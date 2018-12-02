@@ -5,9 +5,7 @@ import os
 
 def read_input(file_name):
     with open(file_name) as f:
-        content = map(lambda x: x.strip(), f.readlines())
-
-    return list(content)
+        return list(map(lambda x: x.strip(), f.readlines()))
 
 
 def frequency_summer(freq_deltas):
