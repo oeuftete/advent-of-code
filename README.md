@@ -1,6 +1,7 @@
 # Advent of Code 2018
 
 [![Build Status](https://travis-ci.com/oeuftete/advent-of-code.svg?branch=master)](https://travis-ci.com/oeuftete/advent-of-code)
+[![codecov](https://codecov.io/gh/oeuftete/advent-of-code/branch/master/graph/badge.svg)](https://codecov.io/gh/oeuftete/advent-of-code)
 
 A little repository for [Advent of Code][adventofcode] [2018][adventofcode-2018]
 just to keep a few things sharp.

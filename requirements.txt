@@ -6,12 +6,20 @@
 #
 atomicwrites==1.2.1       # via pytest
 attrs==18.2.0             # via pytest
+certifi==2018.11.29       # via requests
+chardet==3.0.4            # via requests
+codecov==2.0.15
+coverage==4.5.2           # via codecov, pytest-cov
 flake8==3.6.0
+idna==2.7                 # via requests
 mccabe==0.6.1             # via flake8
 more-itertools==4.3.0     # via pytest
 pluggy==0.8.0             # via pytest
 py==1.7.0                 # via pytest
 pycodestyle==2.4.0        # via flake8
 pyflakes==2.0.0           # via flake8
+pytest-cov==2.6.0
 pytest==4.0.1
+requests==2.20.1          # via codecov
 six==1.11.0               # via more-itertools, pytest
+urllib3==1.24.1           # via requests
