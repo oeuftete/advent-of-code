@@ -3,7 +3,18 @@ import pytest
 from adventofcode.day2.solution import (
     box_checksum,
     box_id_counter,
+    common_letters_for_close,
 )
+
+SIMILAR_BOXES = ['abcde', 'fghij', 'klmno', 'pqrst', 'fguij', 'axcye',
+                 'wvxyz']
+
+
+@pytest.mark.parametrize("box_ids,matched_letters", [
+    (SIMILAR_BOXES, 'fgij'),
+])
+def test_common_letters_for_close(box_ids, matched_letters):
+    assert common_letters_for_close(box_ids) == matched_letters
 
 
 @pytest.mark.parametrize("box_id,has_double,has_triple", [
