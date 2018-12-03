@@ -8,6 +8,8 @@ from adventofcode.common.helpers import read_input
 def parse_claim(claim):
     CLAIM_FORMAT = re.compile(r'#(\d+) @ (\d+),(\d+): (\d+)x(\d+)')
     m = re.match(CLAIM_FORMAT, claim)
+
+    #  This probably should graduate to an object
     (claim_no, start_col, start_row, width, height) = list(
         map(int, m.groups())
     )
@@ -18,16 +20,23 @@ def parse_claim(claim):
             coordinate = (x, y)
             coordinates.append(coordinate)
 
-    return coordinates
+    return (claim_no, coordinates)
 
 
-def multiply_claimed_squares(claims):
+def overlapped_squares(claims):
     coordinate_counter = Counter()
     for claim in claims:
-        coordinate_counter.update(parse_claim(claim))
+        coordinate_counter.update(parse_claim(claim)[1])
 
-    return len([i for i in list(coordinate_counter)
-                if coordinate_counter[i] > 1])
+    return [i for i in list(coordinate_counter) if coordinate_counter[i] > 1]
+
+
+def unoverlapped_claim(claims):
+    overlapped = set(overlapped_squares(claims))
+    for claim in claims:
+        (claim_no, claim_coordinates) = parse_claim(claim)
+        if not (set(claim_coordinates) & overlapped):
+            return claim_no
 
 
 if __name__ == '__main__':
@@ -36,4 +45,5 @@ if __name__ == '__main__':
         '..', '..', 'input/input-day3.txt'
     )
     claims = read_input(INPUT_DATA_FILE)
-    print("Problem 1:", multiply_claimed_squares(claims))
+    print("Problem 1:", len(overlapped_squares(claims)))
+    print("Problem 2:", unoverlapped_claim(claims))

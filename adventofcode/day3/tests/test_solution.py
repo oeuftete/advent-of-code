@@ -1,8 +1,9 @@
 import pytest
 
 from adventofcode.day3.solution import (
-    multiply_claimed_squares,
+    overlapped_squares,
     parse_claim,
+    unoverlapped_claim
 )
 
 CLAIMS = [
@@ -28,11 +29,18 @@ CLAIMS = [
     (CLAIMS[2], [(5, 5), (5, 6), (6, 5), (6, 6), ]),
 ])
 def test_parse_claim(claim, coordinates):
-    assert sorted(parse_claim(claim)) == sorted(coordinates)
+    assert sorted(parse_claim(claim)[1]) == sorted(coordinates)
 
 
 @pytest.mark.parametrize("claims,area", [
     (CLAIMS, 4),
 ])
-def test_multiply_claimed_squares(claims, area):
-    assert multiply_claimed_squares(claims) == area
+def test_overlapped_squares(claims, area):
+    assert len(overlapped_squares(claims)) == area
+
+
+@pytest.mark.parametrize("claims,id", [
+    (CLAIMS, 3),
+])
+def test_unoverlapped_claim(claims, id):
+    assert unoverlapped_claim(claims) == 3
