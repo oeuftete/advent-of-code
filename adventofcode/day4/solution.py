@@ -74,7 +74,7 @@ def sorted_log_entries(log):
     return sorted([LogEntry(l) for l in log])
 
 
-def sleepiest_guard_in_log(log):
+def generate_guard_sleep_logs(log):
     guard_sleep_minutes = defaultdict(lambda: defaultdict(list))
     current_guard = None
     sleeping_minute = None
@@ -111,9 +111,33 @@ def sleepiest_guard_in_log(log):
     for guard, sleep_history in guard_sleep_minutes.items():
         guard_sleep_logs.append(GuardSleepLog(guard, sleep_history))
 
+    return guard_sleep_logs
+
+
+def sleepiest_guard_in_log(log):
+    guard_sleep_logs = generate_guard_sleep_logs(log)
     return sorted(guard_sleep_logs,
                   key=lambda x: x.total_minutes(),
                   reverse=True)[0]
+
+
+def sleepiest_guard_minute_in_log(log):
+    guard_sleep_logs = generate_guard_sleep_logs(log)
+
+    guard_no = None
+    sleepy_minute = None
+    max_occurrences = 0
+
+    for guard_sleep_log in guard_sleep_logs:
+        (minute, occurrences) = guard_sleep_log.sleepy_minute_tuple()
+        if occurrences > max_occurrences:
+            guard_no = guard_sleep_log.no
+            max_occurrences = occurrences
+            sleepy_minute = minute
+
+    logging.debug("Sleepiest guard-minute: %s: minute %s, %s times".
+                  format(guard_no, sleepy_minute, occurrences))
+    return (guard_no, sleepy_minute, occurrences)
 
 
 class GuardSleepLog:
@@ -122,10 +146,13 @@ class GuardSleepLog:
         self.sleep_history = sleep_history
 
     def sleepy_minute(self):
+        return self.sleepy_minute_tuple()[0]
+
+    def sleepy_minute_tuple(self):
         minute_counter = Counter()
         for _, minutes in self.sleep_history.items():
             minute_counter.update(minutes)
-        return minute_counter.most_common(1)[0][0]
+        return minute_counter.most_common(1)[0]
 
     def total_minutes(self):
         count = 0
@@ -142,4 +169,6 @@ if __name__ == '__main__':
     guard_log = read_input(INPUT_DATA_FILE)
     sleepy = sleepiest_guard_in_log(guard_log)
     print("Problem 1:", sleepy.no * sleepy.sleepy_minute())
-    print("Problem 2:", 'TODO')
+
+    sleepy_guard_minute = sleepiest_guard_minute_in_log(guard_log)
+    print("Problem 2:", sleepy_guard_minute[0] * sleepy_guard_minute[1])

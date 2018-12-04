@@ -8,6 +8,7 @@ from .fixtures import (
 from adventofcode.day4.solution import (
     parse_log_entry,
     sleepiest_guard_in_log,
+    sleepiest_guard_minute_in_log,
     sorted_log_entries
 )
 
@@ -44,13 +45,18 @@ def test_sorted_log_entries(raw_log, sorted_log):
 
 @pytest.mark.parametrize("log,sleepiest_guard_no,"
                          "sleepiest_guard_total_minutes,"
-                         "sleepiest_guard_sleepy_minute", [
-                             (unsorted_guard_log(), 10, 50, 24)
+                         "sleepiest_guard_sleepy_minute,"
+                         "sleepiest_guard_minute_tuple", [
+                             (unsorted_guard_log(), 10, 50, 24, (99, 45, 3))
                          ])
 def test_sleepiest_guard(log, sleepiest_guard_no,
                          sleepiest_guard_total_minutes,
-                         sleepiest_guard_sleepy_minute):
+                         sleepiest_guard_sleepy_minute,
+                         sleepiest_guard_minute_tuple):
+
     sleepiest_guard = sleepiest_guard_in_log(log)
     assert sleepiest_guard.no == sleepiest_guard_no
     assert sleepiest_guard.total_minutes() == sleepiest_guard_total_minutes
     assert sleepiest_guard.sleepy_minute() == sleepiest_guard_sleepy_minute
+
+    assert sleepiest_guard_minute_in_log(log) == sleepiest_guard_minute_tuple
