@@ -1,8 +1,7 @@
 import logging
-import os
 import string
 
-from adventofcode.common.helpers import read_input
+from adventofcode.common.helpers import day_data
 
 
 logging.basicConfig(level=logging.INFO)
@@ -41,11 +40,7 @@ def shortest_reduced_polymer(polymer, bad_units):
 
 
 if __name__ == '__main__':
-    INPUT_DATA_FILE = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        '..', '..', 'input/input-day5.txt'
-    )
-    polymer = read_input(INPUT_DATA_FILE)[0]
+    polymer = day_data(5)[0]
     print("Problem 1:", len(reacted_polymer(polymer)))
     print("Problem 2:", shortest_reduced_polymer(polymer,
                                                  string.ascii_lowercase))

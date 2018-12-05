@@ -4,10 +4,9 @@ from collections import (
 )
 from functools import total_ordering
 import logging
-import os
 import re
 
-from adventofcode.common.helpers import read_input
+from adventofcode.common.helpers import day_data
 
 
 @total_ordering
@@ -162,11 +161,7 @@ class GuardSleepLog:
 
 
 if __name__ == '__main__':
-    INPUT_DATA_FILE = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        '..', '..', 'input/input-day4.txt'
-    )
-    guard_log = read_input(INPUT_DATA_FILE)
+    guard_log = day_data(4)
     sleepy = sleepiest_guard_in_log(guard_log)
     print("Problem 1:", sleepy.no * sleepy.sleepy_minute())
 

@@ -1,8 +1,7 @@
 from collections import Counter
-import os
 import re
 
-from adventofcode.common.helpers import read_input
+from adventofcode.common.helpers import day_data
 
 
 def parse_claim(claim):
@@ -40,10 +39,6 @@ def unoverlapped_claim(claims):
 
 
 if __name__ == '__main__':
-    INPUT_DATA_FILE = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        '..', '..', 'input/input-day3.txt'
-    )
-    claims = read_input(INPUT_DATA_FILE)
+    claims = day_data(3)
     print("Problem 1:", len(overlapped_squares(claims)))
     print("Problem 2:", unoverlapped_claim(claims))

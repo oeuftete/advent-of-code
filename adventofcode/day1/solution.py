@@ -1,8 +1,7 @@
 from functools import reduce
 from itertools import cycle
-import os
 
-from adventofcode.common.helpers import read_input
+from adventofcode.common.helpers import day_data
 
 
 def frequency_summer(freq_deltas):
@@ -20,10 +19,6 @@ def frequency_repeat_checker(freq_deltas):
 
 
 if __name__ == '__main__':
-    INPUT_DATA_FILE = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        '..', '..', 'input/input-day1.txt'
-    )
-    frequencies = read_input(INPUT_DATA_FILE)
+    frequencies = day_data(1)
     print("Problem 1:", frequency_summer(frequencies))
     print("Problem 2:", frequency_repeat_checker(frequencies))

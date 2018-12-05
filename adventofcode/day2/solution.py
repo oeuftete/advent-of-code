@@ -1,7 +1,6 @@
 from itertools import groupby
-import os
 
-from adventofcode.common.helpers import read_input
+from adventofcode.common.helpers import day_data
 
 
 def box_checksum(box_ids):
@@ -31,10 +30,6 @@ def box_id_counter(box_id, repeat_count):
 
 
 if __name__ == '__main__':
-    INPUT_DATA_FILE = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        '..', '..', 'input/input-day2.txt'
-    )
-    box_ids = read_input(INPUT_DATA_FILE)
+    box_ids = day_data(2)
     print("Problem 1:", box_checksum(box_ids))
     print("Problem 2:", common_letters_for_close(box_ids))
