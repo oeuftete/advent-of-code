@@ -1,5 +1,6 @@
 advent-of-code-data
 codecov
 flake8
+networkx
 pytest
 pytest-cov
