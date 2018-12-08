@@ -1,24 +1,49 @@
 from collections import deque
 import logging
 
+from anytree import NodeMixin
 from aocd import get_data
 
 
 logging.basicConfig(level=logging.INFO)
 
 
-def find_and_process_child(tokens, depth):
+class AdventNodeBase(object):
+    pass
+
+
+class AdventNode(AdventNodeBase, NodeMixin):
+    def __init__(self, name, parent=None):
+        super(AdventNode, self).__init__()
+        self.name = name
+        self.parent = parent
+        self.metadata = list()
+
+    def update_metadata(self, metadata):
+        self.metadata = metadata
+
+    def node_metadata_sum(self):
+        return sum(self.metadata)
+
+    def tree_metadata_sum(self):
+        return (self.node_metadata_sum() +
+                sum([sum(d.metadata) for d in self.descendants]))
+
+
+def find_and_process_child(tokens, depth, n, parent_node=None):
+
+    parent = parent_node if parent_node else None
+    advent_node = AdventNode('%s:%s' % (depth, n), parent=parent)
 
     def depth_log(msg):
-        logging.debug('%2d: %s' % (depth, msg))
+        logging.debug('%2d:%d %s' % (depth, n, msg))
 
-    def take_metadata(n):
-        metadata_total = 0
-        depth_log('Taking %d metadata' % n)
-        for _ in range(n):
-            metadata_total += tokens.popleft()
-        depth_log('... totalling %d' % metadata_total)
-        return metadata_total
+    def take_metadata(nm):
+        metadata = list()
+        depth_log('Taking %d metadata' % nm)
+        for _ in range(nm):
+            metadata.append(tokens.popleft())
+        return metadata
 
     depth_log('Tokens: {}'.format(tokens))
     n_children = tokens.popleft()
@@ -27,24 +52,31 @@ def find_and_process_child(tokens, depth):
                                                         n_metadata))
     depth_log('Tokens: {}'.format(tokens))
 
-    total = 0
-
     if n_children == 0:
-        total += take_metadata(n_metadata)
+        advent_node.update_metadata(take_metadata(n_metadata))
     else:
         for i in range(n_children):
             depth_log('Tokens: {}'.format(tokens))
             depth_log('Finding child %d...' % i)
             depth += 1
-            total += find_and_process_child(tokens, depth)
-        total += take_metadata(n_metadata)
+            find_and_process_child(tokens, depth, i, advent_node)
+        advent_node.update_metadata(take_metadata(n_metadata))
 
-    return total
+    return advent_node
 
 
 def sum_all_metadata(tree_data):
+    tree = build_tree(tree_data)
+    return tree.tree_metadata_sum()
+
+
+def build_tree(tree_data):
     return find_and_process_child(deque(list(map(int, tree_data.split()))),
-                                  0)
+                                  0, 0)
+
+
+def get_root_node_value(tree_data):
+    pass
 
 
 if __name__ == '__main__':
