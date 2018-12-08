@@ -5,6 +5,7 @@ from adventofcode.day6.solution import (
     get_boundaries,
     get_boundary_indices,
     get_bound_indices,
+    get_safe_coordinates,
     largest_area
 )
 
@@ -83,3 +84,11 @@ def test_bound_indices(coordinates, bound_indices):
 ])
 def test_largest_area(coordinates, area):
     assert largest_area(coordinates) == 17
+
+
+@pytest.mark.parametrize("coordinates,threshold,safe_coordinate_area", [
+    (TEST_COORDINATES, 32, 16),
+])
+def test_safe_coordinates(coordinates, threshold, safe_coordinate_area):
+    assert (len(get_safe_coordinates(coordinates, threshold))
+            == safe_coordinate_area)

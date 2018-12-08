@@ -99,6 +99,27 @@ def get_boundary_indices(coordinates):
     return found
 
 
+def get_safe_coordinates(coordinates, threshold):
+    ((min_x, max_x), (min_y, max_y)) = get_boundaries(coordinates)
+    range_x = max_x - min_x
+    range_y = max_y - min_y
+
+    #  For each point within a wide range...
+    safe = list()
+
+    for x in range(min_x - int(range_x/2), max_x + int(range_x/2)):
+        for y in range(min_y - int(range_y/2), max_y + int(range_y/2)):
+            here = Coordinate(x=x, y=y)
+            total_distance = 0
+            for c in coordinates:
+                total_distance += here.manhattan_distance(c)
+
+            if total_distance < threshold:
+                safe.append(here)
+
+    return safe
+
+
 def largest_area(coordinates):
     ((min_x, max_x), (min_y, max_y)) = get_boundaries(coordinates)
     range_x = max_x - min_x
@@ -176,4 +197,4 @@ if __name__ == '__main__':
     coordinates = list(map(lambda c: Coordinate(csv=c),
                            get_data(year=2018, day=6).split('\n')))
     print("Problem 1:", largest_area(coordinates))
-    print("Problem 2:", 'TBD')
+    print("Problem 2:", len(get_safe_coordinates(coordinates, 10000)))
