@@ -1,4 +1,6 @@
+import itertools
 import logging
+import math
 import re
 
 from aocd import get_data
@@ -84,7 +86,6 @@ def find_and_pop_next_nodes(g, node, pending_nodes, all_nodes):
 
 
 def build_graph(steps):
-    # edges = list()
     g = nx.DiGraph()
     for step in steps:
         (preceding, following) = parse_step(step)
@@ -93,7 +94,68 @@ def build_graph(steps):
     return g
 
 
+def build_workload_graph(steps, offset):
+    g = nx.DiGraph()
+
+    def add_workload_node(c):
+        if c not in g:
+            g.add_node(c,
+                       cost=step_cost(c, offset),
+                       completion=math.inf,
+                       worker=None)
+
+    for step in steps:
+        (preceding, following) = parse_step(step)
+        add_workload_node(preceding)
+        add_workload_node(following)
+        g.add_edge(preceding, following)
+
+    return g
+
+
+def assign_work_to_node(g, c, now, worker):
+    node_costs = nx.get_node_attributes(g, 'cost')
+    g.add_node(c, worker=worker, completion=now + node_costs[c])
+
+
+def step_cost(c, offset):
+    return ord(c) - 64 + offset
+
+
+def get_build_time(steps, workers, offset):
+    g = build_workload_graph(steps, offset)
+    s = ""
+
+    for i in itertools.count():
+        def cycle_log(msg):
+            logging.debug('%04d: [%-26s] %s' % (i, s, msg))
+
+        #  Are any workers done in this second?  If so, delete the node and add
+        #  worker
+        completions = nx.get_node_attributes(g, 'completion')
+        completed = [n for n, completion in completions.items()
+                     if completion == i]
+        cycle_log('Completed = {}'.format(completed))
+        for nc in completed:
+            cycle_log('Removed = {}'.format(completed))
+            g.remove_node(nc)
+            workers += 1
+            s += nc
+            cycle_log('Workers = %d' % workers)
+            if not list(g):
+                return i
+
+        #  Find the current tops
+        tops = [n for n in g.nodes() if not list(g.predecessors(n))]
+        for nt in tops:
+            cycle_log('Found top %s' % nt)
+            if completions[nt] == math.inf and workers > 0:
+                cycle_log('Assigning worker %d to %s' % (workers, nt))
+                assign_work_to_node(g, nt, i, workers)
+                workers -= 1
+
+
 if __name__ == '__main__':
     steps = get_data(year=2018, day=7).split('\n')
     print("Problem 1:", get_ordered_step_string(steps))
-    print("Problem 2:", "TBD")
+    print("Problem 2:", get_build_time(steps, 5, 60))
