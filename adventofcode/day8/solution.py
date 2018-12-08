@@ -19,6 +19,12 @@ class AdventNode(AdventNodeBase, NodeMixin):
         self.parent = parent
         self.metadata = list()
 
+    def __str__(self):
+        return self.name + ('' if self.is_leaf else '*')
+
+    def __repr__(self):
+        return self.name + ('' if self.is_leaf else '*')
+
     def update_metadata(self, metadata):
         self.metadata = metadata
 
@@ -28,6 +34,26 @@ class AdventNode(AdventNodeBase, NodeMixin):
     def tree_metadata_sum(self):
         return (self.node_metadata_sum() +
                 sum([sum(d.metadata) for d in self.descendants]))
+
+    def tree_part2_value(self):
+        logging.debug('part2 value: %s' % self.name)
+        if self.is_leaf:
+            logging.debug('part2 value: %s (leaf)' % self.name)
+            return self.node_metadata_sum()
+        else:
+            logging.debug('part2 value: %s (parent)' % self.name)
+            children = self.children
+            logging.debug('part2 value: {} children = {}'
+                          .format(self.name, children))
+            logging.debug('part2 value: {} metadata = {}'
+                          .format(self.name, self.metadata))
+            total = 0
+            for i in self.metadata:
+                try:
+                    total += children[i-1].tree_part2_value()
+                except IndexError:
+                    pass
+            return total
 
 
 def find_and_process_child(tokens, depth, n, parent_node=None):
@@ -76,10 +102,11 @@ def build_tree(tree_data):
 
 
 def get_root_node_value(tree_data):
-    pass
+    tree = build_tree(tree_data)
+    return tree.tree_part2_value()
 
 
 if __name__ == '__main__':
     tree_data = get_data(year=2018, day=8)
     print("Problem 1:", sum_all_metadata(tree_data))
-    print("Problem 2:", "TBD")
+    print("Problem 2:", get_root_node_value(tree_data))

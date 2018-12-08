@@ -1,6 +1,7 @@
 import pytest
 
 from adventofcode.day8.solution import (
+    get_root_node_value,
     sum_all_metadata
 )
 
@@ -22,5 +23,4 @@ def test_sum_all_metadata(tree_data, metadata_sum):
     (TEST_TREE_DATA, 66),
 ])
 def test_get_root_node_value(tree_data, root_node_value):
-    pass
-    # assert get_root_node_value(tree_data) == root_node_value
+    assert get_root_node_value(tree_data) == root_node_value
