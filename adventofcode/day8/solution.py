@@ -23,7 +23,7 @@ class AdventNode(AdventNodeBase, NodeMixin):
         return self.name + ('' if self.is_leaf else '*')
 
     def __repr__(self):
-        return self.name + ('' if self.is_leaf else '*')
+        return self.__str__()
 
     def update_metadata(self, metadata):
         self.metadata = metadata
