@@ -1,31 +1,29 @@
 from collections import defaultdict, deque
-import logging
 import re
 
 from aocd import get_data
 
 
-logging.basicConfig(level=logging.INFO)
-
-
 def parse_rules(s):
     RULE_FORMAT = (
         r'(\d+) players; '
-        r'last marble is worth (\d+) points: '
-        r'high score is (\d+)$'
+        r'last marble is worth (\d+) points'
+        r'(?:: high score is (\d+))?$'
     )
     m = re.match(RULE_FORMAT, s)
-    (players, play_until, high_score) = list(map(int, m.groups()))
+    (players, play_until, high_score) = list(map(
+        lambda x: int(x) if x else None,
+        m.groups()
+    ))
     return (players, play_until, high_score)
 
 
 class Game:
-    def __init__(self, players, log_every=100):
+    def __init__(self, players):
         self.board = deque([0])
         self.player_count = players
         self.players = defaultdict(int)
         self.current_player = 1
-        self.log_every = log_every
 
     def play_until(self, n):
         for i in range(1, n+1):
@@ -33,20 +31,10 @@ class Game:
         return self
 
     def move(self, n):
-        logging.debug("[%d] Board before %d: %s"
-                      % (self.current_player, n, self.board))
         if n % 23:
             self.normal_move(n)
         else:
             self.special_move(n)
-        logging.debug("[%d] Board after %d: %s"
-                      % (self.current_player, n, self.board))
-
-        if n % self.log_every == 0:
-            leader = self.top_scorer()
-            print("[%d] End of board after %d: %s; Top score: %d: %d"
-                  % (self.current_player, n, self.board[-1],
-                     leader[0], leader[1]))
 
     def normal_move(self, n):
         self.board.rotate(-1)
@@ -55,7 +43,8 @@ class Game:
 
     def special_move(self, n):
         self.board.rotate(7)
-        self.players[self.current_player] += n + self.board.pop()
+        removed = self.board.pop()
+        self.players[self.current_player] += n + removed
         self.board.rotate(-1)
         self.next_turn()
 
@@ -81,5 +70,5 @@ class Game:
 
 if __name__ == '__main__':
     (players, play_until, _) = parse_rules(get_data(year=2018, day=9))
-    print("Problem 1:", Game().play_until(play_until).top_score())
-    print("Problem 2:", "TBD")
+    print("Problem 1:", Game(players).play_until(play_until).top_score())
+    print("Problem 2:", Game(players).play_until(play_until*100).top_score())
