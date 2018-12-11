@@ -21,3 +21,12 @@ def test_cell_power(serial, x, y, power):
 ])
 def test_max_power_square(serial, x, y, max_power):
     assert PowerGrid(serial).max_square() == (x, y, max_power)
+
+
+@pytest.mark.skip(reason="Too slow!")
+@pytest.mark.parametrize("serial, x, y, square_size, max_power", [
+    (18, 90, 269, 16, 113),
+    (42, 232, 251, 12, 119),
+])
+def test_max_power_any_square(serial, x, y, square_size, max_power):
+    assert PowerGrid(serial).max_any_square() == (x, y, square_size, max_power)
