@@ -1,7 +1,7 @@
 advent-of-code-data
 anytree
+bitarray
 codecov
-flake8
 networkx
 pytest
 pytest-cov
