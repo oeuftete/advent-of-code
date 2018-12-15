@@ -20,7 +20,6 @@ class Cart():
     def __init__(self, c, x, y):
         self.x = x
         self.y = y
-        self.can_move = True
         self._build_vector(c)
 
         self.intersection_vectors = itertools.cycle([
@@ -40,12 +39,6 @@ class Cart():
             self.vector = Cart.UP
         elif c == 'v':
             self.vector = Cart.DOWN
-
-    def lock(self):
-        self.can_move = False
-
-    def free(self):
-        self.can_move = True
 
     def move(self):
         self.x += self.vector[0]
@@ -166,7 +159,7 @@ class Track():
         self.iterations += 1
         invalidated_start_positions = list()
 
-        for c in [c for c in sorted(self.carts) if c.can_move]:
+        for c in [c for c in sorted(self.carts)]:
             if c.position in invalidated_start_positions:
                 logging.debug(
                     'Not moving cart at {}:{}, it collided...'.format(
@@ -181,7 +174,6 @@ class Track():
             logging.debug(
                 'Moved cart to {}:{}, tile [{}], new vector {}...'.format(
                     c.x, c.y, new_tile, c.vector))
-            c.lock()
             try:
                 self.check_for_collisions()
             except TrackCollision as e:
@@ -194,9 +186,6 @@ class Track():
                         self.iterations, e.position))
                     self.clean_up_collision(e.position)
                     invalidated_start_positions.append(e.position)
-
-        for c in self.carts:
-            c.free()
 
         return self
 
