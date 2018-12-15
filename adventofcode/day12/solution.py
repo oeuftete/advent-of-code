@@ -65,6 +65,7 @@ class PotRow():
 
         # Optional for now
         # trim to max '....' on each side, adjusting origin if necessary
+
         return self
 
     @property
@@ -90,4 +91,11 @@ class PotRow():
 if __name__ == '__main__':
     rules = get_data(year=2018, day=12)
     print("Problem 1:", PotRow(rules).generate(20).score)
-    print("Problem 2:", "TBD")
+
+    row = PotRow(rules)
+    print("Problem 2:")
+    last = 0
+    for i in range(250):
+        score = row.generate().score
+        print('%6d: %6d (%4d)' % (i + 1, score, score - last))
+        last = score
