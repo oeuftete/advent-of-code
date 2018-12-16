@@ -1,4 +1,6 @@
+import itertools
 import logging
+import math
 
 from aocd import get_data
 
@@ -16,6 +18,24 @@ class RecipeScoreboard():
 
         return ''.join(map(str, self.scores[n:n + 10]))
 
+    def preceding(self, target, max_iterations=math.inf):
+        target_length = len(target)
+
+        for i in itertools.count():
+            if i > max_iterations:
+                break
+
+            count = self.make_new_recipes()
+
+            test_targets = [''.join(map(str, self.scores[-target_length:]))]
+            if count == 2:
+                test_targets.append(''.join(
+                    map(str, self.scores[-target_length - 1:-1])))
+
+            for j in range(len(test_targets)):
+                if target == test_targets[j]:
+                    return len(self.scores) - target_length - j
+
     def make_new_recipes(self):
         sum = 0
         for recipe in self.pointers:
@@ -32,8 +52,11 @@ class RecipeScoreboard():
             self.pointers[i] += self.scores[current_pointer] + 1
             self.pointers[i] %= len(self.scores)
 
+        return 2 if tens else 1
+
 
 if __name__ == '__main__':
-    n = int(get_data(year=2018, day=14))
+    target_string = get_data(year=2018, day=14)
+    n = int(target_string)
     print("Problem 1:", RecipeScoreboard().ten_after(n))
-    print("Problem 2:", "TBD")
+    print("Problem 2:", RecipeScoreboard().preceding(target_string))

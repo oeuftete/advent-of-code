@@ -39,3 +39,15 @@ def test_scoreboard():
 def test_next_ten_scores(n, next_ten):
     scoreboard = RecipeScoreboard()
     assert scoreboard.ten_after(n) == next_ten
+
+
+@pytest.mark.parametrize("target,n", [
+    ('01245', 5),
+    ('51589', 9),
+    ('515891', 9),
+    ('92510', 18),
+    ('59414', 2018),
+])
+def test_preceding_recipes(target, n):
+    scoreboard = RecipeScoreboard()
+    assert scoreboard.preceding(target) == n
