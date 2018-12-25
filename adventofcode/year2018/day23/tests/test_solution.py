@@ -53,3 +53,22 @@ def test_parsed_bot_space(sample_bot_space, i, distance, in_range):
     assert distance_to_strongest == distance
     assert (distance_to_strongest <= strongest.signal) == in_range
     assert len(sample_bot_space.bots_in_range) == 7
+
+
+@pytest.fixture
+def sample_bot_space_part_2():
+    return BotSpace('''
+pos=<10,12,12>, r=2
+pos=<12,14,12>, r=2
+pos=<16,12,12>, r=4
+pos=<14,14,14>, r=6
+pos=<50,50,50>, r=200
+pos=<10,10,10>, r=5
+'''.strip())
+
+
+@pytest.mark.skip(reason='Way too slow')
+def test_bot_in_range(sample_bot_space_part_2):
+    assert sample_bot_space_part_2.signal_extent == \
+        ((-150, -150, -150), (250, 250, 250))
+    assert sample_bot_space_part_2.most_in_range_distance == 36
