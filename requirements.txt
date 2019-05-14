@@ -16,7 +16,7 @@ coverage==4.5.4           # via codecov, pytest-cov
 decorator==4.4.1          # via networkx
 idna==2.8                 # via requests
 importlib-metadata==1.2.0  # via pluggy, pytest
-more-itertools==8.0.0     # via pytest, zipp
+more-itertools==8.0.1     # via pytest, zipp
 networkx==2.4
 packaging==19.2           # via pytest
 pebble==4.4.0             # via advent-of-code-data
@@ -30,6 +30,6 @@ requests==2.22.0          # via advent-of-code-data, codecov
 six==1.13.0               # via anytree, packaging, python-dateutil
 soupsieve==1.9.5          # via beautifulsoup4
 termcolor==1.1.0          # via advent-of-code-data
-urllib3==1.25.7           # via requests
+urllib3==1.25.7
 wcwidth==0.1.7            # via pytest
 zipp==0.6.0               # via importlib-metadata

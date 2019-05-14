@@ -23,7 +23,7 @@ ipython-genutils==0.2.0   # via traitlets
 ipython==7.10.1
 jedi==0.15.1              # via ipython
 mccabe==0.6.1             # via flake8
-more-itertools==8.0.0     # via pytest, zipp
+more-itertools==8.0.1     # via pytest, zipp
 networkx==2.4
 packaging==19.2           # via pytest
 parso==0.5.1              # via jedi
@@ -46,7 +46,7 @@ six==1.13.0               # via anytree, packaging, python-dateutil, traitlets
 soupsieve==1.9.5          # via beautifulsoup4
 termcolor==1.1.0          # via advent-of-code-data
 traitlets==4.3.3          # via ipython
-urllib3==1.25.7           # via requests
+urllib3==1.25.7
 wcwidth==0.1.7            # via prompt-toolkit, pytest
 yapf==0.29.0
 zipp==0.6.0               # via importlib-metadata
