@@ -1,3 +1,5 @@
+from itertools import product
+
 import pytest
 
 from adventofcode.year2018.day3.solution import (
@@ -14,19 +16,9 @@ CLAIMS = [
 
 
 @pytest.mark.parametrize("claim,coordinates", [
-    (CLAIMS[0],
-     [(1, 3), (1, 4), (1, 5), (1, 6),
-      (2, 3), (2, 4), (2, 5), (2, 6),
-      (3, 3), (3, 4), (3, 5), (3, 6),
-      (4, 3), (4, 4), (4, 5), (4, 6),
-      ]),
-    (CLAIMS[1],
-     [(3, 1), (3, 2), (3, 3), (3, 4),
-      (4, 1), (4, 2), (4, 3), (4, 4),
-      (5, 1), (5, 2), (5, 3), (5, 4),
-      (6, 1), (6, 2), (6, 3), (6, 4),
-      ]),
-    (CLAIMS[2], [(5, 5), (5, 6), (6, 5), (6, 6), ]),
+    (CLAIMS[0], product(range(1, 5), range(3, 7))),
+    (CLAIMS[1], product(range(3, 7), range(1, 5))),
+    (CLAIMS[2], product(range(5, 7), range(5, 7))),
 ])
 def test_parse_claim(claim, coordinates):
     assert sorted(parse_claim(claim)[1]) == sorted(coordinates)
