@@ -6,14 +6,12 @@ import re
 from aocd import get_data
 import networkx as nx
 
-
 logging.basicConfig(level=logging.DEBUG)
 
 
 def parse_step(step):
     STEP_FORMAT = re.compile(
-        r'Step (\w) must be finished before step (\w) can begin.'
-    )
+        r'Step (\w) must be finished before step (\w) can begin.')
     m = re.match(STEP_FORMAT, step)
     (preceding, following) = m.groups()
     return (preceding, following)
@@ -41,8 +39,8 @@ def get_ordered_step_string(steps):
 def find_and_pop_next_nodes(g, node, pending_nodes, all_nodes):
     ordered_nodes = []
 
-    next_nodes = sorted(list(filter(lambda x: x in all_nodes,
-                                    list(g.successors(node)))))
+    next_nodes = sorted(
+        list(filter(lambda x: x in all_nodes, list(g.successors(node)))))
     pending_nodes.update(set(next_nodes))
 
     logging.debug('Next available nodes: {}'.format(next_nodes))
@@ -52,11 +50,12 @@ def find_and_pop_next_nodes(g, node, pending_nodes, all_nodes):
         if next_node in all_nodes:
             logging.debug('... {} still in all_nodes ...'.format(next_node))
 
-            all_next_node_preds = [n for n in
-                                   list(nx.bfs_tree(g, next_node, True))
-                                   if n != next_node]
-            preds = list(filter(lambda n: n in pending_nodes,
-                                all_next_node_preds))
+            all_next_node_preds = [
+                n for n in list(nx.bfs_tree(g, next_node, True))
+                if n != next_node
+            ]
+            preds = list(
+                filter(lambda n: n in pending_nodes, all_next_node_preds))
             if preds:
                 logging.debug(
                     '... {} has predecessors ({}) in pending_nodes {}...'
@@ -64,9 +63,8 @@ def find_and_pop_next_nodes(g, node, pending_nodes, all_nodes):
                 continue
 
             logging.debug('{} predecessors ({}) were irrelevant to '
-                          'pending nodes {}.  Adding.'
-                          .format(next_node, all_next_node_preds,
-                                  pending_nodes))
+                          'pending nodes {}.  Adding.'.format(
+                              next_node, all_next_node_preds, pending_nodes))
             all_nodes.remove(next_node)
             pending_nodes.remove(next_node)
             ordered_nodes.append(next_node)
@@ -127,14 +125,16 @@ def get_build_time(steps, workers, offset):
     s = ""
 
     for i in itertools.count():
+
         def cycle_log(msg):
             logging.debug('%04d: [%-26s] %s' % (i, s, msg))
 
         #  Are any workers done in this second?  If so, delete the node and add
         #  worker
         completions = nx.get_node_attributes(g, 'completion')
-        completed = [n for n, completion in completions.items()
-                     if completion == i]
+        completed = [
+            n for n, completion in completions.items() if completion == i
+        ]
         cycle_log('Completed = {}'.format(completed))
         for nc in completed:
             cycle_log('Removed = {}'.format(completed))

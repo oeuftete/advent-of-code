@@ -1,11 +1,8 @@
 import pytest
 
-from adventofcode.year2018.day5.solution import (
-    reacted_polymer,
-    reduced_reacted_polymer,
-    shortest_reduced_polymer
-)
-
+from adventofcode.year2018.day5.solution import (reacted_polymer,
+                                                 reduced_reacted_polymer,
+                                                 shortest_reduced_polymer)
 
 TEST_POLYMER = 'dabAcCaCBAcCcaDA'
 

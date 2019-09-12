@@ -2,15 +2,8 @@ import networkx as nx
 import pytest
 
 from adventofcode.year2018.day7.solution import (
-    assign_work_to_node,
-    build_graph,
-    build_workload_graph,
-    get_build_time,
-    get_ordered_step_string,
-    parse_step,
-    step_cost
-)
-
+    assign_work_to_node, build_graph, build_workload_graph, get_build_time,
+    get_ordered_step_string, parse_step, step_cost)
 
 TEST_STEPS = [
     'Step C must be finished before step A can begin.',

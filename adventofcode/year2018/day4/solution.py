@@ -1,7 +1,4 @@
-from collections import (
-    Counter,
-    defaultdict
-)
+from collections import (Counter, defaultdict)
 from functools import total_ordering
 import logging
 import re
@@ -23,8 +20,9 @@ class LogDay:
         self.minute = minute
 
     def __eq__(self, other):
-        return ((self.year, self.month, self.day, self.hour, self.minute) ==
-                (other.year, other.month, other.day, other.hour, other.minute))
+        return ((self.year, self.month, self.day, self.hour,
+                 self.minute) == (other.year, other.month, other.day,
+                                  other.hour, other.minute))
 
     def __lt__(self, other):
         return ((self.year, self.month, self.day, self.hour, self.minute) <
@@ -43,8 +41,7 @@ class LogEntry:
     def __init__(self, entry):
         LOG_FORMAT = re.compile(
             r'\[(.*?)\] '
-            r'(wakes up|falls asleep|Guard #(\d+) begins shift)'
-        )
+            r'(wakes up|falls asleep|Guard #(\d+) begins shift)')
         m = re.match(LOG_FORMAT, entry)
         (datestamp, event, guard_no) = m.groups()
 
@@ -97,8 +94,7 @@ def generate_guard_sleep_logs(log):
 
         if entry.woke_up:
             guard_sleep_minutes[current_guard][entry.log_day.date()].extend(
-                range(sleeping_minute, entry.log_day.midnight_minute())
-            )
+                range(sleeping_minute, entry.log_day.midnight_minute()))
             logging.debug("Woke up: %d at %d (fell at %d)" %
                           (current_guard, entry.log_day.midnight_minute(),
                            sleeping_minute))
@@ -134,8 +130,8 @@ def sleepiest_guard_minute_in_log(log):
             max_occurrences = occurrences
             sleepy_minute = minute
 
-    logging.debug("Sleepiest guard-minute: %s: minute %s, %s times".
-                  format(guard_no, sleepy_minute, occurrences))
+    logging.debug("Sleepiest guard-minute: %s: minute %s, %s times".format(
+        guard_no, sleepy_minute, occurrences))
     return (guard_no, sleepy_minute, occurrences)
 
 

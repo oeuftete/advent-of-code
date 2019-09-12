@@ -1,10 +1,6 @@
 import pytest
 
-from adventofcode.year2018.day9.solution import (
-    parse_rules,
-    Game
-)
-
+from adventofcode.year2018.day9.solution import (parse_rules, Game)
 
 TEST_GAME_OUTCOMES = [
     '9 players; last marble is worth 25 points: high score is 32',
@@ -16,10 +12,10 @@ TEST_GAME_OUTCOMES = [
 ]
 
 
-@pytest.mark.parametrize("game_rules,players,play_until,high_score", [
-    (TEST_GAME_OUTCOMES[0], 9, 25, 32),
-    ('10 players; last marble is worth 1000 points', 10, 1000, None)
-])
+@pytest.mark.parametrize(
+    "game_rules,players,play_until,high_score",
+    [(TEST_GAME_OUTCOMES[0], 9, 25, 32),
+     ('10 players; last marble is worth 1000 points', 10, 1000, None)])
 def test_parse(game_rules, players, play_until, high_score):
     assert parse_rules(game_rules) == (players, play_until, high_score)
 

@@ -1,8 +1,6 @@
 import pytest
 
-from adventofcode.year2018.day11.solution import (
-    PowerGrid
-)
+from adventofcode.year2018.day11.solution import (PowerGrid)
 
 
 @pytest.mark.parametrize("serial,x,y,power", [

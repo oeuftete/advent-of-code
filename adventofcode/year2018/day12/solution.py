@@ -54,12 +54,11 @@ class PotRow():
             # for each frame of 5, determine next gen, add to new result
             logging.debug('Input state: {}'.format(self.state))
             for i in range(len(self.bits) - 5 + 1):
-                pot_rule = self._from_bitarray(self.bits[i:i+5].to01())
+                pot_rule = self._from_bitarray(self.bits[i:i + 5].to01())
                 pot_value = self.rule_set[pot_rule]
                 logging.debug('Matched rule {} => {} at {}'.format(
-                   pot_rule, pot_value, i
-                ))
-                new_bits[i+2] = True if pot_value == '#' else False
+                    pot_rule, pot_value, i))
+                new_bits[i + 2] = True if pot_value == '#' else False
 
             self.bits = new_bits
 
@@ -79,10 +78,8 @@ class PotRow():
         for i in range(copy.length()):
             if copy.pop(0):
                 to_add = i - self.origin
-                logging.debug(
-                    'Found pot at index {}.  Adding {}.'
-                    .format(i, to_add)
-                )
+                logging.debug('Found pot at index {}.  Adding {}.'.format(
+                    i, to_add))
                 score += to_add
 
         return score

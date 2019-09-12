@@ -3,7 +3,6 @@ import string
 
 from adventofcode.common.helpers import day_data
 
-
 logging.basicConfig(level=logging.INFO)
 
 
@@ -24,9 +23,8 @@ def reacted_polymer(polymer):
 
 
 def reduced_reacted_polymer(polymer, bad_unit):
-    return reacted_polymer(polymer
-                           .replace(bad_unit, '')
-                           .replace(bad_unit.swapcase(), ''))
+    return reacted_polymer(
+        polymer.replace(bad_unit, '').replace(bad_unit.swapcase(), ''))
 
 
 def shortest_reduced_polymer(polymer, bad_units):
@@ -42,5 +40,5 @@ def shortest_reduced_polymer(polymer, bad_units):
 if __name__ == '__main__':
     polymer = day_data(5)[0]
     print("Problem 1:", len(reacted_polymer(polymer)))
-    print("Problem 2:", shortest_reduced_polymer(polymer,
-                                                 string.ascii_lowercase))
+    print("Problem 2:",
+          shortest_reduced_polymer(polymer, string.ascii_lowercase))

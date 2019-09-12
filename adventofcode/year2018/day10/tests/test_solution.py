@@ -5,11 +5,8 @@ from adventofcode.year2018.day10.solution import (
     parse_point_and_vector,
 )
 
-from adventofcode.year2018.day10.tests.resources import (
-    get_test_data,
-    get_test_result
-)
-
+from adventofcode.year2018.day10.tests.resources import (get_test_data,
+                                                         get_test_result)
 
 TEST_POINTS = get_test_data()
 TEST_RESULT = get_test_result()

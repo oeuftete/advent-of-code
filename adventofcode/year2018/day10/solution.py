@@ -8,20 +8,18 @@ from aocd import get_data
 
 def parse_point_and_vector(s):
     int_re = r'(\s*\-?\d+)'
-    POINT_FORMAT = (
-        r'position=<%s,%s> velocity=<%s,%s>$'
-        % (int_re, int_re, int_re, int_re)
-    )
+    POINT_FORMAT = (r'position=<%s,%s> velocity=<%s,%s>$' %
+                    (int_re, int_re, int_re, int_re))
     m = re.match(POINT_FORMAT, s)
     (x, y, dx, dy) = list(map(int, m.groups()))
     return (x, y, dx, dy)
 
 
 def data_to_sky(data):
-    return Sky(list(map(
-        lambda p: SkyPoint(*p),
-        map(lambda ps: parse_point_and_vector(ps), data)
-    )))
+    return Sky(
+        list(
+            map(lambda p: SkyPoint(*p),
+                map(lambda ps: parse_point_and_vector(ps), data))))
 
 
 class SkyPoint:
@@ -65,8 +63,8 @@ class Sky:
         height = self.max_y - self.min_y
         logging.debug('Area = (%d x %d)' % (width, height))
         if width <= max_width and height <= max_height:
-            for y in range(self.min_y, self.max_y+1):
-                for x in range(self.min_x, self.max_x+1):
+            for y in range(self.min_y, self.max_y + 1):
+                for x in range(self.min_x, self.max_x + 1):
                     s += self.sky[x][y]
                 s += "\n"
             return s

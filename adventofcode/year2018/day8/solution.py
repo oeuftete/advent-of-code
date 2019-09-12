@@ -4,7 +4,6 @@ import logging
 from anytree import NodeMixin
 from aocd import get_data
 
-
 logging.basicConfig(level=logging.INFO)
 
 
@@ -43,14 +42,14 @@ class AdventNode(AdventNodeBase, NodeMixin):
         else:
             logging.debug('part2 value: %s (parent)' % self.name)
             children = self.children
-            logging.debug('part2 value: {} children = {}'
-                          .format(self.name, children))
-            logging.debug('part2 value: {} metadata = {}'
-                          .format(self.name, self.metadata))
+            logging.debug('part2 value: {} children = {}'.format(
+                self.name, children))
+            logging.debug('part2 value: {} metadata = {}'.format(
+                self.name, self.metadata))
             total = 0
             for i in self.metadata:
                 try:
-                    total += children[i-1].tree_part2_value()
+                    total += children[i - 1].tree_part2_value()
                 except IndexError:
                     pass
             return total
@@ -74,8 +73,8 @@ def find_and_process_child(tokens, depth, n, parent_node=None):
     depth_log('Tokens: {}'.format(tokens))
     n_children = tokens.popleft()
     n_metadata = tokens.popleft()
-    depth_log('Found %d children and %d metadata...' % (n_children,
-                                                        n_metadata))
+    depth_log('Found %d children and %d metadata...' %
+              (n_children, n_metadata))
     depth_log('Tokens: {}'.format(tokens))
 
     if n_children == 0:
@@ -97,8 +96,8 @@ def sum_all_metadata(tree_data):
 
 
 def build_tree(tree_data):
-    return find_and_process_child(deque(list(map(int, tree_data.split()))),
-                                  0, 0)
+    return find_and_process_child(deque(list(map(int, tree_data.split()))), 0,
+                                  0)
 
 
 def get_root_node_value(tree_data):

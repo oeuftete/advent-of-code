@@ -1,7 +1,5 @@
 from adventofcode.year2018.day12.tests.fixtures import sample_rules
-from adventofcode.year2018.day12.solution import (
-    PotRow
-)
+from adventofcode.year2018.day12.solution import (PotRow)
 
 
 def test_pot_row_initial():

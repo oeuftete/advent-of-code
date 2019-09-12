@@ -6,11 +6,9 @@ from adventofcode.year2018.day1.solution import (
 )
 
 
-@pytest.mark.parametrize("freq_deltas,expected", [
-    (['+1', '+1', '+1'], 3),
-    (['+1', '+1', '-2'], 0),
-    (['-1', '-2', '-3'], -6)
-])
+@pytest.mark.parametrize("freq_deltas,expected", [(['+1', '+1', '+1'], 3),
+                                                  (['+1', '+1', '-2'], 0),
+                                                  (['-1', '-2', '-3'], -6)])
 def test_day1_1(freq_deltas, expected):
     assert frequency_summer(freq_deltas) == expected
 

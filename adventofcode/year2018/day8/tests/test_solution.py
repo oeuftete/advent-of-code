@@ -1,10 +1,7 @@
 import pytest
 
-from adventofcode.year2018.day8.solution import (
-    get_root_node_value,
-    sum_all_metadata
-)
-
+from adventofcode.year2018.day8.solution import (get_root_node_value,
+                                                 sum_all_metadata)
 
 TEST_TREE_DATA = '2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2'
 #                 A----------------------------------

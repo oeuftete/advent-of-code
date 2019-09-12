@@ -6,8 +6,7 @@ from adventofcode.year2018.day2.solution import (
     common_letters_for_close,
 )
 
-SIMILAR_BOXES = ['abcde', 'fghij', 'klmno', 'pqrst', 'fguij', 'axcye',
-                 'wvxyz']
+SIMILAR_BOXES = ['abcde', 'fghij', 'klmno', 'pqrst', 'fguij', 'axcye', 'wvxyz']
 
 
 @pytest.mark.parametrize("box_ids,matched_letters", [
@@ -31,8 +30,9 @@ def test_box_id_counter(box_id, has_double, has_triple):
     assert box_id_counter(box_id, 3) == has_triple
 
 
-SAMPLE_BOXES = ['abcdef', 'bababc', 'abbcde', 'abcccd', 'aabcdd', 'abcdee',
-                'ababab']
+SAMPLE_BOXES = [
+    'abcdef', 'bababc', 'abbcde', 'abcccd', 'aabcdd', 'abcdee', 'ababab'
+]
 
 
 @pytest.mark.parametrize("box_ids,checksum", [

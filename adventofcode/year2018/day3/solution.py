@@ -9,9 +9,8 @@ def parse_claim(claim):
     m = re.match(CLAIM_FORMAT, claim)
 
     #  This probably should graduate to an object
-    (claim_no, start_col, start_row, width, height) = list(
-        map(int, m.groups())
-    )
+    (claim_no, start_col, start_row, width,
+     height) = list(map(int, m.groups()))
 
     coordinates = list()
     for x in range(start_col, start_col + width):
