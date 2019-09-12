@@ -4,7 +4,7 @@
 #
 #    pip-compile dev-requirements.in
 #
-advent-of-code-data==0.8.3
+advent-of-code-data==0.8.5
 anytree==2.7.2
 attrs==19.3.0             # via pytest
 backcall==0.1.0           # via ipython
@@ -18,7 +18,7 @@ decorator==4.4.1          # via ipython, networkx, traitlets
 entrypoints==0.3          # via flake8
 flake8==3.7.9
 idna==2.8                 # via requests
-importlib-metadata==1.1.0  # via pluggy, pytest
+importlib-metadata==1.2.0  # via pluggy, pytest
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.10.1
 jedi==0.15.1              # via ipython
