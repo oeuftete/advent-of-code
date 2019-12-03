@@ -48,6 +48,7 @@ termcolor==1.1.0          # via advent-of-code-data
 traitlets==4.3.3          # via ipython
 urllib3==1.25.7           # via requests
 wcwidth==0.1.7            # via prompt-toolkit, pytest
+yapf==0.29.0
 zipp==0.6.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
