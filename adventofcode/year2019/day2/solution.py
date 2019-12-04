@@ -1,6 +1,3 @@
-from aocd.models import Puzzle
-
-
 def run_program(opcodes, noun=None, verb=None):
 
     if noun:
@@ -32,14 +29,3 @@ def find_inputs(opcodes, output_0):
             output = run_program(opcodes.copy(), noun, verb)
             if output[0] == output_0:
                 return (noun, verb)
-
-
-if __name__ == '__main__':
-    puzzle = Puzzle(year=2019, day=2)
-    opcodes = [int(op) for op in puzzle.input_data.split(',')]
-
-    output_codes = run_program(opcodes.copy(), noun=12, verb=2)
-
-    puzzle.answer_a = output_codes[0]
-    b_tuple = find_inputs(opcodes, 19690720)
-    puzzle.answer_b = 100 * b_tuple[0] + b_tuple[1]
