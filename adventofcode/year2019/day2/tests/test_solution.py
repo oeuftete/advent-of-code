@@ -20,3 +20,22 @@ def test_run_program(opcodes, output_codes):
 ])
 def test_find_inputs(opcodes, output_0, noun, verb):
     assert find_inputs(opcodes, output_0) == (noun, verb)
+
+
+@pytest.mark.parametrize("opcodes", [
+    [3, 0, 0, 0, 99],
+    [1, 1, 1, 4, 99, 5, 6, 0, 0],
+])
+def test_run_program_bad_op(opcodes):
+    with pytest.raises(Exception) as e:
+        assert 'Unknown opcode' in str(e.value)
+
+
+@pytest.mark.parametrize("opcodes", [
+    [],
+    [3, 0, 0, 0],
+    [1, 1, 1, 4, 99, 5, 6, 0],
+])
+def test_run_program_early_exit(opcodes):
+    with pytest.raises(Exception) as e:
+        assert 'Unterminated program' in str(e.value)
