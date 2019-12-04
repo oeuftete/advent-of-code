@@ -1,0 +1,5 @@
+"  Enable automated formatting
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat
+augroup END
