@@ -27,6 +27,6 @@ def fuel_requirements(masses, include_fuel=False):
 
 if __name__ == '__main__':
     puzzle = Puzzle(year=2019, day=1)
-    masses = list(map(int, puzzle.input_data.split('\n')))
+    masses = [int(m) for m in puzzle.input_data.split('\n')]
     puzzle.answer_a = fuel_requirements(masses)
     puzzle.answer_b = fuel_requirements(masses, include_fuel=True)
