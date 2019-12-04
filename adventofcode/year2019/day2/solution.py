@@ -1,7 +1,13 @@
 from aocd.models import Puzzle
 
 
-def run_program(opcodes):
+def run_program(opcodes, noun=None, verb=None):
+
+    if noun:
+        opcodes[1] = noun
+    if verb:
+        opcodes[2] = verb
+
     for i in range(0, len(opcodes), 4):
         op = opcodes[i]
 
@@ -20,14 +26,20 @@ def run_program(opcodes):
     raise Exception('Unterminated program!')
 
 
+def find_inputs(opcodes, output_0):
+    for noun in range(100):
+        for verb in range(100):
+            output = run_program(opcodes.copy(), noun, verb)
+            if output[0] == output_0:
+                return (noun, verb)
+
+
 if __name__ == '__main__':
     puzzle = Puzzle(year=2019, day=2)
-    opcodes = list(map(int, puzzle.input_data.split(',')))
+    opcodes = [int(op) for op in puzzle.input_data.split(',')]
 
-    #  Per the written instructions
-    opcodes[1] = 12
-    opcodes[2] = 2
-
-    output_codes = run_program(opcodes)
+    output_codes = run_program(opcodes.copy(), noun=12, verb=2)
 
     puzzle.answer_a = output_codes[0]
+    b_tuple = find_inputs(opcodes, 19690720)
+    puzzle.answer_b = 100 * b_tuple[0] + b_tuple[1]

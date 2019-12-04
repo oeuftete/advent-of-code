@@ -1,6 +1,7 @@
+from aocd.models import Puzzle
 import pytest
 
-from adventofcode.year2019.day2.solution import (run_program)
+from adventofcode.year2019.day2.solution import (find_inputs, run_program)
 
 
 @pytest.mark.parametrize("opcodes,output_codes", [
@@ -11,3 +12,11 @@ from adventofcode.year2019.day2.solution import (run_program)
 ])
 def test_run_program(opcodes, output_codes):
     assert run_program(opcodes) == output_codes
+
+
+@pytest.mark.parametrize("opcodes,output_0,noun,verb", [
+    ([int(op) for op in Puzzle(year=2019, day=2).input_data.split(',')
+      ], 3765464, 12, 2),
+])
+def test_find_inputs(opcodes, output_0, noun, verb):
+    assert find_inputs(opcodes, output_0) == (noun, verb)
