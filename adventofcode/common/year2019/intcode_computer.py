@@ -33,11 +33,17 @@ class Intcode(object):
 
     def execute(self):
         opcodes = self.opcodes
+        loops = 0
 
         while True:
+            if loops > 10:
+                break
+
             i = self.pointer
 
             op, modes = self.parse_op(opcodes[i])
+            logging.debug(f'Processing op {op} at position {i}...')
+            logging.debug(f'  Opcodes: {opcodes}')
 
             #  ADD
             if op == 1:
@@ -74,6 +80,61 @@ class Intcode(object):
                 self.output_data.append(o)
                 logging.debug(f'Output data appended: {o}')
                 self.pointer += 2
+            #  JUMP-IF-TRUE
+            elif op == 5:
+                p = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
+
+                if p:
+                    self.pointer = (opcodes[i + 2]
+                                    if modes[1] else opcodes[opcodes[i + 2]])
+                    if self.pointer == i:
+                        logging.warning(f'Loop in op {op}, position {i}')
+                        loops += 1
+                else:
+                    self.pointer += 3
+
+            #  JUMP-IF-FALSE
+            elif op == 6:
+                p = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
+
+                if p == 0:
+                    self.pointer = (opcodes[i + 2]
+                                    if modes[1] else opcodes[opcodes[i + 2]])
+                    if self.pointer == i:
+                        logging.warning(f'Loop in op {op}, position {i}')
+                        loops += 1
+                else:
+                    self.pointer += 3
+            #  LESS THAN
+            elif op == 7:
+                p1 = (opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]])
+                p2 = (opcodes[i + 2] if modes[1] else opcodes[opcodes[i + 2]])
+                if p1 < p2:
+                    if modes[2]:
+                        opcodes[i + 3] = 1
+                    else:
+                        opcodes[opcodes[i + 3]] = 1
+                else:
+                    if modes[2]:
+                        opcodes[i + 3] = 0
+                    else:
+                        opcodes[opcodes[i + 3]] = 0
+                self.pointer += 4
+            #  EQUALS
+            elif op == 8:
+                p1 = (opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]])
+                p2 = (opcodes[i + 2] if modes[1] else opcodes[opcodes[i + 2]])
+                if p1 == p2:
+                    if modes[2]:
+                        opcodes[i + 3] = 1
+                    else:
+                        opcodes[opcodes[i + 3]] = 1
+                else:
+                    if modes[2]:
+                        opcodes[i + 3] = 0
+                    else:
+                        opcodes[opcodes[i + 3]] = 0
+                self.pointer += 4
             #  HALT
             elif op == 99:
                 return opcodes

@@ -1,6 +1,7 @@
 import pytest
 
-from adventofcode.common.year2019.intcode_computer import run_program
+from adventofcode.common.year2019.intcode_computer import (Intcode,
+                                                           run_program)
 
 
 @pytest.mark.parametrize("opcodes,output_codes", [
@@ -32,3 +33,29 @@ def test_run_program_early_exit(opcodes):
     with pytest.raises(Exception) as e:
         run_program(opcodes)
         assert 'Unterminated program' in str(e.value)
+
+
+LONG_EXAMPLE = ('3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,'
+                '1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,'
+                '999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99')
+
+
+@pytest.mark.parametrize("opcodes,input_data,output", [
+    ('3,9,8,9,10,9,4,9,99,-1,8', [8], 1),
+    ('3,9,8,9,10,9,4,9,99,-1,8', [7], 0),
+    ('3,9,8,9,10,9,4,9,99,-1,8', [9], 0),
+    ('3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9', [0], 0),
+    ('3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9', [8], 1),
+    ('3,3,1105,-1,9,1101,0,0,12,4,12,99,1', [0], 0),
+    ('3,3,1105,-1,9,1101,0,0,12,4,12,99,1', [8], 1),
+    (LONG_EXAMPLE, [7], 999),
+    (LONG_EXAMPLE, [8], 1000),
+    (LONG_EXAMPLE, [9], 1001),
+])
+def test_opcodes_five_through_eight(opcodes, input_data, output):
+    intcode = Intcode(opcodes, input_data=input_data)
+    try:
+        intcode.execute()
+    except KeyboardInterrupt:
+        pass
+    assert intcode.output_data[-1] == output
