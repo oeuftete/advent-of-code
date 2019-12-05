@@ -1,3 +1,4 @@
+import logging
 import math
 
 from adventofcode.common.coordinate import Coordinate
@@ -32,6 +33,10 @@ class Line(object):
     def horizontal(self):
         return self.start.y == self.end.y
 
+    @property
+    def length(self):
+        return self.start.manhattan_distance(self.end)
+
     def intersection(self, other):
         if ((self.horizontal and other.horizontal)
                 or (self.vertical and other.vertical)):
@@ -61,7 +66,7 @@ class Wire(object):
         self.coordinate = line.end
 
 
-def closest_intersection(path_one, path_two):
+def closest_intersection(path_one, path_two, use_steps=False):
     wires = [Wire(), Wire()]
 
     for i, path in enumerate([path_one, path_two]):
@@ -71,18 +76,49 @@ def closest_intersection(path_one, path_two):
     # Now look at each line in wire 0, and find its intersections with wire 1's
     # lines.
     intersections = list()
+    intersection_steps = list()
+
+    path_one_step_count = 0
     for line_path_one in wires[0].lines:
+        path_two_step_count = 0
         for line_path_two in wires[1].lines:
-            intersections.append(line_path_one.intersection(line_path_two))
+            intersection = line_path_one.intersection(line_path_two)
 
-    closest_distance = math.inf
+            if not intersection:
+                path_two_step_count += line_path_two.length
+                logging.debug(
+                    f'... path two step count is {path_two_step_count}')
+                continue
 
-    for intersection in filter(lambda x: x is not None, intersections):
+            logging.debug(f'Found intersection {intersection}')
+            intersections.append(intersection)
+
+            step_count = (
+                path_one_step_count +
+                line_path_one.start.manhattan_distance(intersection) +
+                path_two_step_count +
+                line_path_two.start.manhattan_distance(intersection))
+            logging.debug(f'... step count is {step_count}')
+            intersection_steps.append(step_count)
+
+            path_two_step_count += line_path_two.length
+            logging.debug(f'... path two step count is {path_two_step_count}')
+
+        path_one_step_count += line_path_one.length
+        logging.debug(f'... path one step count is {path_one_step_count}')
+
+    optimum = math.inf
+
+    for i, intersection in enumerate(intersections):
         distance = intersection.manhattan_distance(wires[0].origin)
 
         #  Ignore origin overlap.
         if distance == 0:
             continue
-        closest_distance = min(distance, closest_distance)
 
-    return closest_distance
+        if use_steps:
+            optimum = min(intersection_steps[i], optimum)
+        else:
+            optimum = min(distance, optimum)
+
+    return optimum
