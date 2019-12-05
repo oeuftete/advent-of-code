@@ -22,7 +22,7 @@ class Intcode(object):
 
     @classmethod
     def parse_op(cls, opcode):
-        """Parses an opcode, and return the op and a list of modes."""
+        """Parse an opcode, and return the op and a list of modes."""
         opcode = str(opcode)
         op = int(opcode[-2:])
         modes = [0, 0, 0]
@@ -74,7 +74,7 @@ class Intcode(object):
                     o = opcodes[opcodes[i + 1]]
 
                 self.output_data.append(o)
-                logging.debug(f'Output data: {o}')
+                logging.debug(f'Output data appended: {o}')
                 move_forward = 1
             #  HALT
             elif op == 99:
@@ -88,5 +88,4 @@ class Intcode(object):
 
 def run_program(opcodes, noun=None, verb=None, input_data=None):
     """A thin wrapper to run an Intcode program."""
-    intcode = Intcode(opcodes, noun, verb, input_data)
-    return intcode.execute()
+    return Intcode(opcodes, noun, verb, input_data).execute()
