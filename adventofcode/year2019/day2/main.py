@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from aocd.models import Puzzle
-from adventofcode.year2019.day2.solution import find_inputs, run_program
+
+from adventofcode.common.year2019.intcode_computer import run_program
+from adventofcode.year2019.day2.solution import find_inputs
 
 if __name__ == '__main__':
     puzzle = Puzzle(year=2019, day=2)
