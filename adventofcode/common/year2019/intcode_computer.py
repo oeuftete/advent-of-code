@@ -5,15 +5,27 @@ def run_program(opcodes, noun=None, verb=None):
     if verb:
         opcodes[2] = verb
 
-    for i in range(0, len(opcodes), 4):
+    move_forward = 0
+
+    for i, op in enumerate(opcodes):
+
+        if move_forward > 0:
+            move_forward = move_forward - 1
+            continue
+
         op = opcodes[i]
 
+        #  ADD
         if op == 1:
             opcodes[opcodes[i + 3]] = (opcodes[opcodes[i + 1]] +
                                        opcodes[opcodes[i + 2]])
+            move_forward = 3
+        #  MULTIPLY
         elif op == 2:
             opcodes[opcodes[i + 3]] = (opcodes[opcodes[i + 1]] *
                                        opcodes[opcodes[i + 2]])
+            move_forward = 3
+        #  HALT
         elif op == 99:
             return opcodes
 
