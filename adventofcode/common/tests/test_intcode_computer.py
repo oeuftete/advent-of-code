@@ -53,8 +53,10 @@ LONG_EXAMPLE = ('3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,'
 ])
 def test_opcodes_five_through_eight(opcodes, input_data, output):
     intcode = Intcode(opcodes, input_data=input_data)
-    try:
-        intcode.execute()
-    except KeyboardInterrupt:
-        pass
+    intcode.execute()
     assert intcode.last_output == output
+
+
+def test_pre_execution_output():
+    intcode = Intcode([])
+    assert intcode.last_output is None
