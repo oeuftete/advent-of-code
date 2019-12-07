@@ -58,4 +58,4 @@ def test_opcodes_five_through_eight(opcodes, input_data, output):
         intcode.execute()
     except KeyboardInterrupt:
         pass
-    assert intcode.output_data[-1] == output
+    assert intcode.last_output == output

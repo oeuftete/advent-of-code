@@ -8,4 +8,4 @@ def test_day5_solution():
     puzzle = Puzzle(year=2019, day=5)
     intcode = Intcode(puzzle.input_data, input_data=[1])
     intcode.execute()
-    assert intcode.output_data[-1] == int(puzzle.answer_a)
+    assert intcode.last_output == int(puzzle.answer_a)

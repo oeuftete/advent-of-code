@@ -9,8 +9,8 @@ if __name__ == '__main__':
 
     intcode_a = Intcode(puzzle.input_data, input_data=[1])
     intcode_a.execute()
-    puzzle.answer_a = intcode_a.output_data[-1]
+    puzzle.answer_a = intcode_a.last_output
 
     intcode_b = Intcode(puzzle.input_data, input_data=[5])
     intcode_b.execute()
-    puzzle.answer_b = intcode_b.output_data[-1]
+    puzzle.answer_b = intcode_b.last_output

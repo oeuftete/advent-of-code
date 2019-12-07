@@ -22,6 +22,12 @@ class Intcode(object):
         self.input_data = input_data or list()
         self.output_data = list()
 
+    @property
+    def last_output(self):
+        if self.output_data:
+            return self.output_data[-1]
+        return
+
     @classmethod
     def parse_op(cls, opcode):
         """Parse an opcode, and return the op and a list of modes."""
@@ -34,6 +40,9 @@ class Intcode(object):
     def execute(self):
         opcodes = self.opcodes
         loops = 0
+
+        logging.debug('Executing with parameters:')
+        logging.debug(f'  input_data: {self.input_data}')
 
         while True:
             if loops > 10:
@@ -65,10 +74,12 @@ class Intcode(object):
                 self.pointer += 4
             #  INPUT
             elif op == 3:
+                input_value = self.input_data.pop(0)
+                logging.debug(f'Processing input value {input_value}...')
                 if modes[0]:
-                    opcodes[i + 1] = self.input_data.pop(0)
+                    opcodes[i + 1] = input_value
                 else:
-                    opcodes[opcodes[i + 1]] = self.input_data.pop(0)
+                    opcodes[opcodes[i + 1]] = input_value
                 self.pointer += 2
             #  OUTPUT
             elif op == 4:
