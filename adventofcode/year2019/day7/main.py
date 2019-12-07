@@ -9,3 +9,6 @@ if __name__ == '__main__':
 
     am = AmplificationMaximizer(puzzle.input_data)
     puzzle.answer_a = am.max_output_signal
+
+    am_feedback = AmplificationMaximizer(puzzle.input_data, feedback=True)
+    puzzle.answer_b = am_feedback.max_output_signal

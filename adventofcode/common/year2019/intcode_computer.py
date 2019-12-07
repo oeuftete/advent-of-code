@@ -1,9 +1,19 @@
 import logging
 
 
+class IntcodeHaltedException(Exception):
+    pass
+
+
 class Intcode(object):
     """The Intcode computer used in 2019 adventofcode challenges."""
-    def __init__(self, opcodes, noun=None, verb=None, input_data=None):
+    def __init__(self,
+                 opcodes,
+                 noun=None,
+                 verb=None,
+                 input_data=None,
+                 pause_on_output=False,
+                 computer_name='intcode'):
         if isinstance(opcodes, str):
             opcodes = [int(op) for op in opcodes.split(',')]
 
@@ -17,10 +27,18 @@ class Intcode(object):
         if self.verb:
             self.opcodes[2] = self.verb
 
-        self.pointer = 0
-
         self.input_data = input_data or list()
+        self.pause_on_output = pause_on_output
+
+        self.paused = self.halted = False
+
+        self.pointer = 0
         self.output_data = list()
+
+        self.computer_name = computer_name
+
+    def debug_log(self, msg):
+        logging.debug(f'{self.computer_name}: {msg}')
 
     @property
     def last_output(self):
@@ -41,8 +59,16 @@ class Intcode(object):
         opcodes = self.opcodes
         loops = 0
 
-        logging.debug('Executing with parameters:')
-        logging.debug(f'  input_data: {self.input_data}')
+        if self.halted:
+            raise IntcodeHaltedException(
+                'The intcode computer has been halted!')
+
+        if self.paused:
+            self.debug_log(f'-- RESUME (at {self.pointer}) --')
+            self.paused = False
+
+        self.debug_log('Executing with parameters:')
+        self.debug_log(f'  input_data: {self.input_data}')
 
         while True:
             if loops > 10:
@@ -51,8 +77,8 @@ class Intcode(object):
             i = self.pointer
 
             op, modes = self.parse_op(opcodes[i])
-            logging.debug(f'Processing op {op} at position {i}...')
-            logging.debug(f'  Opcodes: {opcodes}')
+            self.debug_log(f'Processing op {op} at position {i}...')
+            self.debug_log(f'  Opcodes: {opcodes}')
 
             #  ADD
             if op == 1:
@@ -75,7 +101,7 @@ class Intcode(object):
             #  INPUT
             elif op == 3:
                 input_value = self.input_data.pop(0)
-                logging.debug(f'Processing input value {input_value}...')
+                self.debug_log(f'Processing input value {input_value}...')
                 if modes[0]:
                     opcodes[i + 1] = input_value
                 else:
@@ -89,8 +115,13 @@ class Intcode(object):
                     o = opcodes[opcodes[i + 1]]
 
                 self.output_data.append(o)
-                logging.debug(f'Output data appended: {o}')
+                self.debug_log(f'Output data appended: {o}')
                 self.pointer += 2
+
+                if self.pause_on_output:
+                    self.debug_log(
+                        f'-- PAUSE (will resume at {self.pointer}) --')
+                    return opcodes
             #  JUMP-IF-TRUE
             elif op == 5:
                 p = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
@@ -148,6 +179,7 @@ class Intcode(object):
                 self.pointer += 4
             #  HALT
             elif op == 99:
+                self.halted = True
                 return opcodes
 
             else:
