@@ -1,3 +1,5 @@
+import pytest
+
 from adventofcode.common.coordinate import Coordinate
 
 
@@ -37,3 +39,6 @@ def test_bounding():
     assert not c_5_5.is_bounded_by(c_1_1, 'east')
     assert not c_5_5.is_bounded_by(c_1_1, 'north')
     assert c_5_5.is_bounded_by(c_1_1, 'south')
+
+    with pytest.raises(ValueError):
+        c_2_1.is_bounded_by(c_1_1, 'up')
