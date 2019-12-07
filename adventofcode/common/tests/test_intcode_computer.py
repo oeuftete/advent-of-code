@@ -1,7 +1,6 @@
 import pytest
 
-from adventofcode.common.year2019.intcode_computer import (Intcode,
-                                                           run_program)
+from adventofcode.common.year2019.intcode_computer import Intcode
 
 
 @pytest.mark.parametrize("opcodes,output_codes", [
@@ -10,17 +9,17 @@ from adventofcode.common.year2019.intcode_computer import (Intcode,
     ([2, 4, 4, 5, 99, 0], [2, 4, 4, 5, 99, 9801]),
     ([1, 1, 1, 4, 99, 5, 6, 0, 99], [30, 1, 1, 4, 2, 5, 6, 0, 99]),
 ])
-def test_run_program(opcodes, output_codes):
-    assert run_program(opcodes) == output_codes
+def test_intcode_execute_result(opcodes, output_codes):
+    assert Intcode(opcodes).execute() == output_codes
 
 
 @pytest.mark.parametrize("opcodes", [
     [3, 0, 0, 0, 99],
     [1, 1, 1, 4, 99, 5, 6, 0, 0],
 ])
-def test_run_program_bad_op(opcodes):
+def test_intcode_execute_bad_op(opcodes):
     with pytest.raises(Exception) as e:
-        run_program(opcodes)
+        Intcode(opcodes).execute()
         assert 'Unknown opcode' in str(e.value)
 
 
@@ -29,9 +28,9 @@ def test_run_program_bad_op(opcodes):
     [3, 0, 0, 0],
     [1, 1, 1, 4, 99, 5, 6, 0],
 ])
-def test_run_program_early_exit(opcodes):
+def test_intcode_execute_early_exit(opcodes):
     with pytest.raises(Exception) as e:
-        run_program(opcodes)
+        Intcode(opcodes).execute()
         assert 'Unterminated program' in str(e.value)
 
 

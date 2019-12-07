@@ -5,8 +5,7 @@ from adventofcode.year2019.day2.solution import find_inputs
 
 
 @pytest.mark.parametrize("opcodes,output_0,noun,verb", [
-    ([int(op) for op in Puzzle(year=2019, day=2).input_data.split(',')
-      ], 3765464, 12, 2),
+    (Puzzle(year=2019, day=2).input_data, 3765464, 12, 2),
 ])
 def test_find_inputs(opcodes, output_0, noun, verb):
     assert find_inputs(opcodes, output_0) == (noun, verb)

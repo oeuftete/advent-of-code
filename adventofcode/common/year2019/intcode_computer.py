@@ -154,8 +154,3 @@ class Intcode(object):
                 raise Exception(f'Unknown opcode [{op}]!')
 
         raise Exception('Unterminated program!')
-
-
-def run_program(opcodes, noun=None, verb=None, input_data=None):
-    """A thin wrapper to run an Intcode program."""
-    return Intcode(opcodes, noun, verb, input_data).execute()
