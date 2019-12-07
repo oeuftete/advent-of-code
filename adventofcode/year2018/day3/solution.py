@@ -1,7 +1,7 @@
 from collections import Counter
 import re
 
-from adventofcode.common.helpers import day_data
+from aocd.models import Puzzle
 
 
 def parse_claim(claim):
@@ -38,6 +38,7 @@ def unoverlapped_claim(claims):
 
 
 if __name__ == '__main__':
-    claims = day_data(3)
+    puzzle = Puzzle(year=2018, day=3)
+    claims = puzzle.input_data.split('\n')
     print("Problem 1:", len(overlapped_squares(claims)))
     print("Problem 2:", unoverlapped_claim(claims))

@@ -1,6 +1,6 @@
 from itertools import groupby
 
-from adventofcode.common.helpers import day_data
+from aocd.models import Puzzle
 
 
 def box_checksum(box_ids):
@@ -30,6 +30,6 @@ def box_id_counter(box_id, repeat_count):
 
 
 if __name__ == '__main__':
-    box_ids = day_data(2)
+    box_ids = Puzzle(year=2018, day=2).input_data.split('\n')
     print("Problem 1:", box_checksum(box_ids))
     print("Problem 2:", common_letters_for_close(box_ids))

@@ -1,7 +1,7 @@
 import logging
 import string
 
-from adventofcode.common.helpers import day_data
+from aocd.models import Puzzle
 
 logging.basicConfig(level=logging.INFO)
 
@@ -38,7 +38,7 @@ def shortest_reduced_polymer(polymer, bad_units):
 
 
 if __name__ == '__main__':
-    polymer = day_data(5)[0]
+    polymer = Puzzle(year=2018, day=5).input_data
     print("Problem 1:", len(reacted_polymer(polymer)))
     print("Problem 2:",
           shortest_reduced_polymer(polymer, string.ascii_lowercase))

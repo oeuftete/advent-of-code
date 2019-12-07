@@ -3,7 +3,7 @@ from functools import total_ordering
 import logging
 import re
 
-from adventofcode.common.helpers import day_data
+from aocd.models import Puzzle
 
 
 @total_ordering
@@ -157,7 +157,9 @@ class GuardSleepLog:
 
 
 if __name__ == '__main__':
-    guard_log = day_data(4)
+    puzzle = Puzzle(year=2018, day=4)
+    guard_log = puzzle.input_data.split('\n')
+
     sleepy = sleepiest_guard_in_log(guard_log)
     print("Problem 1:", sleepy.no * sleepy.sleepy_minute())
 

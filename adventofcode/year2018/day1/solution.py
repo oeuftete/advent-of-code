@@ -1,7 +1,7 @@
 from functools import reduce
 from itertools import cycle
 
-from adventofcode.common.helpers import day_data
+from aocd.models import Puzzle
 
 
 def frequency_summer(freq_deltas):
@@ -19,6 +19,6 @@ def frequency_repeat_checker(freq_deltas):
 
 
 if __name__ == '__main__':
-    frequencies = day_data(1)
+    frequencies = Puzzle(year=2018, day=1).input_data.split('\n')
     print("Problem 1:", frequency_summer(frequencies))
     print("Problem 2:", frequency_repeat_checker(frequencies))
