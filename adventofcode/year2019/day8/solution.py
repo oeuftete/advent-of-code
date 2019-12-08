@@ -39,6 +39,27 @@ class Image(object):
             self.layers.append(layer)
 
     @property
+    def rendered(self):
+        #  Make a new one-layer image, all '2's
+        rendered_image = Image('2' * self.width * self.height,
+                               (self.width, self.height))
+
+        for l in self.layers:
+            new_layer = Layer()
+            for i, row in enumerate(l.rows):
+                new_row = map(lambda x, y: y if x == '2' else x,
+                              rendered_image.layers[0].rows[i], row)
+                new_layer.append_row(new_row)
+
+            rendered_image.layers = [new_layer]
+
+        return '\n'.join([''.join(r) for r in rendered_image.layers[0].rows])
+
+    @property
+    def rendered_clearly(self):
+        return self.rendered.translate(str.maketrans("10", u"\u2588 "))
+
+    @property
     def solution_a(self):
         solution = None
         min_zeroes = math.inf
