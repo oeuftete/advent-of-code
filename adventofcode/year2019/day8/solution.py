@@ -3,9 +3,11 @@ import math
 
 
 class Layer(object):
-    def __init__(self, size, data=None):
-        self.data = data
+    def __init__(self, size, data):
         self.size = size
+
+        assert len(data) == self.area
+        self.data = data
 
         self.rows = list()
 
@@ -19,10 +21,14 @@ class Layer(object):
     def height(self):
         return self.size[1]
 
+    @property
+    def area(self):
+        return self.width * self.height
+
     def _build_layer(self):
         data_string = self.data
-        while data_string:
-            for _ in range(self.height):
+        for _ in range(self.height):
+            while data_string:
                 self.append_row(data_string[:self.width])
                 data_string = data_string[self.width:]
 
@@ -51,8 +57,8 @@ class Image(object):
         self.layers = list()
         data_string = self.data
 
-        while data_string:
-            for _ in range(self.area):
+        for _ in range(self.area):
+            while data_string:
                 layer = Layer(size=self.size, data=data_string[:self.area])
                 self.layers.append(layer)
                 data_string = data_string[self.area:]
