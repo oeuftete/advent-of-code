@@ -3,8 +3,28 @@ import math
 
 
 class Layer(object):
-    def __init__(self, rows=None):
-        self.rows = rows or list()
+    def __init__(self, size, data=None):
+        self.data = data
+        self.size = size
+
+        self.rows = list()
+
+        self._build_layer()
+
+    @property
+    def width(self):
+        return self.size[0]
+
+    @property
+    def height(self):
+        return self.size[1]
+
+    def _build_layer(self):
+        data_string = self.data
+        while data_string:
+            for _ in range(self.height):
+                self.append_row(data_string[:self.width])
+                data_string = data_string[self.width:]
 
     def __eq__(self, other):
         if len(self.rows) != len(other.rows):
@@ -23,6 +43,7 @@ class Layer(object):
 class Image(object):
     def __init__(self, data, size):
         self.data = data
+        self.size = size
         self.width, self.height = size
         self._build_layers()
 
@@ -31,29 +52,27 @@ class Image(object):
         data_string = self.data
 
         while data_string:
-            layer = Layer()
-            for _ in range(self.height):
-                layer.append_row(data_string[:self.width])
-                data_string = data_string[self.width:]
+            for _ in range(self.area):
+                layer = Layer(size=self.size, data=data_string[:self.area])
+                self.layers.append(layer)
+                data_string = data_string[self.area:]
 
-            self.layers.append(layer)
+    @property
+    def area(self):
+        return self.width * self.height
 
     @property
     def rendered(self):
-        #  Make a new one-layer image, all '2's
-        rendered_image = Image('2' * self.width * self.height,
-                               (self.width, self.height))
+        #  Make a new layer, all transparent '2's
+        new_layer = Layer(size=self.size, data='2' * self.area)
 
-        for l in self.layers:
-            new_layer = Layer()
-            for i, row in enumerate(l.rows):
-                new_row = map(lambda x, y: y if x == '2' else x,
-                              rendered_image.layers[0].rows[i], row)
-                new_layer.append_row(new_row)
+        for layer in self.layers:
+            for i, row in enumerate(layer.rows):
+                new_layer.rows[i] = list(
+                    map(lambda x, y: y
+                        if x == '2' else x, new_layer.rows[i], row))
 
-            rendered_image.layers = [new_layer]
-
-        return '\n'.join([''.join(r) for r in rendered_image.layers[0].rows])
+        return '\n'.join([''.join(r) for r in new_layer.rows])
 
     @property
     def rendered_clearly(self):

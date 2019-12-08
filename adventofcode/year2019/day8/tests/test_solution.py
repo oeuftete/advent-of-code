@@ -5,8 +5,8 @@ from adventofcode.year2019.day8.solution import (Layer, Image)
 
 @pytest.mark.parametrize("image_data,image_size,layers,solution_a",
                          [("123456789012", (3, 2), [
-                             Layer([list('123'), list('456')]),
-                             Layer([list('789'), list('012')]),
+                             Layer(data='123456', size=(3, 2)),
+                             Layer(data='789012', size=(3, 2)),
                          ], 1)])
 def test_example_a(image_data, image_size, layers, solution_a):
     image = Image(image_data, size=image_size)
