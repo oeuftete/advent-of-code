@@ -6,5 +6,5 @@ def find_inputs(opcodes, output_0):
         for verb in range(100):
             intcode = Intcode(opcodes, noun, verb)
             intcode.execute()
-            if intcode.opcodes[0] == output_0:
+            if intcode.memory[0] == output_0:
                 return (noun, verb)

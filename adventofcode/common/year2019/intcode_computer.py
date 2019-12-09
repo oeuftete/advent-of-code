@@ -1,8 +1,16 @@
+from collections import defaultdict
+from enum import Enum
 import logging
 
 
 class IntcodeHaltedException(Exception):
     pass
+
+
+class IntcodeMode(Enum):
+    POSITION = 0
+    IMMEDIATE = 1
+    RELATIVE = 2
 
 
 class Intcode(object):
@@ -18,14 +26,17 @@ class Intcode(object):
             opcodes = [int(op) for op in opcodes.split(',')]
 
         self.opcodes = opcodes
+        self.memory = defaultdict(int)
+        for i, op in enumerate(opcodes):
+            self.memory[i] = op
 
         self.noun = noun
         self.verb = verb
 
         if self.noun:
-            self.opcodes[1] = self.noun
+            self.memory[1] = self.noun
         if self.verb:
-            self.opcodes[2] = self.verb
+            self.memory[2] = self.verb
 
         self.input_data = input_data or list()
         self.pause_on_output = pause_on_output
@@ -33,6 +44,8 @@ class Intcode(object):
         self.paused = self.halted = False
 
         self.pointer = 0
+        self.relative_base = 0
+
         self.output_data = list()
 
         self.computer_name = computer_name
@@ -51,12 +64,14 @@ class Intcode(object):
         """Parse an opcode, and return the op and a list of modes."""
         opcode = str(opcode)
         op = int(opcode[-2:])
-        modes = [0, 0, 0]
-        modes[0:len(opcode[:-2])] = [int(i) for i in reversed(opcode[:-2])]
+        modes = [IntcodeMode(0)] * 3
+        modes[0:len(opcode[:-2])] = [
+            IntcodeMode(int(i)) for i in reversed(opcode[:-2])
+        ]
         return op, modes
 
     def execute(self):
-        opcodes = self.opcodes
+        memory = self.memory
         loops = 0
 
         if self.halted:
@@ -70,49 +85,74 @@ class Intcode(object):
         self.debug_log('Executing with parameters:')
         self.debug_log(f'  input_data: {self.input_data}')
 
+        def get_offset(mode):
+            if mode == IntcodeMode.RELATIVE:
+                return self.relative_base
+            return 0
+
         while True:
             if loops > 10:
                 break
 
             i = self.pointer
 
-            op, modes = self.parse_op(opcodes[i])
-            self.debug_log(f'Processing op {op} at position {i}...')
-            self.debug_log(f'  Opcodes: {opcodes}')
+            op, modes = self.parse_op(memory[i])
+            self.debug_log(
+                f'Processing op {op} at position {i} with modes {modes}'
+                f' relative base {self.relative_base}...')
+            self.debug_log(f'  memory: {memory.values()}')
 
             #  ADD
             if op == 1:
-                s = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
-                s += opcodes[i + 2] if modes[1] else opcodes[opcodes[i + 2]]
-                if modes[2]:
-                    opcodes[i + 3] = s
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    s = memory[i + 1]
                 else:
-                    opcodes[opcodes[i + 3]] = s
+                    s = memory[memory[i + 1] + get_offset(modes[0])]
+
+                if modes[1] == IntcodeMode.IMMEDIATE:
+                    s += memory[i + 2]
+                else:
+                    s += memory[memory[i + 2] + get_offset(modes[1])]
+
+                if modes[2] == IntcodeMode.IMMEDIATE:
+                    memory[i + 3] = s
+                else:
+                    memory[memory[i + 3] + get_offset(modes[2])] = s
+
                 self.pointer += 4
             #  MULTIPLY
             elif op == 2:
-                m = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
-                m *= opcodes[i + 2] if modes[1] else opcodes[opcodes[i + 2]]
-                if modes[2]:
-                    opcodes[i + 3] = m
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    m = memory[i + 1]
                 else:
-                    opcodes[opcodes[i + 3]] = m
+                    m = memory[memory[i + 1] + get_offset(modes[0])]
+
+                if modes[1] == IntcodeMode.IMMEDIATE:
+                    m *= memory[i + 2]
+                else:
+                    m *= memory[memory[i + 2] + get_offset(modes[1])]
+
+                if modes[2] == IntcodeMode.IMMEDIATE:
+                    memory[i + 3] = m
+                else:
+                    memory[memory[i + 3] + get_offset(modes[2])] = m
+
                 self.pointer += 4
             #  INPUT
             elif op == 3:
                 input_value = self.input_data.pop(0)
                 self.debug_log(f'Processing input value {input_value}...')
-                if modes[0]:
-                    opcodes[i + 1] = input_value
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    memory[i + 1] = input_value
                 else:
-                    opcodes[opcodes[i + 1]] = input_value
+                    memory[memory[i + 1] + get_offset(modes[0])] = input_value
                 self.pointer += 2
             #  OUTPUT
             elif op == 4:
-                if modes[0]:
-                    o = opcodes[i + 1]
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    o = memory[i + 1]
                 else:
-                    o = opcodes[opcodes[i + 1]]
+                    o = memory[memory[i + 1] + get_offset(modes[0])]
 
                 self.output_data.append(o)
                 self.debug_log(f'Output data appended: {o}')
@@ -121,14 +161,20 @@ class Intcode(object):
                 if self.pause_on_output:
                     self.debug_log(
                         f'-- PAUSE (will resume at {self.pointer}) --')
-                    return opcodes
+                    return list(memory.values())
             #  JUMP-IF-TRUE
             elif op == 5:
-                p = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    p = memory[i + 1]
+                else:
+                    p = memory[memory[i + 1] + get_offset(modes[0])]
 
                 if p:
-                    self.pointer = (opcodes[i + 2]
-                                    if modes[1] else opcodes[opcodes[i + 2]])
+                    if modes[1] == IntcodeMode.IMMEDIATE:
+                        self.pointer = memory[i + 2]
+                    else:
+                        self.pointer = memory[memory[i + 2] +
+                                              get_offset(modes[1])]
                     if self.pointer == i:
                         logging.warning(f'Loop in op {op}, position {i}')
                         loops += 1
@@ -137,11 +183,17 @@ class Intcode(object):
 
             #  JUMP-IF-FALSE
             elif op == 6:
-                p = opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]]
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    p = memory[i + 1]
+                else:
+                    p = memory[memory[i + 1] + get_offset(modes[0])]
 
                 if p == 0:
-                    self.pointer = (opcodes[i + 2]
-                                    if modes[1] else opcodes[opcodes[i + 2]])
+                    if modes[1] == IntcodeMode.IMMEDIATE:
+                        self.pointer = memory[i + 2]
+                    else:
+                        self.pointer = memory[memory[i + 2] +
+                                              get_offset(modes[1])]
                     if self.pointer == i:
                         logging.warning(f'Loop in op {op}, position {i}')
                         loops += 1
@@ -149,38 +201,53 @@ class Intcode(object):
                     self.pointer += 3
             #  LESS THAN
             elif op == 7:
-                p1 = (opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]])
-                p2 = (opcodes[i + 2] if modes[1] else opcodes[opcodes[i + 2]])
-                if p1 < p2:
-                    if modes[2]:
-                        opcodes[i + 3] = 1
-                    else:
-                        opcodes[opcodes[i + 3]] = 1
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    p1 = memory[i + 1]
                 else:
-                    if modes[2]:
-                        opcodes[i + 3] = 0
-                    else:
-                        opcodes[opcodes[i + 3]] = 0
+                    p1 = memory[memory[i + 1] + get_offset(modes[0])]
+
+                if modes[1] == IntcodeMode.IMMEDIATE:
+                    p2 = memory[i + 2]
+                else:
+                    p2 = memory[memory[i + 2] + get_offset(modes[1])]
+
+                v = 1 if p1 < p2 else 0
+
+                if modes[2] == IntcodeMode.IMMEDIATE:
+                    memory[i + 3] = v
+                else:
+                    memory[memory[i + 3] + get_offset(modes[2])] = v
                 self.pointer += 4
             #  EQUALS
             elif op == 8:
-                p1 = (opcodes[i + 1] if modes[0] else opcodes[opcodes[i + 1]])
-                p2 = (opcodes[i + 2] if modes[1] else opcodes[opcodes[i + 2]])
-                if p1 == p2:
-                    if modes[2]:
-                        opcodes[i + 3] = 1
-                    else:
-                        opcodes[opcodes[i + 3]] = 1
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    p1 = memory[i + 1]
                 else:
-                    if modes[2]:
-                        opcodes[i + 3] = 0
-                    else:
-                        opcodes[opcodes[i + 3]] = 0
+                    p1 = memory[memory[i + 1] + get_offset(modes[0])]
+
+                if modes[1] == IntcodeMode.IMMEDIATE:
+                    p2 = memory[i + 2]
+                else:
+                    p2 = memory[memory[i + 2] + get_offset(modes[1])]
+
+                v = 1 if p1 == p2 else 0
+
+                if modes[2] == IntcodeMode.IMMEDIATE:
+                    memory[i + 3] = v
+                else:
+                    memory[memory[i + 3] + get_offset(modes[2])] = v
                 self.pointer += 4
+            elif op == 9:
+                if modes[0] == IntcodeMode.IMMEDIATE:
+                    self.relative_base += memory[i + 1]
+                else:
+                    self.relative_base += memory[memory[i + 1] +
+                                                 get_offset(modes[0])]
+                self.pointer += 2
             #  HALT
             elif op == 99:
                 self.halted = True
-                return opcodes
+                return list(memory.values())
 
             else:
                 raise Exception(f'Unknown opcode [{op}]!')

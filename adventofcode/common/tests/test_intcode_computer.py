@@ -39,7 +39,7 @@ LONG_EXAMPLE = ('3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,'
                 '999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99')
 
 
-@pytest.mark.parametrize("opcodes,input_data,output", [
+@pytest.mark.parametrize("opcodes,input_data,last_output", [
     ('3,9,8,9,10,9,4,9,99,-1,8', [8], 1),
     ('3,9,8,9,10,9,4,9,99,-1,8', [7], 0),
     ('3,9,8,9,10,9,4,9,99,-1,8', [9], 0),
@@ -51,10 +51,30 @@ LONG_EXAMPLE = ('3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,'
     (LONG_EXAMPLE, [8], 1000),
     (LONG_EXAMPLE, [9], 1001),
 ])
-def test_opcodes_five_through_eight(opcodes, input_data, output):
+def test_opcodes_five_through_eight(opcodes, input_data, last_output):
     intcode = Intcode(opcodes, input_data=input_data)
     intcode.execute()
-    assert intcode.last_output == output
+    assert intcode.last_output == last_output
+
+
+@pytest.mark.parametrize("opcodes,input_data,output", [
+    ('109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99', [], [
+        int(i) for i in
+        '109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99'.split(',')
+    ]),
+    ('104,1125899906842624,99', [], [1125899906842624]),
+])
+def test_relative_mode_and_big_numbers(opcodes, input_data, output):
+    intcode = Intcode(opcodes, input_data=input_data)
+    intcode.execute()
+    assert intcode.output_data == output
+
+
+def test_big_number_indefinite_test_case():
+    """For whatever reason, the output here is just 'a 16-digit number'."""
+    intcode = Intcode('1102,34915192,34915192,7,4,7,99,0')
+    intcode.execute()
+    assert len(str(intcode.last_output)) == 16
 
 
 def test_pre_execution_output():
