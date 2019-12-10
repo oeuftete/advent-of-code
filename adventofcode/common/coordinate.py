@@ -3,13 +3,12 @@ from functools import total_ordering
 
 @total_ordering
 class Coordinate():
-    def __init__(self, **kwargs):
-        if kwargs.get('csv', None):
-            (self.x, self.y) = map(int, kwargs['csv'].replace(" ",
-                                                              "").split(","))
+    def __init__(self, x=0, y=0, csv=None):
+        if csv:
+            (self.x, self.y) = map(int, csv.replace(" ", "").split(","))
         else:
-            self.x = kwargs['x']
-            self.y = kwargs['y']
+            self.x = x
+            self.y = y
 
     def manhattan_distance(self, other):
         return abs(self.x - other.x) + abs(self.y - other.y)

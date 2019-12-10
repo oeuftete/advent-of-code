@@ -18,6 +18,9 @@ def test_coordinate():
     assert c1 < c2
     assert c1 == Coordinate(x=1, y=1)
 
+    c3 = Coordinate(5, 6)
+    assert str(c3) == "(5, 6)"
+
 
 def test_bounding():
     c_1_1 = Coordinate(x=1, y=1)
