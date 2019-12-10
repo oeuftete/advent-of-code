@@ -22,6 +22,12 @@ class Coordinate():
     def __str__(self):
         return "({}, {})".format(self.x, self.y)
 
+    def __repr__(self):
+        return str(self)
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
     def is_bounded_by(self, other, direction):
         if direction == 'east':
             return (self.x < other.x
