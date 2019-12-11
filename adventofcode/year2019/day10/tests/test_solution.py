@@ -33,15 +33,20 @@ def test_asteroid():
 
 
 #  TODO: more maps
-TEST_MAP = '''.#..#
+TEST_MAP = '''
+.#..#
 .....
 #####
 ....#
-...##'''
+...##
+'''.strip()
 
 
 def test_asteroid_map():
     am = AsteroidMap(TEST_MAP)
+    assert am.width == 5
+    assert am.height == 5
+
     assert am.has_asteroid_at(Coordinate(2, 2))
     assert am.has_asteroid_at(Coordinate(3, 4))
 
@@ -49,3 +54,66 @@ def test_asteroid_map():
     assert am.get_asteroid_at(Coordinate(4, 4)).n_viewable == 7
 
     assert am.best_asteroid == Asteroid(3, 4)
+
+
+BIG_TEST_MAP = '''
+.#..##.###...#######
+##.############..##.
+.#.######.########.#
+.###.#######.####.#.
+#####.##.#.##.###.##
+..#####..#.#########
+####################
+#.####....###.#.#.##
+##.#################
+#####.##.###..####..
+..######..##.#######
+####.##.####...##..#
+.#####..#.######.###
+##...#.##########...
+#.##########.#######
+.####.#.###.###.#.##
+....##.##.###..#####
+.#.#.###########.###
+#.#.#.#####.####.###
+###.##.####.##.#..##
+'''.strip()
+
+
+@pytest.mark.slow
+def test_big_map():
+    am = AsteroidMap(BIG_TEST_MAP)
+    assert am.width == 20
+    assert am.height == 20
+    assert am.get_asteroid_at(Coordinate(11, 13)).n_viewable == 210
+    assert am.station == Asteroid(11, 13)
+
+    am.run_vaporizer()
+    assert am.vaporized[0] == Asteroid(11, 12)
+    assert am.vaporized[1] == Asteroid(12, 1)
+    assert am.vaporized[19] == Asteroid(16, 0)
+    assert am.vaporized[49] == Asteroid(16, 9)
+    assert am.vaporized[99] == Asteroid(10, 16)
+    assert am.vaporized[198] == Asteroid(9, 6)
+    assert am.vaporized[199] == Asteroid(8, 2)
+
+
+VAPORIZE_TEST_MAP = '''
+.#....#####...#..
+##...##.#####..##
+##...#...#.#####.
+..#.....#...###..
+..#.#.....#....##
+'''.strip()
+
+
+def test_vaporize_map():
+    am = AsteroidMap(VAPORIZE_TEST_MAP)
+    assert am.station == Asteroid(8, 3)
+
+    am.run_vaporizer()
+    assert am.vaporized[0] == Asteroid(8, 1)
+    assert am.vaporized[17] == Asteroid(4, 4)
+    assert am.vaporized[26] == Asteroid(5, 1)
+    assert am.vaporized[-2] == Asteroid(13, 3)
+    assert am.vaporized[-1] == Asteroid(14, 3)
