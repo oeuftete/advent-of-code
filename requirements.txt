@@ -5,19 +5,19 @@
 #    pip-compile requirements.in
 #
 advent-of-code-data==0.8.5
-anytree==2.7.2
+anytree==2.7.3
 attrs==19.3.0             # via pytest
 beautifulsoup4==4.8.1     # via advent-of-code-data
-bitarray==1.1.0
+bitarray==1.2.0
 cached-property==1.5.1
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
 codecov==2.0.15
-coverage==4.5.4           # via codecov, pytest-cov
+coverage==5.0             # via codecov, pytest-cov
 decorator==4.4.1          # via networkx
 idna==2.8                 # via requests
-importlib-metadata==1.2.0  # via pluggy, pytest
-more-itertools==8.0.1     # via pytest, zipp
+importlib-metadata==1.3.0  # via pluggy, pytest
+more-itertools==8.0.2     # via pytest, zipp
 networkx==2.4
 packaging==19.2           # via pytest
 pebble==4.4.0             # via advent-of-code-data
@@ -25,7 +25,7 @@ pluggy==0.13.1            # via pytest
 py==1.8.0                 # via pytest
 pyparsing==2.4.5          # via packaging
 pytest-cov==2.8.1
-pytest==5.3.1
+pytest==5.3.2
 python-dateutil==2.8.1    # via advent-of-code-data
 requests==2.22.0          # via advent-of-code-data, codecov
 six==1.13.0               # via anytree, packaging, python-dateutil
