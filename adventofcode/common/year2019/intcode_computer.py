@@ -7,6 +7,10 @@ class IntcodeHaltedException(Exception):
     pass
 
 
+class IntcodeNeedInputException(Exception):
+    pass
+
+
 class IntcodeMode(Enum):
     POSITION = 0
     IMMEDIATE = 1
@@ -140,7 +144,11 @@ class Intcode(object):
                 self.pointer += 4
             #  INPUT
             elif op == 3:
-                input_value = self.input_data.pop(0)
+                try:
+                    input_value = self.input_data.pop(0)
+                except IndexError:
+                    raise IntcodeNeedInputException('Input expected.')
+
                 self.debug_log(f'Processing input value {input_value}...')
                 if modes[0] == IntcodeMode.IMMEDIATE:
                     memory[i + 1] = input_value

@@ -9,3 +9,9 @@ if __name__ == '__main__':
 
     game = ArcadeCabinet(puzzle.input_data)
     puzzle.answer_a = game.blocks_count
+
+    play = ArcadeCabinet(puzzle.input_data,
+                         play=True,
+                         manual=False,
+                         screen=False)
+    puzzle.answer_b = play.score
