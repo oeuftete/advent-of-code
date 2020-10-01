@@ -31,6 +31,6 @@ requests==2.22.0          # via advent-of-code-data, codecov
 six==1.13.0               # via anytree, packaging, python-dateutil
 soupsieve==1.9.5          # via beautifulsoup4
 termcolor==1.1.0          # via advent-of-code-data
-urllib3==1.25.7
+urllib3==1.25.9
 wcwidth==0.1.7            # via pytest
 zipp==0.6.0               # via importlib-metadata
