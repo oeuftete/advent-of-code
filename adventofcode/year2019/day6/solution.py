@@ -29,9 +29,10 @@ class OrbitMap(object):
 
     def n_total_orbits(self, orbiter):
         all_paths = nx.all_simple_paths(self.g, self.ORIGIN, orbiter)
-        if all_paths:
+        try:
             return len(next(all_paths)) - 1
-        return 0
+        except StopIteration:
+            return 0
 
     def n_indirect_orbits(self, orbiter):
         total = self.n_total_orbits(orbiter)

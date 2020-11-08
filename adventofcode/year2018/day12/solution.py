@@ -75,7 +75,7 @@ class PotRow():
         logging.debug('bits = {}'.format(self.bits))
         logging.debug('Copy = {}'.format(copy))
 
-        for i in range(copy.length()):
+        for i in range(len(copy)):
             if copy.pop(0):
                 to_add = i - self.origin
                 logging.debug('Found pot at index {}.  Adding {}.'.format(
