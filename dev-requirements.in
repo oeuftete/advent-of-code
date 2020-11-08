@@ -1,4 +1,6 @@
 -r requirements.in
+black
 flake8
 ipython
-yapf
+isort
+pytest-flake8

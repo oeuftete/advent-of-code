@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @total_ordering
-class Cart():
+class Cart:
 
     #  sorted() order
     LEFT = (-1, 0)
@@ -22,22 +22,21 @@ class Cart():
         self.y = y
         self._build_vector(c)
 
-        self.intersection_vectors = itertools.cycle([
-            lambda c: c.turn_left(), lambda c: c.vector,
-            lambda c: c.turn_right()
-        ])
+        self.intersection_vectors = itertools.cycle(
+            [lambda c: c.turn_left(), lambda c: c.vector, lambda c: c.turn_right()]
+        )
 
     def __lt__(self, other):
         return (self.y, self.x) < (other.y, other.x)
 
     def _build_vector(self, c):
-        if c == '>':
+        if c == ">":
             self.vector = Cart.RIGHT
-        elif c == '<':
+        elif c == "<":
             self.vector = Cart.LEFT
-        elif c == '^':
+        elif c == "^":
             self.vector = Cart.UP
-        elif c == 'v':
+        elif c == "v":
             self.vector = Cart.DOWN
 
     def move(self):
@@ -67,12 +66,12 @@ class Cart():
     def update_vector(self, tile):
         v = self.vector
 
-        logging.debug('update_vector: tile={}; v={}'.format(tile, v))
+        logging.debug("update_vector: tile={}; v={}".format(tile, v))
 
-        if tile == '+':
+        if tile == "+":
             #  TODO: A tad clunky
             self.vector = next(self.intersection_vectors)(self)
-        elif tile == '/':
+        elif tile == "/":
             if v in [Cart.LEFT, Cart.RIGHT]:
                 self.vector = self.turn_left()
             else:
@@ -82,7 +81,7 @@ class Cart():
                 self.vector = self.turn_right()
             else:
                 self.vector = self.turn_left()
-        elif tile == ' ':
+        elif tile == " ":
             raise OffTheRailsException
 
     @property
@@ -99,7 +98,7 @@ class OffTheRailsException(Exception):
     pass
 
 
-class Track():
+class Track:
     def __init__(self, grid_string):
         self.carts = list()
         self.grid = self._parse_grid(grid_string)
@@ -119,17 +118,17 @@ class Track():
         return self.grid[x][y]
 
     def _parse_grid(self, s):
-        g = defaultdict(lambda: defaultdict(lambda: ' '))
+        g = defaultdict(lambda: defaultdict(lambda: " "))
 
         row = 0
-        for l in s.split('\n'):
+        for l in s.split("\n"):
             col = 0
             for c in l:
-                if c == '>' or c == '<':
-                    g[col][row] = '-'
+                if c == ">" or c == "<":
+                    g[col][row] = "-"
                     self.carts.append(Cart(c, col, row))
-                elif c == '^' or c == 'v':
-                    g[col][row] = '|'
+                elif c == "^" or c == "v":
+                    g[col][row] = "|"
                     self.carts.append(Cart(c, col, row))
                 else:
                     g[col][row] = c
@@ -162,28 +161,33 @@ class Track():
         for c in [c for c in sorted(self.carts)]:
             if c.position in invalidated_start_positions:
                 logging.debug(
-                    'Not moving cart at {}:{}, it collided...'.format(
-                        c.x, c.y))
+                    "Not moving cart at {}:{}, it collided...".format(c.x, c.y)
+                )
                 continue
 
-            logging.debug('Moving cart at {}:{}, vector {}...'.format(
-                c.x, c.y, c.vector))
+            logging.debug(
+                "Moving cart at {}:{}, vector {}...".format(c.x, c.y, c.vector)
+            )
             c.move()
             new_tile = self.grid_square(c.x, c.y)
             c.update_vector(new_tile)
             logging.debug(
-                'Moved cart to {}:{}, tile [{}], new vector {}...'.format(
-                    c.x, c.y, new_tile, c.vector))
+                "Moved cart to {}:{}, tile [{}], new vector {}...".format(
+                    c.x, c.y, new_tile, c.vector
+                )
+            )
             try:
                 self.check_for_collisions()
             except TrackCollision as e:
-                logging.info('[{}] Collision at {}'.format(
-                    self.iterations, e.position))
+                logging.info("[{}] Collision at {}".format(self.iterations, e.position))
                 if self.crash_ends:
                     raise
                 else:
-                    logging.info('[{}] Cleaning up collision at {}'.format(
-                        self.iterations, e.position))
+                    logging.info(
+                        "[{}] Cleaning up collision at {}".format(
+                            self.iterations, e.position
+                        )
+                    )
                     self.clean_up_collision(e.position)
                     invalidated_start_positions.append(e.position)
 
@@ -200,7 +204,7 @@ class Track():
                 return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     grid_string = get_data(year=2018, day=13)
     track = Track(grid_string)
     track.run()

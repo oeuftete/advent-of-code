@@ -14,13 +14,13 @@ class Line(object):
         move_direction = move[0]
         move_distance = int(move[1:])
 
-        if move_direction == 'R':
+        if move_direction == "R":
             c_moved = Coordinate(x=c.x + move_distance, y=c.y)
-        elif move_direction == 'L':
+        elif move_direction == "L":
             c_moved = Coordinate(x=c.x - move_distance, y=c.y)
-        elif move_direction == 'U':
+        elif move_direction == "U":
             c_moved = Coordinate(x=c.x, y=c.y + move_distance)
-        elif move_direction == 'D':
+        elif move_direction == "D":
             c_moved = Coordinate(x=c.x, y=c.y - move_distance)
 
         return Line(c, c_moved)
@@ -38,19 +38,18 @@ class Line(object):
         return self.start.manhattan_distance(self.end)
 
     def intersection(self, other):
-        if ((self.horizontal and other.horizontal)
-                or (self.vertical and other.vertical)):
+        if (self.horizontal and other.horizontal) or (self.vertical and other.vertical):
             return None
 
         if self.horizontal:
-            if (other.start.x in range(*sorted((self.start.x, self.end.x)))
-                    and self.start.y in range(*sorted((other.start.y,
-                                                       other.end.y)))):
+            if other.start.x in range(
+                *sorted((self.start.x, self.end.x))
+            ) and self.start.y in range(*sorted((other.start.y, other.end.y))):
                 return Coordinate(x=other.start.x, y=self.start.y)
         else:
-            if (other.start.y in range(*sorted((self.start.y, self.end.y)))
-                    and self.start.x in range(*sorted((other.start.x,
-                                                       other.end.x)))):
+            if other.start.y in range(
+                *sorted((self.start.y, self.end.y))
+            ) and self.start.x in range(*sorted((other.start.x, other.end.x))):
                 return Coordinate(x=self.start.x, y=other.start.y)
 
 
@@ -70,7 +69,7 @@ def closest_intersection(path_one, path_two, use_steps=False):
     wires = [Wire(), Wire()]
 
     for i, path in enumerate([path_one, path_two]):
-        for move in path.split(','):
+        for move in path.split(","):
             wires[i].add_line(move)
 
     # Now look at each line in wire 0, and find its intersections with wire 1's
@@ -86,26 +85,26 @@ def closest_intersection(path_one, path_two, use_steps=False):
 
             if not intersection:
                 path_two_step_count += line_path_two.length
-                logging.debug(
-                    f'... path two step count is {path_two_step_count}')
+                logging.debug(f"... path two step count is {path_two_step_count}")
                 continue
 
-            logging.debug(f'Found intersection {intersection}')
+            logging.debug(f"Found intersection {intersection}")
             intersections.append(intersection)
 
             step_count = (
-                path_one_step_count +
-                line_path_one.start.manhattan_distance(intersection) +
-                path_two_step_count +
-                line_path_two.start.manhattan_distance(intersection))
-            logging.debug(f'... step count is {step_count}')
+                path_one_step_count
+                + line_path_one.start.manhattan_distance(intersection)
+                + path_two_step_count
+                + line_path_two.start.manhattan_distance(intersection)
+            )
+            logging.debug(f"... step count is {step_count}")
             intersection_steps.append(step_count)
 
             path_two_step_count += line_path_two.length
-            logging.debug(f'... path two step count is {path_two_step_count}')
+            logging.debug(f"... path two step count is {path_two_step_count}")
 
         path_one_step_count += line_path_one.length
-        logging.debug(f'... path one step count is {path_one_step_count}')
+        logging.debug(f"... path one step count is {path_one_step_count}")
 
     optimum = math.inf
 

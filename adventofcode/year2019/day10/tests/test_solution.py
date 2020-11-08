@@ -5,18 +5,21 @@ from adventofcode.year2019.day10.solution import Line, Asteroid, AsteroidMap
 
 
 #  simple Line points_on_line tests first.
-@pytest.mark.parametrize("start,end,intersections", [
-    ((1, 0), (5, 0), [(2, 0), (3, 0), (4, 0)]),
-    ((0, 1), (0, 5), [(0, 2), (0, 3), (0, 4)]),
-    ((4, 3), (8, 3), [(5, 3), (6, 3), (7, 3)]),
-    ((1, 1), (3, 3), [(2, 2)]),
-    ((3, 3), (1, 1), [(2, 2)]),
-    ((1, 1), (7, 2), []),
-    ((7, 2), (7, 2), []),
-    ((1, 1), (7, 3), [(4, 2)]),
-    ((1, 1), (7, 4), [(3, 2), (5, 3)]),
-    ((1, 0), (3, 4), [(2, 2)]),
-])
+@pytest.mark.parametrize(
+    "start,end,intersections",
+    [
+        ((1, 0), (5, 0), [(2, 0), (3, 0), (4, 0)]),
+        ((0, 1), (0, 5), [(0, 2), (0, 3), (0, 4)]),
+        ((4, 3), (8, 3), [(5, 3), (6, 3), (7, 3)]),
+        ((1, 1), (3, 3), [(2, 2)]),
+        ((3, 3), (1, 1), [(2, 2)]),
+        ((1, 1), (7, 2), []),
+        ((7, 2), (7, 2), []),
+        ((1, 1), (7, 3), [(4, 2)]),
+        ((1, 1), (7, 4), [(3, 2), (5, 3)]),
+        ((1, 0), (3, 4), [(2, 2)]),
+    ],
+)
 def test_line(start, end, intersections):
     line_points = Line(Coordinate(*start), Coordinate(*end)).points_on_line
     assert line_points == [Coordinate(*i) for i in intersections]
@@ -33,13 +36,13 @@ def test_asteroid():
 
 
 #  TODO: more maps
-TEST_MAP = '''
+TEST_MAP = """
 .#..#
 .....
 #####
 ....#
 ...##
-'''.strip()
+""".strip()
 
 
 def test_asteroid_map():
@@ -56,7 +59,7 @@ def test_asteroid_map():
     assert am.best_asteroid == Asteroid(3, 4)
 
 
-BIG_TEST_MAP = '''
+BIG_TEST_MAP = """
 .#..##.###...#######
 ##.############..##.
 .#.######.########.#
@@ -77,7 +80,7 @@ BIG_TEST_MAP = '''
 .#.#.###########.###
 #.#.#.#####.####.###
 ###.##.####.##.#..##
-'''.strip()
+""".strip()
 
 
 @pytest.mark.slow
@@ -98,13 +101,13 @@ def test_big_map():
     assert am.vaporized[199] == Asteroid(8, 2)
 
 
-VAPORIZE_TEST_MAP = '''
+VAPORIZE_TEST_MAP = """
 .#....#####...#..
 ##...##.#####..##
 ##...#...#.#####.
 ..#.....#...###..
 ..#.#.....#....##
-'''.strip()
+""".strip()
 
 
 def test_vaporize_map():

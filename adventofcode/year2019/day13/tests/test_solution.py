@@ -13,8 +13,5 @@ def test_day13_solution():
     game = ArcadeCabinet(puzzle.input_data)
     assert game.blocks_count == int(puzzle.answer_a)
 
-    play = ArcadeCabinet(puzzle.input_data,
-                         play=True,
-                         manual=False,
-                         screen=False)
+    play = ArcadeCabinet(puzzle.input_data, play=True, manual=False, screen=False)
     assert play.score == int(puzzle.answer_b)

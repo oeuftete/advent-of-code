@@ -19,15 +19,18 @@ class IntcodeMode(Enum):
 
 class Intcode(object):
     """The Intcode computer used in 2019 adventofcode challenges."""
-    def __init__(self,
-                 opcodes,
-                 noun=None,
-                 verb=None,
-                 input_data=None,
-                 pause_on_output=False,
-                 computer_name='intcode'):
+
+    def __init__(
+        self,
+        opcodes,
+        noun=None,
+        verb=None,
+        input_data=None,
+        pause_on_output=False,
+        computer_name="intcode",
+    ):
         if isinstance(opcodes, str):
-            opcodes = [int(op) for op in opcodes.split(',')]
+            opcodes = [int(op) for op in opcodes.split(",")]
 
         self.opcodes = opcodes
         self.memory = defaultdict(int)
@@ -55,7 +58,7 @@ class Intcode(object):
         self.computer_name = computer_name
 
     def debug_log(self, msg):
-        logging.debug(f'{self.computer_name}: {msg}')
+        logging.debug(f"{self.computer_name}: {msg}")
 
     @property
     def last_output(self):
@@ -69,7 +72,7 @@ class Intcode(object):
         opcode = str(opcode)
         op = int(opcode[-2:])
         modes = [IntcodeMode(0)] * 3
-        modes[0:len(opcode[:-2])] = [
+        modes[0 : len(opcode[:-2])] = [
             IntcodeMode(int(i)) for i in reversed(opcode[:-2])
         ]
         return op, modes
@@ -79,15 +82,14 @@ class Intcode(object):
         loops = 0
 
         if self.halted:
-            raise IntcodeHaltedException(
-                'The intcode computer has been halted!')
+            raise IntcodeHaltedException("The intcode computer has been halted!")
 
         if self.paused:
-            self.debug_log(f'-- RESUME (at {self.pointer}) --')
+            self.debug_log(f"-- RESUME (at {self.pointer}) --")
             self.paused = False
 
-        self.debug_log('Executing with parameters:')
-        self.debug_log(f'  input_data: {self.input_data}')
+        self.debug_log("Executing with parameters:")
+        self.debug_log(f"  input_data: {self.input_data}")
 
         def get_offset(mode):
             if mode == IntcodeMode.RELATIVE:
@@ -102,9 +104,10 @@ class Intcode(object):
 
             op, modes = self.parse_op(memory[i])
             self.debug_log(
-                f'Processing op {op} at position {i} with modes {modes}'
-                f' relative base {self.relative_base}...')
-            self.debug_log(f'  memory: {memory.values()}')
+                f"Processing op {op} at position {i} with modes {modes}"
+                f" relative base {self.relative_base}..."
+            )
+            self.debug_log(f"  memory: {memory.values()}")
 
             #  ADD
             if op == 1:
@@ -147,9 +150,9 @@ class Intcode(object):
                 try:
                     input_value = self.input_data.pop(0)
                 except IndexError:
-                    raise IntcodeNeedInputException('Input expected.')
+                    raise IntcodeNeedInputException("Input expected.")
 
-                self.debug_log(f'Processing input value {input_value}...')
+                self.debug_log(f"Processing input value {input_value}...")
                 if modes[0] == IntcodeMode.IMMEDIATE:
                     memory[i + 1] = input_value
                 else:
@@ -163,12 +166,11 @@ class Intcode(object):
                     o = memory[memory[i + 1] + get_offset(modes[0])]
 
                 self.output_data.append(o)
-                self.debug_log(f'Output data appended: {o}')
+                self.debug_log(f"Output data appended: {o}")
                 self.pointer += 2
 
                 if self.pause_on_output:
-                    self.debug_log(
-                        f'-- PAUSE (will resume at {self.pointer}) --')
+                    self.debug_log(f"-- PAUSE (will resume at {self.pointer}) --")
                     return list(memory.values())
             #  JUMP-IF-TRUE
             elif op == 5:
@@ -181,10 +183,9 @@ class Intcode(object):
                     if modes[1] == IntcodeMode.IMMEDIATE:
                         self.pointer = memory[i + 2]
                     else:
-                        self.pointer = memory[memory[i + 2] +
-                                              get_offset(modes[1])]
+                        self.pointer = memory[memory[i + 2] + get_offset(modes[1])]
                     if self.pointer == i:
-                        logging.warning(f'Loop in op {op}, position {i}')
+                        logging.warning(f"Loop in op {op}, position {i}")
                         loops += 1
                 else:
                     self.pointer += 3
@@ -200,10 +201,9 @@ class Intcode(object):
                     if modes[1] == IntcodeMode.IMMEDIATE:
                         self.pointer = memory[i + 2]
                     else:
-                        self.pointer = memory[memory[i + 2] +
-                                              get_offset(modes[1])]
+                        self.pointer = memory[memory[i + 2] + get_offset(modes[1])]
                     if self.pointer == i:
-                        logging.warning(f'Loop in op {op}, position {i}')
+                        logging.warning(f"Loop in op {op}, position {i}")
                         loops += 1
                 else:
                     self.pointer += 3
@@ -249,8 +249,7 @@ class Intcode(object):
                 if modes[0] == IntcodeMode.IMMEDIATE:
                     self.relative_base += memory[i + 1]
                 else:
-                    self.relative_base += memory[memory[i + 1] +
-                                                 get_offset(modes[0])]
+                    self.relative_base += memory[memory[i + 1] + get_offset(modes[0])]
                 self.pointer += 2
             #  HALT
             elif op == 99:
@@ -258,6 +257,6 @@ class Intcode(object):
                 return list(memory.values())
 
             else:
-                raise Exception(f'Unknown opcode [{op}]!')
+                raise Exception(f"Unknown opcode [{op}]!")
 
-        raise Exception('Unterminated program!')
+        raise Exception("Unterminated program!")

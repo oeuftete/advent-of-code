@@ -6,7 +6,9 @@ from time import sleep
 
 from adventofcode.common.coordinate import Coordinate
 from adventofcode.common.year2019.intcode_computer import (
-    Intcode, IntcodeNeedInputException)
+    Intcode,
+    IntcodeNeedInputException,
+)
 
 
 class TileId(Enum):
@@ -22,16 +24,16 @@ class TileId(Enum):
     @property
     def c(self):
         if self.value == self.EMPTY.value:
-            return ' '
+            return " "
         elif self.value == self.WALL.value:
-            return '\u2588'
+            return "\u2588"
         elif self.value == self.BLOCK.value:
-            return '#'
+            return "#"
         elif self.value == self.PADDLE.value:
-            return '|'
+            return "|"
         elif self.value == self.BALL.value:
-            return 'o'
-        return '?'
+            return "o"
+        return "?"
 
 
 class ArcadeCabinet(object):
@@ -60,25 +62,25 @@ class ArcadeCabinet(object):
                     x, y, tile_id = self.intcode.output_data
 
                     if x == -1 and y == 0:
-                        logging.debug(f'Setting score: {tile_id}')
+                        logging.debug(f"Setting score: {tile_id}")
                         self.score = tile_id
                     else:
                         c = Coordinate(x, y)
                         t = TileId(tile_id)
                         self.tiles[c] = t
-                        logging.debug(f'Tile update: {c} -> {t}')
+                        logging.debug(f"Tile update: {c} -> {t}")
 
                         if tile_id == TileId.PADDLE.value:
-                            logging.debug(f'*** Paddle at {c}')
+                            logging.debug(f"*** Paddle at {c}")
                             self.paddle_location = c
                         elif tile_id == TileId.BALL.value:
-                            logging.debug(f'*** Ball at {c}')
+                            logging.debug(f"*** Ball at {c}")
                             self.ball_location = c
 
                     self.intcode.output_data = list()
 
                 if self.intcode.halted:
-                    logging.debug('HALTED')
+                    logging.debug("HALTED")
                     break
 
             except IntcodeNeedInputException:
@@ -101,8 +103,10 @@ class ArcadeCabinet(object):
         if not self.screen:
             return
 
-        print(f'  SCORE: {self.score}, ball: {self.ball_location}, '
-              f'paddle: {self.paddle_location}')
+        print(
+            f"  SCORE: {self.score}, ball: {self.ball_location}, "
+            f"paddle: {self.paddle_location}"
+        )
         screen = defaultdict(lambda: defaultdict(lambda: TileId.EMPTY))
 
         min_x = min_y = math.inf
@@ -116,7 +120,7 @@ class ArcadeCabinet(object):
             min_y = min(min_y, c.y)
 
         for x in range(min_x, max_x + 1):
-            line = ''
+            line = ""
             for y in range(min_y, max_y + 1):
                 line += screen[x, y].c
             print(line)
@@ -124,5 +128,4 @@ class ArcadeCabinet(object):
 
     @property
     def blocks_count(self):
-        return len(
-            [t for t in self.tiles.values() if t.value == TileId.BLOCK.value])
+        return len([t for t in self.tiles.values() if t.value == TileId.BLOCK.value])

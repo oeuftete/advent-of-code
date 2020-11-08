@@ -5,19 +5,21 @@ from adventofcode.year2018.day10.solution import (
     parse_point_and_vector,
 )
 
-from adventofcode.year2018.day10.tests.resources import (get_test_data,
-                                                         get_test_result)
+from adventofcode.year2018.day10.tests.resources import get_test_data, get_test_result
 
 TEST_POINTS = get_test_data()
 TEST_RESULT = get_test_result()
 
 
-@pytest.mark.parametrize("point_s,x,y,dx,dy", [
-    (TEST_POINTS[0], 9, 1, 0, 2),
-    (TEST_POINTS[1], 7, 0, -1, 0),
-    (TEST_POINTS[-1], -3, 6, 2, -1),
-    (TEST_POINTS[-2], 14, 7, -2, 0),
-])
+@pytest.mark.parametrize(
+    "point_s,x,y,dx,dy",
+    [
+        (TEST_POINTS[0], 9, 1, 0, 2),
+        (TEST_POINTS[1], 7, 0, -1, 0),
+        (TEST_POINTS[-1], -3, 6, 2, -1),
+        (TEST_POINTS[-2], 14, 7, -2, 0),
+    ],
+)
 def test_parse(point_s, x, y, dx, dy):
     assert parse_point_and_vector(point_s) == (x, y, dx, dy)
 

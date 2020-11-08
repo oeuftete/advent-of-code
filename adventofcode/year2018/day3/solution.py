@@ -5,12 +5,11 @@ from aocd.models import Puzzle
 
 
 def parse_claim(claim):
-    CLAIM_FORMAT = re.compile(r'#(\d+) @ (\d+),(\d+): (\d+)x(\d+)')
+    CLAIM_FORMAT = re.compile(r"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)")
     m = re.match(CLAIM_FORMAT, claim)
 
     #  This probably should graduate to an object
-    (claim_no, start_col, start_row, width,
-     height) = list(map(int, m.groups()))
+    (claim_no, start_col, start_row, width, height) = list(map(int, m.groups()))
 
     coordinates = list()
     for x in range(start_col, start_col + width):
@@ -37,8 +36,8 @@ def unoverlapped_claim(claims):
             return claim_no
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle = Puzzle(year=2018, day=3)
-    claims = puzzle.input_data.split('\n')
+    claims = puzzle.input_data.split("\n")
     print("Problem 1:", len(overlapped_squares(claims)))
     print("Problem 2:", unoverlapped_claim(claims))
