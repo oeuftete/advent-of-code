@@ -1,7 +1,7 @@
-from collections import (Counter, defaultdict)
-from functools import total_ordering
 import logging
 import re
+from collections import Counter, defaultdict
+from functools import total_ordering
 
 from aocd.models import Puzzle
 
@@ -9,8 +9,7 @@ from aocd.models import Puzzle
 @total_ordering
 class LogDay:
     def __init__(self, log_date):
-        LOG_DATE_FORMAT = re.compile(r'(\d{4})-(\d{2})-(\d{2}) '
-                                     r'(\d{2}):(\d{2})')
+        LOG_DATE_FORMAT = re.compile(r"(\d{4})-(\d{2})-(\d{2}) " r"(\d{2}):(\d{2})")
         m = re.match(LOG_DATE_FORMAT, log_date)
         (year, month, day, hour, minute) = map(int, m.groups())
         self.year = year
@@ -20,13 +19,22 @@ class LogDay:
         self.minute = minute
 
     def __eq__(self, other):
-        return ((self.year, self.month, self.day, self.hour,
-                 self.minute) == (other.year, other.month, other.day,
-                                  other.hour, other.minute))
+        return (self.year, self.month, self.day, self.hour, self.minute) == (
+            other.year,
+            other.month,
+            other.day,
+            other.hour,
+            other.minute,
+        )
 
     def __lt__(self, other):
-        return ((self.year, self.month, self.day, self.hour, self.minute) <
-                (other.year, other.month, other.day, other.hour, other.minute))
+        return (self.year, self.month, self.day, self.hour, self.minute) < (
+            other.year,
+            other.month,
+            other.day,
+            other.hour,
+            other.minute,
+        )
 
     def midnight_minute(self):
         if self.hour == 0:
@@ -34,14 +42,14 @@ class LogDay:
         return None
 
     def date(self):
-        return '%4d-%02d-%02d' % (self.year, self.month, self.day)
+        return "%4d-%02d-%02d" % (self.year, self.month, self.day)
 
 
 class LogEntry:
     def __init__(self, entry):
         LOG_FORMAT = re.compile(
-            r'\[(.*?)\] '
-            r'(wakes up|falls asleep|Guard #(\d+) begins shift)')
+            r"\[(.*?)\] " r"(wakes up|falls asleep|Guard #(\d+) begins shift)"
+        )
         m = re.match(LOG_FORMAT, entry)
         (datestamp, event, guard_no) = m.groups()
 
@@ -51,9 +59,9 @@ class LogEntry:
             self.guard_no = int(guard_no)
         else:
             self.guard_no = None
-        self.is_beginning = (guard_no is not None)
-        self.fell_asleep = (event == "falls asleep")
-        self.woke_up = (event == "wakes up")
+        self.is_beginning = guard_no is not None
+        self.fell_asleep = event == "falls asleep"
+        self.woke_up = event == "wakes up"
 
     def __eq__(self, other):
         return self.log_day == other.log_day
@@ -82,22 +90,24 @@ def generate_guard_sleep_logs(log):
         if entry.guard_no:
             logging.debug("Began shift: %d" % entry.guard_no)
             if sleeping_minute and current_guard != entry.guard_no:
-                guard_sleep_minutes[current_guard][entry.log_day.date()]. \
-                    extend(range(sleeping_minute, 60))
+                guard_sleep_minutes[current_guard][entry.log_day.date()].extend(
+                    range(sleeping_minute, 60)
+                )
             current_guard = entry.guard_no
             sleeping_minute = None
 
         if entry.fell_asleep:
             sleeping_minute = entry.log_day.midnight_minute()
-            logging.debug("Fell asleep: %d at %d" %
-                          (current_guard, sleeping_minute))
+            logging.debug("Fell asleep: %d at %d" % (current_guard, sleeping_minute))
 
         if entry.woke_up:
             guard_sleep_minutes[current_guard][entry.log_day.date()].extend(
-                range(sleeping_minute, entry.log_day.midnight_minute()))
-            logging.debug("Woke up: %d at %d (fell at %d)" %
-                          (current_guard, entry.log_day.midnight_minute(),
-                           sleeping_minute))
+                range(sleeping_minute, entry.log_day.midnight_minute())
+            )
+            logging.debug(
+                "Woke up: %d at %d (fell at %d)"
+                % (current_guard, entry.log_day.midnight_minute(), sleeping_minute)
+            )
             sleeping_minute = None
 
     logging.debug(guard_sleep_minutes)
@@ -111,9 +121,7 @@ def generate_guard_sleep_logs(log):
 
 def sleepiest_guard_in_log(log):
     guard_sleep_logs = generate_guard_sleep_logs(log)
-    return sorted(guard_sleep_logs,
-                  key=lambda x: x.total_minutes(),
-                  reverse=True)[0]
+    return sorted(guard_sleep_logs, key=lambda x: x.total_minutes(), reverse=True)[0]
 
 
 def sleepiest_guard_minute_in_log(log):
@@ -130,8 +138,11 @@ def sleepiest_guard_minute_in_log(log):
             max_occurrences = occurrences
             sleepy_minute = minute
 
-    logging.debug("Sleepiest guard-minute: %s: minute %s, %s times".format(
-        guard_no, sleepy_minute, occurrences))
+    logging.debug(
+        "Sleepiest guard-minute: %s: minute %s, %s times".format(
+            guard_no, sleepy_minute, occurrences
+        )
+    )
     return (guard_no, sleepy_minute, occurrences)
 
 
@@ -156,9 +167,9 @@ class GuardSleepLog:
         return count
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     puzzle = Puzzle(year=2018, day=4)
-    guard_log = puzzle.input_data.split('\n')
+    guard_log = puzzle.input_data.split("\n")
 
     sleepy = sleepiest_guard_in_log(guard_log)
     print("Problem 1:", sleepy.no * sleepy.sleepy_minute())

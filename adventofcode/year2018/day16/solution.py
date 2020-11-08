@@ -1,6 +1,6 @@
-from collections import defaultdict
 import logging
 import re
+from collections import defaultdict
 
 from aocd import get_data
 
@@ -12,35 +12,26 @@ class SampleParseException(Exception):
 
 
 OP_CODES = {
-    'ADDR': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) + cpu.r(b)),
-    'ADDI': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) + b),
-    'MULR': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) * cpu.r(b)),
-    'MULI': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) * b),
-    'BANR': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) & cpu.r(b)),
-    'BANI': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) & b),
-    'BORR': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) | cpu.r(b)),
-    'BORI': lambda cpu, a, b, c: cpu.set_r(c,
-                                           cpu.r(a) | b),
-    'SETR': lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a)),
-    'SETI': lambda cpu, a, b, c: cpu.set_r(c, a),
-    'GTIR': lambda cpu, a, b, c: cpu.set_r(c, 1 if a > cpu.r(b) else 0),
-    'GTRI': lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) > b else 0),
-    'GTRR': lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) > cpu.r(b) else 0),
-    'EQIR': lambda cpu, a, b, c: cpu.set_r(c, 1 if a == cpu.r(b) else 0),
-    'EQRI': lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) == b else 0),
-    'EQRR': lambda cpu, a, b, c: cpu.set_r(c, 1
-                                           if cpu.r(a) == cpu.r(b) else 0),
+    "ADDR": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) + cpu.r(b)),
+    "ADDI": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) + b),
+    "MULR": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) * cpu.r(b)),
+    "MULI": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) * b),
+    "BANR": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) & cpu.r(b)),
+    "BANI": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) & b),
+    "BORR": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) | cpu.r(b)),
+    "BORI": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a) | b),
+    "SETR": lambda cpu, a, b, c: cpu.set_r(c, cpu.r(a)),
+    "SETI": lambda cpu, a, b, c: cpu.set_r(c, a),
+    "GTIR": lambda cpu, a, b, c: cpu.set_r(c, 1 if a > cpu.r(b) else 0),
+    "GTRI": lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) > b else 0),
+    "GTRR": lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) > cpu.r(b) else 0),
+    "EQIR": lambda cpu, a, b, c: cpu.set_r(c, 1 if a == cpu.r(b) else 0),
+    "EQRI": lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) == b else 0),
+    "EQRR": lambda cpu, a, b, c: cpu.set_r(c, 1 if cpu.r(a) == cpu.r(b) else 0),
 }
 
 
-class Cpu():
+class Cpu:
     def __init__(self, registers=None):
         self.registers = registers if registers else [0, 0, 0, 0]
 
@@ -64,15 +55,29 @@ class CpuNumberedOps(Cpu):
         #  assigning, eliminating those from remaining sets, repeating until
         #  complete.
         self.op_map = [
-            'ADDI', 'EQRR', 'BORR', 'GTRI', 'ADDR', 'SETI', 'MULI', 'BANI',
-            'BANR', 'GTRR', 'SETR', 'GTIR', 'BORI', 'EQRI', 'EQIR', 'MULR'
+            "ADDI",
+            "EQRR",
+            "BORR",
+            "GTRI",
+            "ADDR",
+            "SETI",
+            "MULI",
+            "BANI",
+            "BANR",
+            "GTRR",
+            "SETR",
+            "GTIR",
+            "BORI",
+            "EQRI",
+            "EQIR",
+            "MULR",
         ]
 
     def op_by_number(self, n, a, b, c):
         self.op(self.op_map[n], a, b, c)
 
 
-class CpuMonitorSample():
+class CpuMonitorSample:
     def __init__(self, before, operation, after):
         self.before = before
         self.operation = operation
@@ -82,18 +87,18 @@ class CpuMonitorSample():
     def possible_opcodes(self):
         hits = list()
         for opcode in OP_CODES.keys():
-            logging.debug('Before sample: {}'.format(self.before))
+            logging.debug("Before sample: {}".format(self.before))
             c = Cpu(list(self.before))
 
-            logging.debug('Before: {}'.format(c.registers))
-            logging.debug('Applying: {}'.format(opcode))
+            logging.debug("Before: {}".format(c.registers))
+            logging.debug("Applying: {}".format(opcode))
 
             c.op(opcode, *(self.operation[1:]))
 
-            logging.debug('After: {}'.format(c.registers))
+            logging.debug("After: {}".format(c.registers))
 
             if c.registers == self.after:
-                logging.debug('Hit: {}'.format(opcode))
+                logging.debug("Hit: {}".format(opcode))
                 hits.append(opcode)
 
         return hits
@@ -103,7 +108,7 @@ class CpuMonitorSample():
         return self.operation[0]
 
 
-class CpuMonitor():
+class CpuMonitor:
     def __init__(self, lines):
         self.lines = lines
         self.samples = list()
@@ -122,14 +127,14 @@ class CpuMonitor():
     @property
     def possible_opcode_matches(self):
         for sample in self.samples:
-            self.possibilities[sample.opcode_number] = (
-                self.possibilities[sample.opcode_number] &  # noqa: W504
-                set(sample.possible_opcodes))
+            self.possibilities[sample.opcode_number] = self.possibilities[
+                sample.opcode_number
+            ] & set(sample.possible_opcodes)
         return self.possibilities
 
     def _parse(self):
-        BEFORE_LINE = re.compile(r'Before:\s*\[(\d), (\d), (\d), (\d)\]')
-        AFTER_LINE = re.compile(r'After:\s*\[(\d), (\d), (\d), (\d)\]')
+        BEFORE_LINE = re.compile(r"Before:\s*\[(\d), (\d), (\d), (\d)\]")
+        AFTER_LINE = re.compile(r"After:\s*\[(\d), (\d), (\d), (\d)\]")
 
         is_in_sample = False
         before = operation = after = None
@@ -157,19 +162,17 @@ class CpuMonitor():
                     m = re.match(AFTER_LINE, line)
                     if m:
                         after = list(map(int, list(m.groups())))
-                        self.samples.append(
-                            CpuMonitorSample(before, operation, after))
+                        self.samples.append(CpuMonitorSample(before, operation, after))
                         before = operation = after = None
                         is_in_sample = False
                     else:
-                        logging.error('Samples so far: {}'.format(
-                            len(self.samples)))
-                        raise SampleParseException('line = %s' % line)
+                        logging.error("Samples so far: {}".format(len(self.samples)))
+                        raise SampleParseException("line = %s" % line)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     data = get_data(year=2018, day=16)
-    lines = data.split('\n')
+    lines = data.split("\n")
     monitor = CpuMonitor(lines)
 
     print("Problem 1:", monitor.find_ambiguous(3))

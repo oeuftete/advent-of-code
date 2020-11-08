@@ -1,5 +1,5 @@
-from collections import Counter
 import math
+from collections import Counter
 
 
 class Layer(object):
@@ -29,8 +29,8 @@ class Layer(object):
         data_string = self.data
         for _ in range(self.height):
             while data_string:
-                self.append_row(data_string[:self.width])
-                data_string = data_string[self.width:]
+                self.append_row(data_string[: self.width])
+                data_string = data_string[self.width :]
 
     def __eq__(self, other):
         if len(self.rows) != len(other.rows):
@@ -59,9 +59,9 @@ class Image(object):
 
         for _ in range(self.area):
             while data_string:
-                layer = Layer(size=self.size, data=data_string[:self.area])
+                layer = Layer(size=self.size, data=data_string[: self.area])
                 self.layers.append(layer)
-                data_string = data_string[self.area:]
+                data_string = data_string[self.area :]
 
     @property
     def area(self):
@@ -70,15 +70,15 @@ class Image(object):
     @property
     def rendered(self):
         #  Make a new layer, all transparent '2's
-        new_layer = Layer(size=self.size, data='2' * self.area)
+        new_layer = Layer(size=self.size, data="2" * self.area)
 
         for layer in self.layers:
             for i, row in enumerate(layer.rows):
                 new_layer.rows[i] = list(
-                    map(lambda x, y: y
-                        if x == '2' else x, new_layer.rows[i], row))
+                    map(lambda x, y: y if x == "2" else x, new_layer.rows[i], row)
+                )
 
-        return '\n'.join([''.join(r) for r in new_layer.rows])
+        return "\n".join(["".join(r) for r in new_layer.rows])
 
     @property
     def rendered_clearly(self):
@@ -94,8 +94,8 @@ class Image(object):
             for r in l.rows:
                 counter.update(r)
 
-            if counter['0'] < min_zeroes:
-                min_zeroes = counter['0']
-                solution = counter['1'] * counter['2']
+            if counter["0"] < min_zeroes:
+                min_zeroes = counter["0"]
+                solution = counter["1"] * counter["2"]
 
         return solution

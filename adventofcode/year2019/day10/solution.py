@@ -1,6 +1,6 @@
-from fractions import Fraction
 import logging
 import math
+from fractions import Fraction
 
 from cached_property import cached_property
 
@@ -22,10 +22,10 @@ class Line(object):
             b = c1.y - m * c1.x
             assert b == c2.y - m * c2.x
         except ZeroDivisionError:
-            logging.debug('Vertical line...')
+            logging.debug("Vertical line...")
             m = math.inf
 
-        logging.debug(f'Line = {m}x + {b}')
+        logging.debug(f"Line = {m}x + {b}")
         return (m, b)
 
     @property
@@ -48,7 +48,7 @@ class Line(object):
             result.extend([Coordinate(c1.x, y) for y in y_range])
 
         if m == 0:
-            logging.debug('Horizontal line...')
+            logging.debug("Horizontal line...")
             result.extend([Coordinate(x, c1.y) for x in x_range])
 
         if m < 1:
@@ -62,7 +62,7 @@ class Line(object):
                 if y.denominator == 1:
                     result.append(Coordinate(x, y))
 
-        logging.debug(f'Result = {result}')
+        logging.debug(f"Result = {result}")
         return result
 
 
@@ -77,13 +77,13 @@ class Asteroid(Coordinate):
 
     @property
     def n_viewable(self):
-        logging.debug('Viewable = ' f'{self.viewable_asteroids}')
+        logging.debug("Viewable = " f"{self.viewable_asteroids}")
         return len(self.viewable_asteroids)
 
 
 class AsteroidMap(object):
-    EMPTY = '.'
-    ASTEROID = '#'
+    EMPTY = "."
+    ASTEROID = "#"
 
     def __init__(self, input_data):
         self.asteroids = list()
@@ -97,7 +97,7 @@ class AsteroidMap(object):
         # (so the top-left corner is 0,0 and the position immediately to its
         # right is 1,0).
         self.width = self.height = 0
-        for (y, l) in enumerate(input_data.split('\n')):
+        for (y, l) in enumerate(input_data.split("\n")):
             self.height += 1
             self.width = len(l)
             for (x, c) in enumerate(l):
@@ -115,22 +115,22 @@ class AsteroidMap(object):
     def remove_asteroid_at(self, c):
         for i, a in enumerate(self.asteroids):
             if a == c:
-                del self.asteroids[i:i + 1]
+                del self.asteroids[i : i + 1]
                 return True
 
         return False
 
     def _build_views(self):
         for i, a1 in enumerate(self.asteroids):
-            logging.debug(f'Checking {a1} ...')
-            for a2 in self.asteroids[i + 1:]:
-                logging.debug(f'... against {a2} ...')
+            logging.debug(f"Checking {a1} ...")
+            for a2 in self.asteroids[i + 1 :]:
+                logging.debug(f"... against {a2} ...")
                 line = Line(a1, a2)
                 for c in line.points_on_line + [a2]:
-                    logging.debug(f'... checking point on line {c}...')
+                    logging.debug(f"... checking point on line {c}...")
                     if self.has_asteroid_at(Coordinate(c.x, c.y)):
                         a_seen = self.get_asteroid_at(Coordinate(c.x, c.y))
-                        logging.debug(f'*** Can see: {a1} <--> {a_seen}')
+                        logging.debug(f"*** Can see: {a1} <--> {a_seen}")
                         a1.add_viewable(a_seen)
                         a_seen.add_viewable(a1)
                         break
@@ -141,13 +141,12 @@ class AsteroidMap(object):
         best_asteroid = None
 
         for asteroid in self.asteroids:
-            logging.debug(f'Checking asteroid {asteroid}...')
+            logging.debug(f"Checking asteroid {asteroid}...")
             if asteroid.n_viewable > max_viewable:
                 max_viewable = asteroid.n_viewable
                 best_asteroid = asteroid
-                logging.debug(f'*** New best: {best_asteroid}')
-                logging.debug(' ** Can see:  '
-                              f'{best_asteroid.viewable_asteroids}')
+                logging.debug(f"*** New best: {best_asteroid}")
+                logging.debug(" ** Can see:  " f"{best_asteroid.viewable_asteroids}")
 
         return best_asteroid
 
@@ -173,21 +172,27 @@ class AsteroidMap(object):
         zapped = self.remove_asteroid_at(Coordinate(x, y))
         if zapped:
             self.vaporized.append(Asteroid(x, y))
-            logging.debug(f'Zapped ({x}, {y})')
+            logging.debug(f"Zapped ({x}, {y})")
         return zapped
 
     def run_vaporizer(self, limit=None):
         self.vaporized = list()
         limit = limit or math.inf
 
-        positive = sorted([
-            eq[0] for eq in self.equations_from_station
-            if (eq[0] > 0 and not math.isinf(eq[0]))
-        ])
-        negative = sorted([
-            eq[0] for eq in self.equations_from_station
-            if (eq[0] < 0 and not math.isinf(eq[0]))
-        ])
+        positive = sorted(
+            [
+                eq[0]
+                for eq in self.equations_from_station
+                if (eq[0] > 0 and not math.isinf(eq[0]))
+            ]
+        )
+        negative = sorted(
+            [
+                eq[0]
+                for eq in self.equations_from_station
+                if (eq[0] < 0 and not math.isinf(eq[0]))
+            ]
+        )
 
         sx, sy = self.station.x, self.station.y
         while len(self.vaporized) < limit:
@@ -203,11 +208,12 @@ class AsteroidMap(object):
             #  Check the negative slopes, looking up (-y) and right (+x)
             for slope in negative:
                 logging.debug(
-                    f'NE: Checking slope {slope} from station ({sx}, {sy})...')
+                    f"NE: Checking slope {slope} from station ({sx}, {sy})..."
+                )
                 if abs(slope) > 1:
                     for x in range(sx + 1, self.width):
                         y = sy - (slope * (sx - x))
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if y < 0:
                             break
                         if y.denominator != 1:
@@ -217,7 +223,7 @@ class AsteroidMap(object):
                 else:
                     for y in reversed(range(0, sy)):
                         x = sx - (1 / slope) * (sy - y)
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if x > self.width:
                             break
                         if x.denominator != 1:
@@ -226,8 +232,7 @@ class AsteroidMap(object):
                             break
 
             #  Look right
-            logging.debug(
-                f'E: Checking slope {slope} from station ({sx}, {sy})...')
+            logging.debug(f"E: Checking slope {slope} from station ({sx}, {sy})...")
             for x in range(sx + 1, self.width):
                 if self.zap(x, sy):
                     break
@@ -235,11 +240,12 @@ class AsteroidMap(object):
             #  Check the positive slopes, looking down (+y) and right (+x)
             for slope in positive:
                 logging.debug(
-                    f'SE: Checking slope {slope} from station ({sx}, {sy})...')
+                    f"SE: Checking slope {slope} from station ({sx}, {sy})..."
+                )
                 if slope > 1:
                     for x in range(sx + 1, self.width):
                         y = sy - (slope * (sx - x))
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if y < 0:
                             break
                         if y.denominator != 1:
@@ -249,7 +255,7 @@ class AsteroidMap(object):
                 else:
                     for y in range(sy + 1, self.height):
                         x = sx - (1 / slope) * (sy - y)
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if x > self.width:
                             break
                         if x.denominator != 1:
@@ -258,8 +264,7 @@ class AsteroidMap(object):
                             break
 
             #  Look straight down
-            logging.debug(
-                f'S: Checking slope {slope} from station ({sx}, {sy})...')
+            logging.debug(f"S: Checking slope {slope} from station ({sx}, {sy})...")
             for y in range(sy + 1, self.height):
                 if self.zap(sx, y):
                     break
@@ -267,11 +272,12 @@ class AsteroidMap(object):
             #  Check the negative slopes, looking down (+y) and left (-x)
             for slope in negative:
                 logging.debug(
-                    f'SW: Checking slope {slope} from station ({sx}, {sy})...')
+                    f"SW: Checking slope {slope} from station ({sx}, {sy})..."
+                )
                 if slope > 1:
                     for x in reversed(range(0, sx)):
                         y = sy - (slope * (sx - x))
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if y > self.height:
                             break
                         if y.denominator != 1:
@@ -281,7 +287,7 @@ class AsteroidMap(object):
                 else:
                     for y in range(sy + 1, self.height):
                         x = sx - (1 / slope) * (sy - y)
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if x < 0:
                             break
                         if x.denominator != 1:
@@ -290,8 +296,7 @@ class AsteroidMap(object):
                             break
 
             #  Look left
-            logging.debug(
-                f'W: Checking slope {slope} from station ({sx}, {sy})...')
+            logging.debug(f"W: Checking slope {slope} from station ({sx}, {sy})...")
             for x in reversed(range(0, sx)):
                 if self.zap(x, sy):
                     break
@@ -299,11 +304,12 @@ class AsteroidMap(object):
             #  Check the positive slopes, looking up (-y) and left (-x)
             for slope in positive:
                 logging.debug(
-                    f'NW: Checking slope {slope} from station ({sx}, {sy})...')
+                    f"NW: Checking slope {slope} from station ({sx}, {sy})..."
+                )
                 if abs(slope) > 1:
                     for x in reversed(range(0, sx)):
                         y = sy - (slope * (sx - x))
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if y < 0:
                             break
                         if y.denominator != 1:
@@ -313,7 +319,7 @@ class AsteroidMap(object):
                 else:
                     for y in reversed(range(0, sy)):
                         x = sx - (1 / slope) * (sy - y)
-                        logging.debug(f'.... checking zap: ({x}, {y})')
+                        logging.debug(f".... checking zap: ({x}, {y})")
                         if x < 0:
                             break
                         if x.denominator != 1:
@@ -322,5 +328,5 @@ class AsteroidMap(object):
                             break
 
             if len(self.asteroids) == last_count:
-                logging.warning('No asteroids found to zap!')
+                logging.warning("No asteroids found to zap!")
                 break

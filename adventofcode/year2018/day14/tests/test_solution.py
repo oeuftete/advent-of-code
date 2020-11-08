@@ -30,24 +30,19 @@ def test_scoreboard():
     assert scoreboard.pointers == [4, 8]
 
 
-@pytest.mark.parametrize("n,next_ten", [
-    (5, '0124515891'),
-    (9, '5158916779'),
-    (18, '9251071085'),
-    (2018, '5941429882'),
-])
+@pytest.mark.parametrize(
+    "n,next_ten",
+    [(5, "0124515891"), (9, "5158916779"), (18, "9251071085"), (2018, "5941429882"),],
+)
 def test_next_ten_scores(n, next_ten):
     scoreboard = RecipeScoreboard()
     assert scoreboard.ten_after(n) == next_ten
 
 
-@pytest.mark.parametrize("target,n", [
-    ('01245', 5),
-    ('51589', 9),
-    ('515891', 9),
-    ('92510', 18),
-    ('59414', 2018),
-])
+@pytest.mark.parametrize(
+    "target,n",
+    [("01245", 5), ("51589", 9), ("515891", 9), ("92510", 18), ("59414", 2018),],
+)
 def test_preceding_recipes(target, n):
     scoreboard = RecipeScoreboard()
     assert scoreboard.preceding(target) == n

@@ -1,16 +1,19 @@
-from collections import defaultdict, deque
 import re
+from collections import defaultdict, deque
 
 from aocd import get_data
 
 
 def parse_rules(s):
-    RULE_FORMAT = (r'(\d+) players; '
-                   r'last marble is worth (\d+) points'
-                   r'(?:: high score is (\d+))?$')
+    RULE_FORMAT = (
+        r"(\d+) players; "
+        r"last marble is worth (\d+) points"
+        r"(?:: high score is (\d+))?$"
+    )
     m = re.match(RULE_FORMAT, s)
-    (players, play_until,
-     high_score) = list(map(lambda x: int(x) if x else None, m.groups()))
+    (players, play_until, high_score) = list(
+        map(lambda x: int(x) if x else None, m.groups())
+    )
     return (players, play_until, high_score)
 
 
@@ -57,14 +60,13 @@ class Game:
         return dict(self.players)
 
     def top_scorer(self):
-        return sorted(self.all_player_scores().items(),
-                      key=lambda s: -1 * s[1])[0]
+        return sorted(self.all_player_scores().items(), key=lambda s: -1 * s[1])[0]
 
     def top_score(self):
         return self.top_scorer()[1]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     (players, play_until, _) = parse_rules(get_data(year=2018, day=9))
     print("Problem 1:", Game(players).play_until(play_until).top_score())
     print("Problem 2:", Game(players).play_until(play_until * 100).top_score())
