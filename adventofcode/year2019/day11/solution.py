@@ -1,6 +1,8 @@
 from adventofcode.common.coordinate import Coordinate
 from adventofcode.common.year2019.intcode_computer import (
-    Intcode, IntcodeHaltedException)
+    Intcode,
+    IntcodeHaltedException,
+)
 
 BLACK = 0
 WHITE = 1
@@ -40,10 +42,12 @@ class PainterRobot(object):
 
 class PaintingRun(object):
     def __init__(self, opcodes, initial_panel_color=BLACK):
-        self.intcode = Intcode(opcodes,
-                               input_data=[initial_panel_color],
-                               pause_on_output=True,
-                               computer_name='painter')
+        self.intcode = Intcode(
+            opcodes,
+            input_data=[initial_panel_color],
+            pause_on_output=True,
+            computer_name="painter",
+        )
         self.panels = [PaintedPanel(0, 0, initial_panel_color)]
         self.robot = PainterRobot()
 
@@ -60,9 +64,7 @@ class PaintingRun(object):
                 self.robot.turn(turn_direction)
                 self.robot.move()
 
-                self.intcode.input_data = [
-                    self.get_paint_color_at(self.robot.position)
-                ]
+                self.intcode.input_data = [self.get_paint_color_at(self.robot.position)]
         except IntcodeHaltedException:
             pass
 

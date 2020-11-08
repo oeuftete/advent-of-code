@@ -1,5 +1,5 @@
 def sorted_guard_log():
-    return '''
+    return """
 [1518-11-01 00:00] Guard #10 begins shift
 [1518-11-01 00:05] falls asleep
 [1518-11-01 00:25] wakes up
@@ -17,11 +17,13 @@ def sorted_guard_log():
 [1518-11-05 00:03] Guard #99 begins shift
 [1518-11-05 00:45] falls asleep
 [1518-11-05 00:55] wakes up
-'''.strip().split('\n')
+""".strip().split(
+        "\n"
+    )
 
 
 def unsorted_guard_log():
-    return '''
+    return """
 [1518-11-05 00:55] wakes up
 [1518-11-01 00:00] Guard #10 begins shift
 [1518-11-01 00:25] wakes up
@@ -39,4 +41,6 @@ def unsorted_guard_log():
 [1518-11-01 23:58] Guard #99 begins shift
 [1518-11-05 00:03] Guard #99 begins shift
 [1518-11-03 00:24] falls asleep
-'''.strip().split('\n')
+""".strip().split(
+        "\n"
+    )

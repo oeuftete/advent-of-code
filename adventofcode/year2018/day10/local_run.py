@@ -7,13 +7,10 @@ import sys
 
 from aocd import get_data
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-from adventofcode.year2018.day10.solution import (  # noqa: E402
-    data_to_sky)
-
-from adventofcode.year2018.day10.tests.resources import (  # noqa: E402
-    get_test_data, )
+from adventofcode.year2018.day10.solution import data_to_sky  # noqa: E402
+from adventofcode.year2018.day10.tests.resources import get_test_data  # noqa: E402
 
 TEST_POINTS = get_test_data()
 
@@ -21,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 
 print(data_to_sky(TEST_POINTS).iterate(3).dump_sky())
 
-data = get_data(year=2018, day=10).split('\n')
+data = get_data(year=2018, day=10).split("\n")
 problem_sky = data_to_sky(data)
 
 for i in itertools.count():

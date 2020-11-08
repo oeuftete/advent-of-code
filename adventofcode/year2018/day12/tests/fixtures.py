@@ -1,5 +1,5 @@
 def sample_rules():
-    return '''
+    return """
 initial state: #..#.#..##......###...###
 
 ...## => #
@@ -16,4 +16,4 @@ initial state: #..#.#..##......###...###
 ###.. => #
 ###.# => #
 ####. => #
-'''.strip()
+""".strip()

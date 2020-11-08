@@ -1,23 +1,23 @@
-from collections import defaultdict, Counter
 import logging
+from collections import Counter, defaultdict
 
 from aocd import get_data
 
 logging.basicConfig(level=logging.INFO)
 
-OPEN_SPACE = '.'
-LUMBERYARD = '#'
-TREES = '|'
+OPEN_SPACE = "."
+LUMBERYARD = "#"
+TREES = "|"
 
 
-class Lumberyard():
+class Lumberyard:
     def __init__(self, string_grid):
         self._parse_grid(string_grid)
 
     def _parse_grid(self, s):
         self.grid = defaultdict(dict)
         y = 0
-        for l in s.split('\n'):
+        for l in s.split("\n"):
             x = 0
             for c in l:
                 if c not in [OPEN_SPACE, LUMBERYARD, TREES]:
@@ -49,9 +49,13 @@ class Lumberyard():
         adjacent = list()
         for dx in [-1, 0, 1]:
             for dy in [-1, 0, 1]:
-                if ((dx == 0 and dy == 0) or (x + dx) < 0 or (y + dy) < 0
-                        or (x + dx + 1) > self.x_size
-                        or (y + dy + 1) > self.y_size):
+                if (
+                    (dx == 0 and dy == 0)
+                    or (x + dx) < 0
+                    or (y + dy) < 0
+                    or (x + dx + 1) > self.x_size
+                    or (y + dy + 1) > self.y_size
+                ):
                     continue
                 adjacent.append((x + dx, y + dy))
 
@@ -108,7 +112,7 @@ class Lumberyard():
         return self
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     data = get_data(year=2018, day=18)
     print("Problem 1:", Lumberyard(data).iterate(10).value)
     print("Problem 2:", "Eyeballed from repeated values")

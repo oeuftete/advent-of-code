@@ -33,15 +33,16 @@ class PowerGrid:
     def max_any_square(self):
         max_result = (None, None, 0, -math.inf)
         for square_size in range(1, self.square_size):
-            logging.debug('Checking square size %d...' % square_size)
+            logging.debug("Checking square size %d..." % square_size)
             max_for_square = self.max_square(square_size)
             if max_for_square[2] > max_result[3]:
-                logging.debug('New max: {}'.format(max_for_square))
+                logging.debug("New max: {}".format(max_for_square))
                 max_result = (
                     max_for_square[0],
                     max_for_square[1],  # x, y
                     square_size,
-                    max_for_square[2])
+                    max_for_square[2],
+                )
 
         return max_result
 
@@ -64,6 +65,6 @@ class PowerGrid:
 
 logging.basicConfig(level=logging.DEBUG)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Problem 1:", PowerGrid(4455).max_square())
     print("Problem 2:", PowerGrid(4455).max_any_square())

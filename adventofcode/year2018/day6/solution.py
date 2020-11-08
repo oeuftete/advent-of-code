@@ -1,6 +1,6 @@
-from collections import defaultdict, Counter
 import logging
 import math
+from collections import Counter, defaultdict
 
 from aocd import get_data
 
@@ -22,24 +22,27 @@ def get_bound_indices(coordinates):
     for c in coordinates:
         bounded = defaultdict(bool)
         for c_other in coordinates:
-            logging.debug('Checking {} against {}...'.format(c, c_other))
+            logging.debug("Checking {} against {}...".format(c, c_other))
             if c == c_other:
-                logging.debug('...identity: {} == {}'.format(c, c_other))
+                logging.debug("...identity: {} == {}".format(c, c_other))
                 continue
 
-            for d in ['west', 'east', 'north', 'south']:
+            for d in ["west", "east", "north", "south"]:
                 if c.is_bounded_by(c_other, d):
-                    logging.debug('...{} bound to the {} by {}'.format(
-                        c, d, c_other))
+                    logging.debug("...{} bound to the {} by {}".format(c, d, c_other))
                     bounded[d] = True
                     continue
 
-        if (bounded['west'] and bounded['east'] and bounded['north']
-                and bounded['south']):
-            logging.debug('{} ({}) bound in all directions'.format(c, i))
+        if (
+            bounded["west"]
+            and bounded["east"]
+            and bounded["north"]
+            and bounded["south"]
+        ):
+            logging.debug("{} ({}) bound in all directions".format(c, i))
             unbound.append(i)
         else:
-            logging.debug('{} ({}) not bound: {}'.format(c, i, bounded))
+            logging.debug("{} ({}) not bound: {}".format(c, i, bounded))
 
         i += 1
 
@@ -91,7 +94,7 @@ def largest_area(coordinates):
     for x in range(min_x - int(range_x / 2), max_x + int(range_x / 2)):
         for y in range(min_y - int(range_y / 2), max_y + int(range_y / 2)):
 
-            logging.debug('Checking {}:{}...'.format(x, y))
+            logging.debug("Checking {}:{}...".format(x, y))
 
             target = Coordinate(x=x, y=y)
             min_length = math.inf
@@ -101,28 +104,28 @@ def largest_area(coordinates):
             for c in coordinates:
                 distance = c.manhattan_distance(target)
                 if distance == 0:
-                    logging.debug('C {} {} won {}:{} (identity)!'.format(
-                        i, c, x, y))
+                    logging.debug("C {} {} won {}:{} (identity)!".format(i, c, x, y))
                     winners.update([i])
                     leading_i = None
                     break
 
                 elif distance == min_length:
-                    logging.debug('{}:{} was pushed by C {} {}.'.format(
-                        x, y, i, c))
+                    logging.debug("{}:{} was pushed by C {} {}.".format(x, y, i, c))
                     leading_i = None
 
                 elif distance < min_length:
-                    logging.debug('C {} {} took the lead at {}:{}...'.format(
-                        i, c, x, y))
+                    logging.debug(
+                        "C {} {} took the lead at {}:{}...".format(i, c, x, y)
+                    )
                     leading_i = i
                     min_length = distance
 
                 i += 1
 
             if leading_i is not None:
-                logging.debug('C {} won {}:{} (after full search)!'.format(
-                    leading_i, x, y))
+                logging.debug(
+                    "C {} won {}:{} (after full search)!".format(leading_i, x, y)
+                )
                 winners.update([leading_i])
 
     logging.debug(winners)
@@ -134,12 +137,14 @@ def largest_area(coordinates):
 
         logging.debug("Checking winner {}".format(winner_index))
         if winner_index in bound_indices:
-            logging.debug("Leader {} ({}) is not bound.  Wins!".format(
-                winner_index, winner_count))
+            logging.debug(
+                "Leader {} ({}) is not bound.  Wins!".format(winner_index, winner_count)
+            )
             return winner_count
 
-        logging.debug("Leader {} ({}) was unbound...".format(
-            winner_index, winner_count))
+        logging.debug(
+            "Leader {} ({}) was unbound...".format(winner_index, winner_count)
+        )
 
     #    For each coordinate...
     #      Find it's distance to the target point...
@@ -153,9 +158,9 @@ def largest_area(coordinates):
     #  See who won the most, return the count of it's wins
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     coordinates = list(
-        map(lambda c: Coordinate(csv=c),
-            get_data(year=2018, day=6).split('\n')))
+        map(lambda c: Coordinate(csv=c), get_data(year=2018, day=6).split("\n"))
+    )
     print("Problem 1:", largest_area(coordinates))
     print("Problem 2:", len(get_safe_coordinates(coordinates, 10000)))

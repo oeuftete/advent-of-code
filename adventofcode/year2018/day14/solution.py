@@ -7,7 +7,7 @@ from aocd import get_data
 logging.basicConfig(level=logging.INFO)
 
 
-class RecipeScoreboard():
+class RecipeScoreboard:
     def __init__(self):
         self.scores = [3, 7]
         self.pointers = [0, 1]
@@ -16,7 +16,7 @@ class RecipeScoreboard():
         while len(self.scores) < (n + 10):
             self.make_new_recipes()
 
-        return ''.join(map(str, self.scores[n:n + 10]))
+        return "".join(map(str, self.scores[n : n + 10]))
 
     def preceding(self, target, max_iterations=math.inf):
         target_length = len(target)
@@ -27,10 +27,11 @@ class RecipeScoreboard():
 
             count = self.make_new_recipes()
 
-            test_targets = [''.join(map(str, self.scores[-target_length:]))]
+            test_targets = ["".join(map(str, self.scores[-target_length:]))]
             if count == 2:
-                test_targets.append(''.join(
-                    map(str, self.scores[-target_length - 1:-1])))
+                test_targets.append(
+                    "".join(map(str, self.scores[-target_length - 1 : -1]))
+                )
 
             for j in range(len(test_targets)):
                 if target == test_targets[j]:
@@ -55,7 +56,7 @@ class RecipeScoreboard():
         return 2 if tens else 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     target_string = get_data(year=2018, day=14)
     n = int(target_string)
     print("Problem 1:", RecipeScoreboard().ten_after(n))

@@ -39,5 +39,8 @@ class DepotPassword(object):
 def count_valid_passwords(low, high, part_b_rules=False):
     return len(
         list(
-            filter(lambda p: DepotPassword(p).is_valid(part_b_rules),
-                   range(low, high + 1))))
+            filter(
+                lambda p: DepotPassword(p).is_valid(part_b_rules), range(low, high + 1)
+            )
+        )
+    )

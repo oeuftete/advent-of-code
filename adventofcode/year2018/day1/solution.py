@@ -18,7 +18,7 @@ def frequency_repeat_checker(freq_deltas):
         frequencies_seen.add(current_frequency)
 
 
-if __name__ == '__main__':
-    frequencies = Puzzle(year=2018, day=1).input_data.split('\n')
+if __name__ == "__main__":
+    frequencies = Puzzle(year=2018, day=1).input_data.split("\n")
     print("Problem 1:", frequency_summer(frequencies))
     print("Problem 2:", frequency_repeat_checker(frequencies))
