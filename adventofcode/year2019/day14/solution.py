@@ -117,8 +117,8 @@ class Nanofactory(object):
 
         while self.ore_requests:
             (chemical, n, cost, n_created) = self.ore_requests.pop()
-            #  Get the current chemical reserve
-            #  If it's not enough, react until there are enough
+            #  Get the current chemical reserve.  If it's not enough, react
+            #  until there are enough.
             while self.g.nodes[chemical]["reserve"] < n:
                 ore_spent += cost
                 self.g.nodes[chemical]["reserve"] += n_created

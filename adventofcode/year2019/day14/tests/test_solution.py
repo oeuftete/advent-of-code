@@ -28,6 +28,21 @@ def reaction_two():
 """.strip()
 
 
+@pytest.fixture
+def reaction_three():
+    return """
+157 ORE => 5 NZVS
+165 ORE => 6 DCFZ
+44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ => 1 FUEL
+12 HKGWZ, 1 GPVTF, 8 PSHF => 9 QDVJ
+179 ORE => 7 PSHF
+177 ORE => 5 HKGWZ
+7 DCFZ, 7 PSHF => 2 XJWVT
+165 ORE => 2 GPVTF
+3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT
+""".strip()
+
+
 def test_reaction_one(reaction_one):
     factory = Nanofactory(reaction_one)
 
@@ -43,16 +58,19 @@ def test_reaction_one(reaction_one):
     factory.reset()
 
     assert factory.minimum_ore == 31
+    assert factory.g.nodes["A"]["reserve"] == 2
+    assert factory.g.nodes["B"]["reserve"] == 0
 
 
 def test_reaction_two(reaction_two):
     factory = Nanofactory(reaction_two)
-
-    #  assert factory.minimum_ore_for_chemical("A", 1) == 9
-    #  factory.reset()
-    #  assert factory.minimum_ore_for_chemical("A", 2) == 9
-    #  factory.reset()
-    #  assert factory.minimum_ore_for_chemical("A", 3) == 18
-    #  factory.reset()
-
     assert factory.minimum_ore == 165
+    assert factory.g.nodes["A"]["reserve"] == 0
+    assert factory.g.nodes["B"]["reserve"] == 1
+    assert factory.g.nodes["C"]["reserve"] == 3
+
+
+@pytest.mark.xfail
+def test_reaction_three(reaction_three):
+    factory = Nanofactory(reaction_three)
+    assert factory.minimum_ore == 13312
