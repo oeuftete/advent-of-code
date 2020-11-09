@@ -8,19 +8,16 @@ from cached_property import cached_property
 
 class Nanofactory(object):
     def __init__(self, input_reactions):
-        self.g = nx.DiGraph()
-        self.ORIGIN = "FUEL"
-
         if isinstance(input_reactions, str):
             input_reactions = input_reactions.split("\n")
         self.input_reactions = input_reactions
 
-        self.ore_requests = []
-
+        self.g = nx.DiGraph()
         self._build_graph()
 
+        self.ore_requests = []
+
     def _build_graph(self):
-        #  We have as much ORE as we need
         self.g.add_node("ORE", reserve=math.inf)
 
         REACTION_FORMAT = re.compile(r"(.*?) => (.*)")
@@ -32,25 +29,24 @@ class Nanofactory(object):
             m_output = re.match(REACTANT_FORMAT, output)
             n_output, output_reactant = m_output.groups()
 
-            self.g.add_node(output_reactant, reserve=0)
+            self.g.add_node(output_reactant, n_output=int(n_output), reserve=0)
 
             for input_string in [s.strip() for s in inputs.split(",")]:
                 m_input = re.match(REACTANT_FORMAT, input_string)
                 n_input, input_reactant = m_input.groups()
-                #  On the edge, n is the number of input reactants required,
-                #  and cost is the total cost.
+
                 self.g.add_edge(
                     output_reactant,
                     input_reactant,
-                    n=int(n_output),
-                    cost=int(n_input),
+                    n_output=int(n_output),
+                    n_input=int(n_input),
                 )
 
     def reset(self):
         for n in self.g.nodes():
             self.g.nodes[n]["reserve"] = 0
 
-    def minimum_ore_for_chemical(self, chemical="FUEL", n=1, top_level=True):
+    def minimum_ore_for_chemical(self, chemical="FUEL", n=1, depth=0):
         # Start at `chemical`
         #
         # Figure out the cost in immediate precursors.
@@ -68,23 +64,48 @@ class Nanofactory(object):
         #       - Add costs: 7 ORE (now [1B, 7A, 7A, 7A])
         #     - Add costs: 7 ORE (now [1B, 7A, 7A, 7A, 7A])
 
-        logging.debug(f"Determining ORE requirement for {n} {chemical}")
+        if depth == 0:
+            logging.debug("## TOP LEVEL ##")
+
+        logging.debug("(%s) Determining ORE requirement for %s %s", depth, n, chemical)
         logging.debug(self.g.edges([chemical], data=True))
         for _, precursor, reaction_data in self.g.edges([chemical], data=True):
             logging.debug(f"... precursor found: {precursor}: {reaction_data}")
             if precursor == "ORE":
                 logging.debug(f"Adding ORE request for {n} {chemical}.")
                 self.ore_requests.append(
-                    (chemical, n, reaction_data["cost"], reaction_data["n"])
+                    (chemical, n, reaction_data["n_input"], reaction_data["n_output"])
                 )
             else:
-                cost = reaction_data["cost"]
-                rx_n = reaction_data["n"]
-                for _ in range(cost):
-                    logging.debug(f"Making recursive request for {rx_n} {precursor}.")
-                    self.minimum_ore_for_chemical(precursor, rx_n, top_level=False)
+                n_input = reaction_data["n_input"]
+                n_output = reaction_data["n_output"]
 
-        if not top_level:
+                #  How many requests do we need to make?  If the precursor is
+                #  created in bigger chunks than we need, we also need to account
+                #  for that.
+                n_requests = math.ceil(n / n_output)
+                logging.debug(
+                    f"Making {n_requests} recursive requests for {n_input} {precursor}."
+                )
+
+                precursor_n_output = self.g.nodes[precursor]["n_output"]
+                n_optimized_requests = math.ceil(
+                    n_input * (n_requests / precursor_n_output)
+                )
+                if n_optimized_requests < n_requests:
+                    logging.debug(
+                        "... optimized to %s requests for %s %s.",
+                        n_optimized_requests,
+                        precursor_n_output,
+                        precursor,
+                    )
+                    n_requests = n_optimized_requests
+                    n_input = precursor_n_output
+
+                for _ in range(n_requests):
+                    self.minimum_ore_for_chemical(precursor, n_input, depth=depth + 1)
+
+        if depth > 0:
             return
 
         self.ore_requests.sort(key=lambda x: x[3])
@@ -116,14 +137,35 @@ class Nanofactory(object):
         ore_spent = 0
 
         while self.ore_requests:
-            (chemical, n, cost, n_created) = self.ore_requests.pop()
+            (chemical, n, n_input, n_output) = self.ore_requests.pop()
             #  Get the current chemical reserve.  If it's not enough, react
             #  until there are enough.
-            while self.g.nodes[chemical]["reserve"] < n:
-                ore_spent += cost
-                self.g.nodes[chemical]["reserve"] += n_created
+            logging.debug(
+                f"Fulfilling ORE request for {n} {chemical}: "
+                f"n_input: {n_input}, n_output: {n_output}"
+            )
 
+            while self.g.nodes[chemical]["reserve"] < n:
+                logging.debug(
+                    "%s reserve: %s", chemical, self.g.nodes[chemical]["reserve"]
+                )
+                ore_spent += n_input
+                self.g.nodes[chemical]["reserve"] += n_output
+
+            logging.debug("Ore mined: %s", ore_spent)
+            logging.debug(
+                "%s reserve after ORE: %s", chemical, self.g.nodes[chemical]["reserve"]
+            )
             self.g.nodes[chemical]["reserve"] -= n
+            logging.debug(
+                "%s reserve after fulfillment: %s",
+                chemical,
+                self.g.nodes[chemical]["reserve"],
+            )
+
+        logging.debug("All reserves after fulfillment:")
+        for n in self.g.nodes:
+            logging.debug("  %-5s reserve: %s", n, self.g.nodes[n]["reserve"])
 
         return ore_spent
 
