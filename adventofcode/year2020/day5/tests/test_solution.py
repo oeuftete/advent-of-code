@@ -13,11 +13,9 @@ BBFFBBFRLL
 """.strip()
 
 
-@pytest.mark.parametrize("code, row, column, seat_id", [("FBFBBFFRLR", 44, 5, 357)])
-def test_boarding_pass(code, row, column, seat_id):
+@pytest.mark.parametrize("code, seat_id", [("FBFBBFFRLR", 357)])
+def test_boarding_pass(code, seat_id):
     bp = BoardingPass(code)
-    assert bp.row_number == row
-    assert bp.column_number == column
     assert bp.seat_id == seat_id
 
 
