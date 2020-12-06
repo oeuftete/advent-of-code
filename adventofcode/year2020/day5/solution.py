@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from aocd.models import Puzzle
 
 
@@ -16,13 +18,15 @@ class Manifest:
             if seat_id not in seat_ids:
                 return seat_id
 
+        raise ValueError("No empty seat found")
 
+
+@dataclass
 class BoardingPass:
-    def __init__(self, code):
-        self.code = code
+    code: str
 
     @property
-    def seat_id(self):
+    def seat_id(self) -> int:
         return int(
             self.code.replace("F", "0")
             .replace("B", "1")

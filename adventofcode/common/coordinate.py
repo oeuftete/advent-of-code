@@ -31,11 +31,11 @@ class Coordinate:
     def is_bounded_by(self, other, direction):
         if direction == "east":
             return self.x < other.x and (other.x - self.x) >= abs(self.y - other.y)
-        elif direction == "west":
+        if direction == "west":
             return self.x > other.x and (self.x - other.x) >= abs(self.y - other.y)
-        elif direction == "north":
+        if direction == "north":
             return self.y < other.y and (other.y - self.y) >= abs(self.x - other.x)
-        elif direction == "south":
+        if direction == "south":
             return self.y > other.y and (self.y - other.y) >= abs(self.x - other.x)
 
         raise ValueError

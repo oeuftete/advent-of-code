@@ -3,6 +3,6 @@ python:
   - "3.6"
 install:
   - pip install -r requirements.txt
-script: pytest --cov=./
+script: pytest --cov=./ --pylint --pylint-ignore-patterns '.*year201[89].*'
 after_success:
   - codecov

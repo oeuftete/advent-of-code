@@ -1,22 +1,24 @@
 import operator
+from dataclasses import dataclass
 from functools import reduce
 from itertools import permutations
 
 from aocd.models import Puzzle
-from cached_property import cached_property
 
 
+@dataclass
 class ExpenseReport:
-    def __init__(self, expenses, tuple_size=2):
-        self.expenses = expenses
-        self.tuple_size = tuple_size
+    expenses: list
+    tuple_size: int = 2
 
-    @cached_property
+    @property
     def product_2020(self):
         """Return the product of two expenses that sum to 2020."""
         for p in permutations(self.expenses, r=self.tuple_size):
-            if reduce(operator.add, p) == 2020:
+            if sum(p) == 2020:
                 return reduce(operator.mul, p)
+
+        raise ValueError("Expected a permutation that summed to 2020")
 
 
 if __name__ == "__main__":

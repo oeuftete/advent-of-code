@@ -3,7 +3,9 @@ anytree
 bitarray
 cached-property
 codecov
+dataclasses
 networkx
 pytest
 pytest-cov
+pytest-pylint
 urllib3>=1.24.2

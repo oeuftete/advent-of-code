@@ -3,8 +3,8 @@ import pytest
 from adventofcode.year2020.day5.solution import BoardingPass, Manifest
 
 
-@pytest.fixture
-def simple_manifest():
+@pytest.fixture(name="simple_manifest")
+def fixture_simple_manifest():
     return """
 FBFBBFFRLR
 BFFFBBFRRR

@@ -1,14 +1,15 @@
+from dataclasses import dataclass
+
 from aocd.models import Puzzle
 
 
+@dataclass
 class PasswordRule:
-    def __init__(self, raw_rule, new_policy=False):
-        self.raw = raw_rule
-        self.new_policy = new_policy
-        self._build_rule()
+    raw_rule: str
+    new_policy: bool = False
 
-    def _build_rule(self):
-        raw, character = self.raw.split(" ")
+    def __post_init__(self):
+        raw, character = self.raw_rule.split(" ")
         low, high = [int(r) for r in raw.split("-")]
 
         self.character = character
@@ -22,14 +23,13 @@ class PasswordRule:
             return (password[self.positions[0]] == self.character) != (
                 password[self.positions[1]] == self.character
             )
-        else:
-            return password.count(self.character) in self.count_range
+        return password.count(self.character) in self.count_range
 
 
+@dataclass
 class PasswordValidator:
-    def __init__(self, password_list, new_policy=False):
-        self.password_list = password_list
-        self.new_policy = new_policy
+    password_list: list
+    new_policy: bool = False
 
     @property
     def valid_passwords(self):

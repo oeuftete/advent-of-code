@@ -1,5 +1,6 @@
 import logging
 import re
+from dataclasses import dataclass, field
 from functools import partial
 
 from aocd.models import Puzzle
@@ -7,13 +8,12 @@ from aocd.models import Puzzle
 logging.basicConfig(level=logging.INFO)
 
 
+@dataclass
 class PassportBatch:
-    def __init__(self, raw):
-        self.raw = raw
-        self.passports = []
-        self._build_passports()
+    raw: str
+    passports: list = field(init=False, default_factory=list)
 
-    def _build_passports(self):
+    def __post_init__(self):
         """Parse an entire batch into a list of passport fields."""
         for raw_p in self.raw.split("\n\n"):
             passport_fields = {}
@@ -37,7 +37,15 @@ class PassportBatch:
 class Passport:
     FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
 
-    def height_validator(hgt):
+    def __init__(self, raw):
+        for k in raw:
+            if k in self.FIELDS:
+                setattr(self, k, raw[k])
+            else:
+                raise ValueError(f"Unexpected field [{k}]")
+
+    @classmethod
+    def height_validator(cls, hgt):
         m = re.fullmatch(r"(\d{2,3})(cm|in)", hgt)
         if not m:
             return False
@@ -56,28 +64,24 @@ class Passport:
 
         return True
 
-    def year_validator(year, low, high):
+    @classmethod
+    def year_validator(cls, year, low, high):
         return (
             len(year) == 4 and year.isdigit() and int(year) >= low and int(year) <= high
         )
 
-    STRICT_VALIDATORS = {
-        "byr": partial(year_validator, low=1920, high=2002),
-        "iyr": partial(year_validator, low=2010, high=2020),
-        "eyr": partial(year_validator, low=2020, high=2030),
-        "hgt": height_validator,
-        "hcl": lambda s: bool(re.fullmatch(r"#[0-9a-f]{6}", s)),
-        "ecl": lambda s: s in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"],
-        "pid": lambda s: len(s) == 9 and s.isdigit(),
-        "cid": lambda s: True,
-    }
-
-    def __init__(self, raw):
-        for k in raw:
-            if k in self.FIELDS:
-                setattr(self, k, raw[k])
-            else:
-                raise ValueError(f"Unexpected field [{k}]")
+    @classmethod
+    def strict_validators(cls):
+        return {
+            "byr": partial(cls.year_validator, low=1920, high=2002),
+            "iyr": partial(cls.year_validator, low=2010, high=2020),
+            "eyr": partial(cls.year_validator, low=2020, high=2030),
+            "hgt": cls.height_validator,
+            "hcl": lambda s: bool(re.fullmatch(r"#[0-9a-f]{6}", s)),
+            "ecl": lambda s: s in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"],
+            "pid": lambda s: len(s) == 9 and s.isdigit(),
+            "cid": lambda s: True,
+        }
 
     def is_valid(self, allow_missing_fields=None, strict=False):
         allow_missing_fields = allow_missing_fields or []
@@ -88,7 +92,7 @@ class Passport:
                 logging.debug("Missing attribute %s", f)
                 return False
             if strict:
-                if not self.STRICT_VALIDATORS[f](fv):
+                if not self.strict_validators()[f](fv):
                     logging.debug("Strict validation failed: %s=%s", f, fv)
                     return False
 

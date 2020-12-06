@@ -3,8 +3,8 @@ import pytest
 from adventofcode.year2020.day3.solution import TreedSlope
 
 
-@pytest.fixture
-def example_slope():
+@pytest.fixture(name="example_slope")
+def fixture_example_slope():
     return """
 ..##.......
 #...#...#..
@@ -27,16 +27,16 @@ def test_slope(example_slope):
     assert treed_slope.height == 11
 
     #  Base
-    assert treed_slope.is_tree_at(0, 0) == False
-    assert treed_slope.is_tree_at(0, 1) == True
-    assert treed_slope.is_tree_at(0, 10) == False
-    assert treed_slope.is_tree_at(1, 0) == False
-    assert treed_slope.is_tree_at(1, 1) == False
+    assert not treed_slope.is_tree_at(0, 0)
+    assert treed_slope.is_tree_at(0, 1)
+    assert not treed_slope.is_tree_at(0, 10)
+    assert not treed_slope.is_tree_at(1, 0)
+    assert not treed_slope.is_tree_at(1, 1)
 
     # Extended
-    assert treed_slope.is_tree_at(11, 0) == False
-    assert treed_slope.is_tree_at(11, 1) == True
-    assert treed_slope.is_tree_at(22, 0) == False
+    assert not treed_slope.is_tree_at(11, 0)
+    assert treed_slope.is_tree_at(11, 1)
+    assert not treed_slope.is_tree_at(22, 0)
 
     # Outside
     with pytest.raises(ValueError):
@@ -54,4 +54,7 @@ def test_slope(example_slope):
     assert treed_slope.trees_hit == 3
 
     treed_slope.go_back_to_the_top()
-    treed_slope.multiple_slide_product([(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]) == 336
+    assert (
+        treed_slope.multiple_slide_product([(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)])
+        == 336
+    )

@@ -3,8 +3,8 @@ import pytest
 from adventofcode.year2020.day2.solution import PasswordRule, PasswordValidator
 
 
-@pytest.fixture
-def password_list():
+@pytest.fixture(name="password_list")
+def fixture_password_list():
     return """
 1-3 a: abcde
 1-3 b: cdefg
@@ -23,10 +23,10 @@ def test_password_rule():
     assert 4 not in rule.count_range
     assert rule.character == "a"
 
-    assert rule.validate_password("abcde") == True
-    assert rule.validate_password("abada") == True
-    assert rule.validate_password("fghij") == False
-    assert rule.validate_password("aaaaa") == False
+    assert rule.validate_password("abcde")
+    assert rule.validate_password("abada")
+    assert not rule.validate_password("fghij")
+    assert not rule.validate_password("aaaaa")
 
 
 def test_password_rule_new():
@@ -38,11 +38,11 @@ def test_password_rule_new():
     assert 3 not in rule.positions
     assert rule.character == "a"
 
-    assert rule.validate_password("abcde") == True
-    assert rule.validate_password("abada") == False
-    assert rule.validate_password("fghij") == False
-    assert rule.validate_password("aaaaa") == False
-    assert rule.validate_password("baaaa") == True
+    assert rule.validate_password("abcde")
+    assert not rule.validate_password("abada")
+    assert not rule.validate_password("fghij")
+    assert not rule.validate_password("aaaaa")
+    assert rule.validate_password("baaaa")
 
 
 def test_password_validator(password_list):

@@ -60,8 +60,7 @@ class TreedSlope:
 
 if __name__ == "__main__":
     puzzle = Puzzle(year=2020, day=3)
-    slope_map = puzzle.input_data
-    slope = TreedSlope(slope_map)
+    slope = TreedSlope(puzzle.input_data)
     slope.slide()
     puzzle.answer_a = slope.trees_hit
     puzzle.answer_b = slope.multiple_slide_product(

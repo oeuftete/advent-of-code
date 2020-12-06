@@ -3,8 +3,8 @@ import pytest
 from adventofcode.year2020.day4.solution import Passport, PassportBatch
 
 
-@pytest.fixture
-def batch():
+@pytest.fixture(name="batch")
+def fixture_batch():
     return """
 ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
@@ -22,8 +22,8 @@ iyr:2011 ecl:brn hgt:59in
 """
 
 
-@pytest.fixture
-def invalid_batch():
+@pytest.fixture(name="invalid_batch")
+def fixture_invalid_batch():
     return """
 eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
@@ -41,8 +41,8 @@ pid:3556412378 byr:2007
 """
 
 
-@pytest.fixture
-def valid_batch():
+@pytest.fixture(name="valid_batch")
+def fixture_valid_batch():
     return """
 pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
 hcl:#623a2f
@@ -84,7 +84,7 @@ def test_passport():
     ],
 )
 def test_strict_rules(field, value, is_valid):
-    assert Passport.STRICT_VALIDATORS[field](value) == is_valid
+    assert Passport.strict_validators()[field](value) == is_valid
 
 
 def test_passport_batch(batch):

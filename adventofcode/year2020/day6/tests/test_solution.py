@@ -7,8 +7,8 @@ from adventofcode.year2020.day6.solution import (
 )
 
 
-@pytest.fixture
-def simple_customs_collection():
+@pytest.fixture(name="simple_customs_collection")
+def fixture_simple_customs_collection():
     return """
 abc
 
@@ -41,18 +41,18 @@ def test_customs_form(line, answers):
         ("a\na\na\na", {"a"}, {"a"}),
     ],
 )
-def test_customs_form(group, any_yeses, all_yeses):
+def test_customs_group(group, any_yeses, all_yeses):
     assert CustomsGroup(group).any_yeses == any_yeses
     assert CustomsGroup(group).all_yeses == all_yeses
 
 
 def test_customs_collection(simple_customs_collection):
-    cc = CustomsCollection(simple_customs_collection)
-    assert len(cc.groups) == 5
-    assert len(cc.groups[1].forms) == 3
-    assert cc.groups[2].any_yeses == {"a", "b", "c"}
-    assert cc.sum_of_any_yeses == 11
+    customs_collection = CustomsCollection(simple_customs_collection)
+    assert len(customs_collection.groups) == 5
+    assert len(customs_collection.groups[1].forms) == 3
+    assert customs_collection.groups[2].any_yeses == {"a", "b", "c"}
+    assert customs_collection.sum_of_any_yeses == 11
 
-    assert cc.groups[0].all_yeses == {"a", "b", "c"}
-    assert cc.groups[2].all_yeses == {"a"}
-    assert cc.sum_of_all_yeses == 6
+    assert customs_collection.groups[0].all_yeses == {"a", "b", "c"}
+    assert customs_collection.groups[2].all_yeses == {"a"}
+    assert customs_collection.sum_of_all_yeses == 6

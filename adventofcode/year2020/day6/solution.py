@@ -1,10 +1,15 @@
+from dataclasses import dataclass
+
 from aocd.models import Puzzle
 
 
+@dataclass
 class CustomsForm:
-    def __init__(self, line):
-        self.line = line
-        self.answers = set(line)
+    line: str
+
+    @property
+    def answers(self) -> set:
+        return set(self.line)
 
 
 class CustomsGroup:
