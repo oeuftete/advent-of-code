@@ -13,11 +13,21 @@ class CustomsGroup:
         self.forms = [CustomsForm(line) for line in group.split("\n")]
 
     @property
-    def yeses(self):
-        yeses = set()
+    def any_yeses(self):
+        any_yeses = set()
         for form in self.forms:
-            yeses.update(form.answers)
-        return yeses
+            any_yeses.update(form.answers)
+        return any_yeses
+
+    @property
+    def all_yeses(self):
+        all_yeses = None
+        for form in self.forms:
+            if all_yeses is None:
+                all_yeses = form.answers
+            else:
+                all_yeses.intersection_update(form.answers)
+        return all_yeses
 
 
 class CustomsCollection:
@@ -27,11 +37,16 @@ class CustomsCollection:
         ]
 
     @property
-    def sum_of_yeses(self):
-        return sum([len(g.yeses) for g in self.groups])
+    def sum_of_any_yeses(self):
+        return sum([len(g.any_yeses) for g in self.groups])
+
+    @property
+    def sum_of_all_yeses(self):
+        return sum([len(g.all_yeses) for g in self.groups])
 
 
 if __name__ == "__main__":
     puzzle = Puzzle(year=2020, day=6)
     cc = CustomsCollection(puzzle.input_data)
-    puzzle.answer_a = cc.sum_of_yeses
+    puzzle.answer_a = cc.sum_of_any_yeses
+    puzzle.answer_b = cc.sum_of_all_yeses
