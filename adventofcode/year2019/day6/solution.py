@@ -1,7 +1,7 @@
 import networkx as nx
 
 
-class OrbitMap(object):
+class OrbitMap:
     def __init__(self, input_map):
         self.g = nx.DiGraph()
         self.ORIGIN = "COM"
