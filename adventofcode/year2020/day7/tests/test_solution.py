@@ -18,7 +18,20 @@ dotted black bags contain no other bags.
 """.strip()
 
 
-def test_baggage_rules(sample_rules):
+@pytest.fixture(name="harder_rules")
+def fixture_harder_rules():
+    return """
+shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags.
+""".strip()
+
+
+def test_baggage_rules(sample_rules, harder_rules):
     baggage_rules = BaggageRules(sample_rules)
     shiny_gold_holders = baggage_rules.can_carry("shiny gold")
     assert len(shiny_gold_holders) == 4
@@ -30,3 +43,5 @@ def test_baggage_rules(sample_rules):
             "light red",
         ]
     )
+    assert baggage_rules.contained_bags("shiny gold") == 32
+    assert BaggageRules(harder_rules).contained_bags("shiny gold") == 126
