@@ -22,3 +22,6 @@ def test_boot_code(boot_code):
     computer = ConsoleComputer(boot_code)
     computer.run_until_loop()
     assert computer.accumulator == 5
+
+    computer.reset()
+    assert computer.run_with_toggles_accumulator == 8
