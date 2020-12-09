@@ -32,3 +32,4 @@ def fixture_sample_stream():
 def test_sample_stream(sample_stream):
     cyphertext = Cyphertext(stream=sample_stream, window_size=5)
     assert cyphertext.first_invalid == 127
+    assert cyphertext.weakness == 62
