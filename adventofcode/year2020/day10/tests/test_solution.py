@@ -53,15 +53,16 @@ FIXTURE_INTERMEDIATE_BAG = """
 
 
 @pytest.mark.parametrize(
-    "bag,diffs_one,diffs_three,diffs_product",
+    "bag,diffs_one,diffs_three,diffs_product,arrangements",
     [
-        (FIXTURE_SIMPLE_BAG, 7, 5, 35),
-        (FIXTURE_INTERMEDIATE_BAG, 22, 10, 220),
+        (FIXTURE_SIMPLE_BAG, 7, 5, 35, 8),
+        (FIXTURE_INTERMEDIATE_BAG, 22, 10, 220, 19208),
     ],
 )
-def test_bags(bag, diffs_one, diffs_three, diffs_product):
+def test_bags(bag, diffs_one, diffs_three, diffs_product, arrangements):
     adapters = AdapterBag([int(n) for n in bag.strip().splitlines()])
     adapters.chain()
     assert adapters.diffs[1] == diffs_one
     assert adapters.diffs[3] == diffs_three
     assert adapters.diffs_product() == diffs_product
+    assert adapters.arrangements == arrangements
