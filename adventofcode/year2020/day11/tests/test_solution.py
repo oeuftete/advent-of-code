@@ -23,3 +23,9 @@ def test_seat_layout(simple_seat_layout):
     seating_area = SeatingArea(simple_seat_layout)
     seating_area.reseat_until_stable()
     assert seating_area.occupied_seats == 37
+
+
+def test_seat_layout_alt(simple_seat_layout):
+    seating_area = SeatingArea(simple_seat_layout)
+    seating_area.reseat_until_stable(algorithm="alt")
+    assert seating_area.occupied_seats == 26
