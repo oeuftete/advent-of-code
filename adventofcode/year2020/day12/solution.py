@@ -1,6 +1,5 @@
 import itertools
 import math
-from collections import deque
 from dataclasses import dataclass, field
 
 from aocd.models import Puzzle
@@ -14,13 +13,13 @@ class NavSystem:
     bearing: str = "east"
     waypoint: Coordinate = Coordinate(10, 1)
     use_waypoint: bool = False
-    instruction_queue: deque = field(init=False)
+    instruction_queue: list = field(init=False)
     origin: Coordinate = field(default_factory=Coordinate)
     location: Coordinate = field(init=False)
 
     def __post_init__(self):
         self.location = Coordinate(self.origin.x, self.origin.y)
-        self.instruction_queue = deque(self.instructions)
+        self.instruction_queue = self.instructions.copy()
 
     def _update_attr_from_direction(self, attribute, direction, value):
         c = getattr(self, attribute)
@@ -40,7 +39,7 @@ class NavSystem:
                 return
 
             try:
-                instruction = self.instruction_queue.popleft()
+                instruction = self.instruction_queue.pop(0)
             except IndexError:
                 break
             action, value = instruction[0], instruction[1:]
