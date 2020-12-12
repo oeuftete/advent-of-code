@@ -11,14 +11,28 @@ from adventofcode.common.coordinate import Coordinate
 @dataclass
 class NavSystem:
     instructions: list
-    instruction_queue: deque = field(init=False)
     bearing: str = "east"
+    waypoint: Coordinate = Coordinate(10, 1)
+    use_waypoint: bool = False
+    instruction_queue: deque = field(init=False)
     origin: Coordinate = field(default_factory=Coordinate)
     location: Coordinate = field(init=False)
 
     def __post_init__(self):
         self.location = Coordinate(self.origin.x, self.origin.y)
         self.instruction_queue = deque(self.instructions)
+
+    def _update_attr_from_direction(self, attribute, direction, value):
+        c = getattr(self, attribute)
+
+        if direction == "N":
+            c.y += value
+        if direction == "S":
+            c.y -= value
+        if direction == "E":
+            c.x += value
+        if direction == "W":
+            c.x -= value
 
     def process(self, n=math.inf):
         for i in itertools.count(start=1):
@@ -34,21 +48,43 @@ class NavSystem:
 
     def perform_action(self, action, value):
         if action in "NESW":
-            self.move_direction(action, value)
+            if self.use_waypoint:
+                self.move_waypoint(action, value)
+            else:
+                self.move_direction(action, value)
         if action == "F":
-            self.move_direction(self.bearing.capitalize()[0], value)
+            if self.use_waypoint:
+                self.move_to_waypoint(value)
+            else:
+                self.move_direction(self.bearing.capitalize()[0], value)
         if action in "RL":
-            self.change_bearing(action, value)
+            if self.use_waypoint:
+                self.rotate_waypoint(action, value)
+            else:
+                self.change_bearing(action, value)
 
+    #  WAYPOINT ACTIONS
+    def move_waypoint(self, direction, value):
+        self._update_attr_from_direction(
+            attribute="waypoint", direction=direction, value=value
+        )
+
+    def move_to_waypoint(self, value):
+        self.location.x += self.waypoint.x * value
+        self.location.y += self.waypoint.y * value
+
+    def rotate_waypoint(self, action, value):
+        i = int(value / 90)
+        for _ in range(i):
+            wx, wy = self.waypoint.x, self.waypoint.y
+            self.waypoint.x = wy if action == "R" else -wy
+            self.waypoint.y = -wx if action == "R" else wx
+
+    #  BEARING ACTIONS
     def move_direction(self, direction, value):
-        if direction == "N":
-            self.location.y += value
-        if direction == "S":
-            self.location.y -= value
-        if direction == "E":
-            self.location.x += value
-        if direction == "W":
-            self.location.x -= value
+        self._update_attr_from_direction(
+            attribute="location", direction=direction, value=value
+        )
 
     def change_bearing(self, turn, value):
         bearings = ["north", "east", "south", "west"]
@@ -63,6 +99,11 @@ class NavSystem:
 if __name__ == "__main__":
     puzzle = Puzzle(year=2020, day=12)
     instructions = puzzle.input_data.strip().splitlines()
+
     nav_system = NavSystem(instructions)
     nav_system.process()
     puzzle.answer_a = nav_system.location.manhattan_distance(nav_system.origin)
+
+    nav_system = NavSystem(instructions, use_waypoint=True)
+    nav_system.process()
+    puzzle.answer_b = nav_system.location.manhattan_distance(nav_system.origin)
