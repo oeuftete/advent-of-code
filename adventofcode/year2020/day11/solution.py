@@ -18,13 +18,10 @@ class SeatingArea:
 
     def __repr__(self):
         grid_rows = []
-        for x in range(self.width):
+        for y in range(self.height):
             row_str = ""
-            for y in range(self.height):
-                try:
-                    row_str += self.grid[y][x]
-                except KeyError:
-                    row_str += "?"
+            for x in range(self.width):
+                row_str += self.grid[x][y]
             grid_rows.append(row_str)
 
         return "\n".join(grid_rows)
