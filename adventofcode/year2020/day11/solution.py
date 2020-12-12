@@ -41,13 +41,16 @@ class SeatingArea:
         self.height = y + 1  # pylint: disable=undefined-loop-variable
 
     @classmethod
-    def nearest_counter_alt(cls, x, y, starting_grid):
+    def nearest_counter(cls, x, y, starting_grid, algorithm="original"):
         surroundings = Counter()
+        spaces_to_check = ["L", "#"]
+        if algorithm == "original":
+            spaces_to_check.append(".")
 
         for ix in itertools.count(start=x + 1):
             try:
                 c = starting_grid[ix][y]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -56,7 +59,7 @@ class SeatingArea:
         for ix in itertools.count(start=x - 1, step=-1):
             try:
                 c = starting_grid[ix][y]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -65,7 +68,7 @@ class SeatingArea:
         for iy in itertools.count(start=y + 1):
             try:
                 c = starting_grid[x][iy]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -74,7 +77,7 @@ class SeatingArea:
         for iy in itertools.count(start=y - 1, step=-1):
             try:
                 c = starting_grid[x][iy]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -83,7 +86,7 @@ class SeatingArea:
         for dy, ix in enumerate(itertools.count(start=x + 1), start=1):
             try:
                 c = starting_grid[ix][y + dy]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -92,7 +95,7 @@ class SeatingArea:
         for dy, ix in enumerate(itertools.count(start=x + 1), start=1):
             try:
                 c = starting_grid[ix][y - dy]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -101,7 +104,7 @@ class SeatingArea:
         for dy, ix in enumerate(itertools.count(start=x - 1, step=-1), start=1):
             try:
                 c = starting_grid[ix][y + dy]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
@@ -110,41 +113,12 @@ class SeatingArea:
         for dy, ix in enumerate(itertools.count(start=x - 1, step=-1), start=1):
             try:
                 c = starting_grid[ix][y - dy]
-                if c in ["L", "#"]:
+                if c in spaces_to_check:
                     surroundings[c] += 1
                     break
             except KeyError:
                 break
 
-        return surroundings
-
-    @classmethod
-    def nearest_counter_original(cls, x, y, starting_grid):
-        surroundings = Counter()
-        surrounding_points = []
-        for d in [
-            (-1, -1),
-            (-1, 0),
-            (-1, 1),
-            (0, -1),
-            (0, 1),
-            (1, -1),
-            (1, 0),
-            (1, 1),
-        ]:
-            surrounding_points.append((x + d[0], y + d[1]))
-
-        for p in surrounding_points:
-            logging.debug("(%s, %s) looking at %s...", x, y, d)
-            try:
-                neighbour = starting_grid[p[0]][p[1]]
-                #  logging.debug(
-                #      "...(%s, %s) found neighbour (%s)", x, y, neighbour
-                #  )
-                surroundings[neighbour] += 1
-            except KeyError:
-                logging.debug("...(%s, %s) no neighbour", x, y)
-                surroundings["."] += 1
         return surroundings
 
     def reseat(self, n=1, algorithm="original"):
@@ -158,12 +132,7 @@ class SeatingArea:
                     if c == ".":
                         continue
 
-                    if algorithm == "original":
-                        surroundings = self.nearest_counter_original(
-                            x, y, starting_grid
-                        )
-                    else:
-                        surroundings = self.nearest_counter_alt(x, y, starting_grid)
+                    surroundings = self.nearest_counter(x, y, starting_grid, algorithm)
 
                     #  logging.debug("(%s, %s) Counter = %s", x, y, surroundings)
 
