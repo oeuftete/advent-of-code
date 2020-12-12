@@ -39,11 +39,13 @@ class SeatingArea:
 
     @classmethod
     def nearest_counter(cls, x, y, starting_grid, algorithm="original"):
+        # pylint: disable=too-many-branches,too-many-statements
         surroundings = Counter()
         spaces_to_check = ["L", "#"]
         if algorithm == "original":
             spaces_to_check.append(".")
 
+        #  right
         for ix in itertools.count(start=x + 1):
             try:
                 c = starting_grid[ix][y]
@@ -53,6 +55,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  left
         for ix in itertools.count(start=x - 1, step=-1):
             try:
                 c = starting_grid[ix][y]
@@ -62,6 +65,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  up
         for iy in itertools.count(start=y + 1):
             try:
                 c = starting_grid[x][iy]
@@ -71,6 +75,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  down
         for iy in itertools.count(start=y - 1, step=-1):
             try:
                 c = starting_grid[x][iy]
@@ -80,6 +85,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  up/right
         for dy, ix in enumerate(itertools.count(start=x + 1), start=1):
             try:
                 c = starting_grid[ix][y + dy]
@@ -89,6 +95,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  down/right
         for dy, ix in enumerate(itertools.count(start=x + 1), start=1):
             try:
                 c = starting_grid[ix][y - dy]
@@ -98,6 +105,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  up/left
         for dy, ix in enumerate(itertools.count(start=x - 1, step=-1), start=1):
             try:
                 c = starting_grid[ix][y + dy]
@@ -107,6 +115,7 @@ class SeatingArea:
             except KeyError:
                 break
 
+        #  up/right
         for dy, ix in enumerate(itertools.count(start=x - 1, step=-1), start=1):
             try:
                 c = starting_grid[ix][y - dy]
