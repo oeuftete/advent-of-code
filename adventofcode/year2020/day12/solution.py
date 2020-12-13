@@ -73,8 +73,7 @@ class NavSystem:
         self.location.y += self.waypoint.y * value
 
     def rotate_waypoint(self, action, value):
-        i = int(value / 90)
-        for _ in range(i):
+        for _ in range(value // 90):
             wx, wy = self.waypoint.x, self.waypoint.y
             self.waypoint.x = wy if action == "R" else -wy
             self.waypoint.y = -wx if action == "R" else wx
@@ -88,7 +87,7 @@ class NavSystem:
     def change_bearing(self, turn, value):
         bearings = ["north", "east", "south", "west"]
         current_index = bearings.index(self.bearing)
-        i = int(value / 90)
+        i = value // 90
         if turn == "R":
             self.bearing = bearings[(current_index + i) % 4]
         if turn == "L":
