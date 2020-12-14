@@ -2,6 +2,7 @@ import itertools
 import logging
 import math
 from dataclasses import dataclass, field
+from functools import partial
 
 from aocd.models import Puzzle
 
@@ -33,34 +34,27 @@ class BusNotes:
     @property
     def offset_timestamp(self):
         bus_map = {
-            int(id): int(offset)
-            for offset, id in enumerate(self.bus_ids)
-            if id.isdigit()
+            int(bus_id): int(offset)
+            for offset, bus_id in enumerate(self.bus_ids)
+            if bus_id.isdigit()
         }
-        id_offset_zero = int(self.bus_ids[0])
-        max_id = max(bus_map)
-        logging.debug("Searching offset0=%s, max=%s", id_offset_zero, max_id)
+        MAX_TIMESTAMP = 100_000_000_000_000
 
-        matching_offset = math.inf
-        for t in itertools.count(step=id_offset_zero):
-            if t > 1_100_000:
-                break
-            logging.debug("Checking time %s", t)
+        matches = range(MAX_TIMESTAMP)
 
-            try:
-                for bus_id, offset in bus_map.items():
-                    id_t = t + offset
-                    logging.debug("Checking for id %s at %s", bus_id, id_t)
-                    if id_t not in range(0, t + bus_id, bus_id):
-                        raise StopIteration(f"Time {t} does not match.")
-            except StopIteration as e:
-                logging.debug("Continuing: %s", e)
-                continue
+        def filter_offsets(n, offset, bus_id):
+            logging.debug("Applying filter_offsets with %s, %s, %s", n, offset, bus_id)
+            return n + offset in range(0, MAX_TIMESTAMP, bus_id)
 
-            matching_offset = t
-            break
+        for bus_id, offset in bus_map.items():
+            matches = filter(
+                lambda n, offset=offset, bus_id=bus_id: filter_offsets(
+                    n, offset, bus_id
+                ),
+                matches,
+            )
 
-        return matching_offset
+        return next(matches)
 
 
 if __name__ == "__main__":
