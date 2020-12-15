@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-advent-of-code-data==0.9.0  # via -r requirements.in
+advent-of-code-data==0.9.4  # via -r requirements.in
 anytree==2.8.0            # via -r requirements.in
 astroid==2.4.2            # via pylint
 attrs==20.3.0             # via pytest
@@ -18,29 +18,30 @@ coverage==5.3             # via codecov, pytest-cov
 dataclasses==0.8          # via -r requirements.in
 decorator==4.4.2          # via networkx
 idna==2.10                # via requests
-importlib-metadata==3.1.1  # via pluggy, pytest
+importlib-metadata==3.3.0  # via pluggy, pytest
 iniconfig==1.1.1          # via pytest
 isort==5.6.4              # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
 networkx==2.5             # via -r requirements.in
-packaging==20.7           # via pytest
+packaging==20.8           # via pytest
 pebble==4.5.3             # via advent-of-code-data
 pluggy==0.13.1            # via pytest
-py==1.10.0                 # via pytest
+py==1.10.0                # via pytest
 pylint==2.6.0             # via pytest-pylint
 pyparsing==2.4.7          # via packaging
 pytest-cov==2.10.1        # via -r requirements.in
 pytest-pylint==0.18.0     # via -r requirements.in
-pytest==6.1.2             # via -r requirements.in, pytest-cov, pytest-pylint
+pytest==6.2.0             # via -r requirements.in, pytest-cov, pytest-pylint
 python-dateutil==2.8.1    # via advent-of-code-data
 pytz==2020.4              # via tzlocal
 requests==2.25.0          # via advent-of-code-data, codecov
 six==1.15.0               # via anytree, astroid, python-dateutil
-soupsieve==2.0.1          # via beautifulsoup4
+soupsieve==2.1            # via beautifulsoup4
 termcolor==1.1.0          # via advent-of-code-data
 toml==0.10.2              # via pylint, pytest, pytest-pylint
 typed-ast==1.4.1          # via astroid
+typing-extensions==3.7.4.3  # via importlib-metadata
 tzlocal==2.1              # via advent-of-code-data
 urllib3==1.26.2           # via -r requirements.in, requests
 wrapt==1.12.1             # via astroid
