@@ -27,7 +27,7 @@ networkx==2.5             # via -r requirements.in
 packaging==20.7           # via pytest
 pebble==4.5.3             # via advent-of-code-data
 pluggy==0.13.1            # via pytest
-py==1.9.0                 # via pytest
+py==1.10.0                 # via pytest
 pylint==2.6.0             # via pytest-pylint
 pyparsing==2.4.7          # via packaging
 pytest-cov==2.10.1        # via -r requirements.in
