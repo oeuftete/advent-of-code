@@ -15,10 +15,19 @@ def fixture_simple_initial():
 def test_cube_cell():
     cc = CubeCell()
     assert len(cc.neighbours) == 26
-    assert (1, 1, 1) in cc.neighbours
-    assert (0, 0, 0) not in cc.neighbours
+    assert (1, 1, 1, 0) in cc.neighbours
+    assert (0, 0, 0, 0) not in cc.neighbours
 
 
+def test_hypercube_cell():
+    cc = CubeCell(is_hypercube=True)
+    assert len(cc.neighbours) == 80
+    assert (1, 1, 1, 0) in cc.neighbours
+    assert (1, 1, 1, -1) in cc.neighbours
+    assert (0, 0, 0, 0) not in cc.neighbours
+
+
+@pytest.mark.slow
 def test_cube_engine(simple_initial):
     cube_engine = CubeEngine(simple_initial)
     assert cube_engine.grid[CubeCell(0, 0, 0)] == "."
@@ -33,3 +42,10 @@ def test_cube_engine(simple_initial):
 
     cube_engine.iterate(5)
     assert cube_engine.active_cells == 112
+
+
+@pytest.mark.slow
+def test_hypercube_engine(simple_initial):
+    cube_engine = CubeEngine(simple_initial, is_hypercube=True)
+    cube_engine.iterate(6)
+    assert cube_engine.active_cells == 848
