@@ -47,7 +47,7 @@ class Calculator:
 
     @property
     def tokenized(self):
-        return [c for c in self.equation if c != ""]
+        return [c for c in self.equation if c != " "]
 
     @property
     def result(self) -> int:
@@ -74,17 +74,21 @@ class Calculator:
                 )
             logging.debug("[%s] Resulting calcs: %s", len(calculation), calculation)
 
+        logging.debug("[%s] ### Final equation: %s", len(calculation), current_eq)
         return current_eq.left
 
     @property
     def advanced_result(self) -> int:
         calculation = [Equation()]
+
+        open_parens = []
         for token in self.tokenized:
             logging.debug("[%s] Adding token [%s]", len(calculation), token)
             current_eq = calculation[-1]
             if token == "(":
                 calculation.append(Equation())
                 current_eq = calculation[-1]
+                open_parens.append(len(calculation))
             elif token.isdigit():
                 #  If currently multiplying, start a new level
                 if current_eq.operator == "*":
@@ -94,9 +98,12 @@ class Calculator:
             elif token in ("*", "+"):
                 current_eq.add_operator(token)
             elif token == ")":
-                deep_result = calculation.pop().left
-                current_eq = calculation[-1]
-                current_eq.add_digit(deep_result)
+                #  Resolve back to open paren
+                open_paren_level = open_parens.pop()
+                while len(calculation) > open_paren_level:
+                    deep_result = calculation.pop().resolve()
+                    current_eq = calculation[-1]
+                    current_eq.add_digit(deep_result)
 
             if current_eq.is_complete:
                 interim = current_eq.resolve()
@@ -112,6 +119,7 @@ class Calculator:
             current_eq.add_digit(deep_result)
             current_eq.resolve()
 
+        logging.debug("[%s] ### Final equation: %s", len(calculation), current_eq)
         return current_eq.left
 
 
