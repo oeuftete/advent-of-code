@@ -81,14 +81,31 @@ class Calculator:
     def advanced_result(self) -> int:
         calculation = [Equation()]
 
-        open_parens = []
-        for token in self.tokenized:
+        token_iter = iter(self.tokenized)
+        for token in token_iter:
             logging.debug("[%s] Adding token [%s]", len(calculation), token)
             current_eq = calculation[-1]
             if token == "(":
-                calculation.append(Equation())
-                current_eq = calculation[-1]
-                open_parens.append(len(calculation))
+                #  Recursively get the result from subequation
+                sub_tokens = ""
+                paren_level = 0
+                while True:
+                    next_token = next(token_iter)
+                    if next_token == "(":
+                        paren_level += 1
+                    elif next_token == ")":
+                        if paren_level == 0:
+                            break
+                        paren_level -= 1
+                    sub_tokens += next_token
+
+                sub_result = Calculator(sub_tokens).advanced_result
+                logging.debug("[%s] SUBRESULT: [%s]", len(calculation), sub_result)
+
+                if current_eq.operator == "*":
+                    calculation.append(Equation())
+                    current_eq = calculation[-1]
+                current_eq.add_digit(sub_result)
             elif token.isdigit():
                 #  If currently multiplying, start a new level
                 if current_eq.operator == "*":
@@ -97,13 +114,6 @@ class Calculator:
                 current_eq.add_digit(token)
             elif token in ("*", "+"):
                 current_eq.add_operator(token)
-            elif token == ")":
-                #  Resolve back to open paren
-                open_paren_level = open_parens.pop()
-                while len(calculation) > open_paren_level:
-                    deep_result = calculation.pop().resolve()
-                    current_eq = calculation[-1]
-                    current_eq.add_digit(deep_result)
 
             if current_eq.is_complete:
                 interim = current_eq.resolve()
