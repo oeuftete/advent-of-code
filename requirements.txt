@@ -43,6 +43,6 @@ toml==0.10.2              # via pylint, pytest, pytest-pylint
 typed-ast==1.4.1          # via astroid
 typing-extensions==3.7.4.3  # via importlib-metadata
 tzlocal==2.1              # via advent-of-code-data
-urllib3==1.26.2           # via -r requirements.in, requests
+urllib3==1.26.4           # via -r requirements.in, requests
 wrapt==1.12.1             # via astroid
 zipp==3.4.0               # via importlib-metadata
