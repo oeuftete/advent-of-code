@@ -3,7 +3,6 @@ anytree
 bitarray
 cached-property
 codecov
-dataclasses
 networkx
 pytest
 pytest-cov

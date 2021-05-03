@@ -15,7 +15,7 @@ class Equation:
 
     @property
     def is_complete(self):
-        return all([f is not None for f in (self.left, self.operator, self.right)])
+        return all(f is not None for f in (self.left, self.operator, self.right))
 
     def add_digit(self, d):
         d = int(d)

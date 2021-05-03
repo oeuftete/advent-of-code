@@ -13,6 +13,7 @@ line_length = 88
 disable = """
 bad-continuation,
 bad-whitespace,
+duplicate-code,
 invalid-name,
 missing-class-docstring,
 missing-function-docstring,
