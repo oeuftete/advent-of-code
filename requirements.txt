@@ -86,7 +86,7 @@ toml==0.10.2
     #   pytest-pylint
 tzlocal==2.1
     # via advent-of-code-data
-urllib3==1.26.4
+urllib3==1.26.5
     # via
     #   -r requirements.in
     #   requests
