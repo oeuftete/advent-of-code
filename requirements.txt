@@ -40,7 +40,7 @@ lazy-object-proxy==1.6.0
     # via astroid
 mccabe==0.6.1
     # via pylint
-networkx==2.5.1
+networkx==2.6
     # via -r requirements.in
 packaging==20.9
     # via pytest
