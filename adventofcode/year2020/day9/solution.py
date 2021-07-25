@@ -1,27 +1,29 @@
 import logging
+import typing
 from collections import deque
-from dataclasses import dataclass, field
 from itertools import combinations
 
+import attr
 from aocd.models import Puzzle
 from cached_property import cached_property
 
 logging.basicConfig(level=logging.INFO)
 
 
-@dataclass
+@attr.s
 class Cyphertext:
-    stream: list
-    window_size: int = 25
-    window: deque = field(init=False)
+    stream: typing.List[int] = attr.ib(
+        factory=list, converter=lambda l: list(map(int, l))
+    )
+    window_size: int = attr.ib(default=25)
+    window: typing.Deque[int] = attr.ib(init=False, factory=deque)
 
-    def __post_init__(self):
-        self.stream = list(map(int, self.stream))
+    def __attrs_post_init__(self):
         self.window = deque(self.stream[: self.window_size], self.window_size)
 
     @cached_property
     def first_invalid(self):
-        for n in self.stream[self.window_size :]:
+        for n in self.stream[self.window_size:]:
             if n not in map(sum, combinations(self.window, 2)):
                 return n
             self.window.append(n)
