@@ -2,6 +2,7 @@ import logging
 import math
 from fractions import Fraction
 
+import attr
 from cached_property import cached_property
 
 from adventofcode.common.coordinate import Coordinate
@@ -25,7 +26,7 @@ class Line(object):
             logging.debug("Vertical line...")
             m = math.inf
 
-        logging.debug(f"Line = {m}x + {b}")
+        logging.debug("Line = %fx + %f", m, b)
         return (m, b)
 
     @property
@@ -62,14 +63,13 @@ class Line(object):
                 if y.denominator == 1:
                     result.append(Coordinate(x, y))
 
-        logging.debug(f"Result = {result}")
+        logging.debug("Result = %s", result)
         return result
 
 
+@attr.s
 class Asteroid(Coordinate):
-    def __init__(self, *args, **kwargs):
-        super(Asteroid, self).__init__(*args, **kwargs)
-        self.viewable_asteroids = set()
+    viewable_asteroids = attr.ib(factory=set, cmp=False, init=False, repr=False)
 
     def add_viewable(self, other):
         assert isinstance(other, Asteroid)
@@ -77,7 +77,7 @@ class Asteroid(Coordinate):
 
     @property
     def n_viewable(self):
-        logging.debug("Viewable = " f"{self.viewable_asteroids}")
+        logging.debug("Viewable = %s", self.viewable_asteroids)
         return len(self.viewable_asteroids)
 
 
@@ -105,32 +105,32 @@ class AsteroidMap(object):
                     self.asteroids.append(Asteroid(x, y))
 
     def has_asteroid_at(self, c):
-        return c in self.asteroids
+        return c in map(lambda a: Coordinate(*(a.x, a.y)), self.asteroids)
 
     def get_asteroid_at(self, c):
         for a in self.asteroids:
-            if a == c:
+            if (a.x, a.y) == (c.x, c.y):
                 return a
 
     def remove_asteroid_at(self, c):
         for i, a in enumerate(self.asteroids):
-            if a == c:
-                del self.asteroids[i : i + 1]
+            if (a.x, a.y) == (c.x, c.y):
+                del self.asteroids[i: i + 1]
                 return True
 
         return False
 
     def _build_views(self):
         for i, a1 in enumerate(self.asteroids):
-            logging.debug(f"Checking {a1} ...")
-            for a2 in self.asteroids[i + 1 :]:
-                logging.debug(f"... against {a2} ...")
+            logging.debug("Checking %s ...", a1)
+            for a2 in self.asteroids[i + 1:]:
+                logging.debug("... against %s ...", a2)
                 line = Line(a1, a2)
                 for c in line.points_on_line + [a2]:
-                    logging.debug(f"... checking point on line {c}...")
+                    logging.debug("... checking point on line %s...", c)
                     if self.has_asteroid_at(Coordinate(c.x, c.y)):
                         a_seen = self.get_asteroid_at(Coordinate(c.x, c.y))
-                        logging.debug(f"*** Can see: {a1} <--> {a_seen}")
+                        logging.debug("*** Can see: %s <--> %s", a1, a_seen)
                         a1.add_viewable(a_seen)
                         a_seen.add_viewable(a1)
                         break
@@ -141,12 +141,12 @@ class AsteroidMap(object):
         best_asteroid = None
 
         for asteroid in self.asteroids:
-            logging.debug(f"Checking asteroid {asteroid}...")
+            logging.debug("Checking asteroid %s...", asteroid)
             if asteroid.n_viewable > max_viewable:
                 max_viewable = asteroid.n_viewable
                 best_asteroid = asteroid
-                logging.debug(f"*** New best: {best_asteroid}")
-                logging.debug(" ** Can see:  " f"{best_asteroid.viewable_asteroids}")
+                logging.debug("*** New best: %s", best_asteroid)
+                logging.debug(" ** Can see:  %s", best_asteroid.viewable_asteroids)
 
         return best_asteroid
 
@@ -172,7 +172,7 @@ class AsteroidMap(object):
         zapped = self.remove_asteroid_at(Coordinate(x, y))
         if zapped:
             self.vaporized.append(Asteroid(x, y))
-            logging.debug(f"Zapped ({x}, {y})")
+            logging.debug("Zapped (%s, %s)", x, y)
         return zapped
 
     def run_vaporizer(self, limit=None):

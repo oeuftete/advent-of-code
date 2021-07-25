@@ -1,32 +1,17 @@
-from functools import total_ordering
+import attr
 
 
-@total_ordering
+@attr.s(frozen=True)
 class Coordinate:
-    def __init__(self, x=0, y=0, csv=None):
-        if csv:
-            (self.x, self.y) = map(int, csv.replace(" ", "").split(","))
-        else:
-            self.x = x
-            self.y = y
+    x = attr.ib(default=0)
+    y = attr.ib(default=0)
+
+    @classmethod
+    def from_csv(cls, csv):
+        return cls(*(map(int, csv.replace(" ", "").split(","))))
 
     def manhattan_distance(self, other):
         return abs(self.x - other.x) + abs(self.y - other.y)
-
-    def __eq__(self, other):
-        return (self.x, self.y) == (other.x, other.y)
-
-    def __lt__(self, other):
-        return (self.x, self.y) < (other.x, other.y)
-
-    def __str__(self):
-        return "({}, {})".format(self.x, self.y)
-
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash((self.x, self.y))
 
     def is_bounded_by(self, other, direction):
         if direction == "east":

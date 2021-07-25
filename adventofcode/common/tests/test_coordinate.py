@@ -4,7 +4,7 @@ from adventofcode.common.coordinate import Coordinate
 
 
 def test_coordinate():
-    c1 = Coordinate(csv="1, 1")
+    c1 = Coordinate.from_csv("1, 1")
     assert c1.x == 1
     assert c1.y == 1
 
@@ -17,9 +17,6 @@ def test_coordinate():
 
     assert c1 < c2
     assert c1 == Coordinate(x=1, y=1)
-
-    c3 = Coordinate(5, 6)
-    assert str(c3) == "(5, 6)"
 
 
 def test_bounding():

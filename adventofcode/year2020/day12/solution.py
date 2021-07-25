@@ -2,6 +2,7 @@ import itertools
 import math
 from dataclasses import dataclass, field
 
+import attr
 from aocd.models import Puzzle
 
 from adventofcode.common.coordinate import Coordinate
@@ -25,13 +26,13 @@ class NavSystem:
         c = getattr(self, attribute)
 
         if direction == "N":
-            c.y += value
+            setattr(self, attribute, attr.evolve(c, y=c.y + value))
         if direction == "S":
-            c.y -= value
+            setattr(self, attribute, attr.evolve(c, y=c.y - value))
         if direction == "E":
-            c.x += value
+            setattr(self, attribute, attr.evolve(c, x=c.x + value))
         if direction == "W":
-            c.x -= value
+            setattr(self, attribute, attr.evolve(c, x=c.x - value))
 
     def process(self, n=math.inf):
         for i in itertools.count(start=1):
@@ -69,14 +70,20 @@ class NavSystem:
         )
 
     def move_to_waypoint(self, value):
-        self.location.x += self.waypoint.x * value
-        self.location.y += self.waypoint.y * value
+        self.location = attr.evolve(
+            self.location,
+            x=self.location.x + self.waypoint.x * value,
+            y=self.location.y + self.waypoint.y * value,
+        )
 
     def rotate_waypoint(self, action, value):
         for _ in range(value // 90):
             wx, wy = self.waypoint.x, self.waypoint.y
-            self.waypoint.x = wy if action == "R" else -wy
-            self.waypoint.y = -wx if action == "R" else wx
+            self.waypoint = attr.evolve(
+                self.waypoint,
+                x=wy if action == "R" else -wy,
+                y=-wx if action == "R" else wx,
+            )
 
     #  BEARING ACTIONS
     def move_direction(self, direction, value):

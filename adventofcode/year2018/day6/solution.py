@@ -160,7 +160,7 @@ def largest_area(coordinates):
 
 if __name__ == "__main__":
     coordinates = list(
-        map(lambda c: Coordinate(csv=c), get_data(year=2018, day=6).split("\n"))
+        map(lambda c: Coordinate.from_csv(c), get_data(year=2018, day=6).split("\n"))
     )
     print("Problem 1:", largest_area(coordinates))
     print("Problem 2:", len(get_safe_coordinates(coordinates, 10000)))

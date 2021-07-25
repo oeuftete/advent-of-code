@@ -11,7 +11,7 @@ from adventofcode.year2018.day6.solution import (
 
 TEST_COORDINATES = list(
     map(
-        lambda c: Coordinate(csv=c),
+        lambda c: Coordinate.from_csv(c),
         [
             "1, 1",
             "1, 6",

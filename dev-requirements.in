@@ -2,4 +2,5 @@
 black
 ipython
 isort
+python-lsp-server[all]
 urllib3>=1.26.5
