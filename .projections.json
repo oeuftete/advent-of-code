@@ -1,0 +1,13 @@
+{
+  "*.py": {
+    "alternate": "{dirname}/tests/test_{basename}.py"
+  },
+  "*/solution.py": {
+    "make": "python3 {file}",
+    "dispatch": "python3 {file}"
+  },
+  "**/tests/test_*.py": {
+    "alternate": "{dirname}/{basename}.py",
+    "type": "test"
+  }
+}
