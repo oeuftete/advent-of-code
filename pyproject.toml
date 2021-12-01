@@ -18,6 +18,7 @@ invalid-name,
 missing-class-docstring,
 missing-function-docstring,
 missing-module-docstring,
+too-few-public-methods
 """
 ignore = "year2018, year2019"
 
