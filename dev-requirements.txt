@@ -91,10 +91,16 @@ ptyprocess==0.7.0
     # via pexpect
 py==1.11.0
     # via pytest
+pycodestyle==2.8.0
+    # via python-lsp-server
+pydocstyle==6.1.1
+    # via python-lsp-server
 pygments==2.10.0
     # via ipython
 pylint==2.12.1
-    # via pytest-pylint
+    # via
+    #   pytest-pylint
+    #   python-lsp-server
 pyls-isort==0.2.2
     # via -r dev-requirements.in
 pyparsing==3.0.6
@@ -114,7 +120,7 @@ python-lsp-black==1.0.1
     # via -r dev-requirements.in
 python-lsp-jsonrpc==1.0.0
     # via python-lsp-server
-python-lsp-server==1.3.2
+python-lsp-server[pycodestyle,pydocstyle,pylint]==1.3.2
     # via
     #   -r dev-requirements.in
     #   pyls-isort
@@ -129,6 +135,8 @@ six==1.16.0
     # via
     #   anytree
     #   python-dateutil
+snowballstemmer==2.2.0
+    # via pydocstyle
 soupsieve==2.3.1
     # via beautifulsoup4
 termcolor==1.1.0
