@@ -18,7 +18,7 @@ nearby tickets:
 40,4,50
 55,2,20
 38,6,12
-""".strip()
+""".strip().splitlines()
 
 
 @pytest.fixture(name="part_b_notes")
@@ -35,7 +35,7 @@ nearby tickets:
 3,9,18
 15,1,5
 5,14,9
-""".strip()
+""".strip().splitlines()
 
 
 @pytest.mark.skip

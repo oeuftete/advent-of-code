@@ -13,7 +13,7 @@ class Ticket:
 
 @dataclass
 class TicketValidator:
-    boundary_rules: list = field(default_factory=list)
+    boundary_rules: dict = field(default_factory=dict)
 
     def is_value_valid_for_rule(self, v, field_name):
         is_valid = False
@@ -56,7 +56,7 @@ class TicketNotebook:
         mode = 0
         rules = {}
 
-        for line in self.notes.splitlines():
+        for line in self.notes:
             if not line:
                 mode += 1
                 continue
@@ -145,16 +145,16 @@ class TicketNotebook:
     @property
     def departure_product(self) -> int:
         product = 1
-        for field_name in self.field_map:
+        for field_name, field_value in self.field_map.items():
             if field_name.startswith("departure"):
-                product *= self.my_ticket.ticket_values[self.field_map[field_name]]
+                product *= self.my_ticket.ticket_values[field_value]
 
         return product
 
 
 if __name__ == "__main__":
     puzzle = Puzzle(year=2020, day=16)
-    notes = puzzle.input_data.strip()
+    notes = puzzle.input_data.strip().splitlines()
     ticket_notebook = TicketNotebook(notes)
     puzzle.answer_a = ticket_notebook.nearby_error_rate
     puzzle.answer_b = ticket_notebook.departure_product
