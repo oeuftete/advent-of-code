@@ -21,3 +21,8 @@ def test_product_position(example_course):
 
 def test_product_aim(example_course):
     assert Positionator(example_course, course_type="aim").position_product == 900
+
+
+def test_invalid_course_type():
+    with pytest.raises(ValueError):
+        _ = Positionator([], course_type="invalid")

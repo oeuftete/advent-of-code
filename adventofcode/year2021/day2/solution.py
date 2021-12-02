@@ -1,4 +1,3 @@
-import re
 import typing
 
 import attr
@@ -8,47 +7,32 @@ from aocd.models import Puzzle
 @attr.s
 class Positionator:
     course: typing.List[str] = attr.ib()
-    course_type: str = attr.ib(default="position")
+    course_type: str = attr.ib(
+        default="position", validator=attr.validators.in_(["aim", "position"])
+    )
     forward: int = attr.ib(default=0, init=False)
     depth: int = attr.ib(default=0, init=False)
     aim: int = attr.ib(default=0, init=False)
 
     def __attrs_post_init__(self):
-        if self.course_type == "position":
-            self._process_position_commands()
-        elif self.course_type == "aim":
-            self._process_aim_commands()
-        else:
-            raise ValueError("Bad course type!")
-
-    def _process_position_commands(self):
         for command in self.course:
-            m = re.match(r"(forward|up|down) (\d+)", command)
-            direction, units = m.groups()
+            direction, units = command.split(" ")
             units = int(units)
-            if direction == "forward":
-                self.forward += units
-            elif direction == "up":
-                self.depth -= units
-            elif direction == "down":
-                self.depth += units
-            else:
-                raise ValueError("Bad command!")
 
-    def _process_aim_commands(self):
-        for command in self.course:
-            m = re.match(r"(forward|up|down) (\d+)", command)
-            direction, units = m.groups()
-            units = int(units)
-            if direction == "forward":
-                self.forward += units
-                self.depth += self.aim*units
-            elif direction == "up":
-                self.aim -= units
-            elif direction == "down":
-                self.aim += units
-            else:
-                raise ValueError("Bad command!")
+            match (self.course_type, direction):
+                case ("position", "forward"):
+                    self.forward += units
+                case ("position", "up"):
+                    self.depth -= units
+                case ("position", "down"):
+                    self.depth += units
+                case ("aim", "forward"):
+                    self.forward += units
+                    self.depth += self.aim * units
+                case ("aim", "up"):
+                    self.aim -= units
+                case ("aim", "down"):
+                    self.aim += units
 
     @property
     def position_product(self):

@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.9"
+  - "nightly"
 install:
   - pip install -r requirements.txt
 script: pytest --cov=./ --pylint --pylint-ignore-patterns '.*year201[89].*'
