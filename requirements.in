@@ -8,5 +8,4 @@ networkx
 pytest
 pytest-cov
 pytest-pylint
-tzlocal<4
 urllib3>=1.24.2

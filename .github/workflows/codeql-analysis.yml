@@ -1,5 +1,5 @@
-name: "CodeQL"
-'on':
+name: CodeQL
+"on":
   push:
     branches:
       - master
@@ -7,7 +7,7 @@ name: "CodeQL"
     branches:
       - master
   schedule:
-    - cron: '44 17 * * 6'
+    - cron: "44 17 * * 6"
 jobs:
   analyze:
     name: Analyze

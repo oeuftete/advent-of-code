@@ -1,6 +1,6 @@
 # Advent of Code
 
-[![Build Status](https://travis-ci.com/oeuftete/advent-of-code.svg?branch=master)](https://travis-ci.com/oeuftete/advent-of-code)
+[![pytest](https://github.com/oeuftete/advent-of-code/actions/workflows/main.yml/badge.svg)](https://github.com/oeuftete/advent-of-code/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/oeuftete/advent-of-code/branch/master/graph/badge.svg)](https://codecov.io/gh/oeuftete/advent-of-code)
 [![Known Vulnerabilities](https://snyk.io/test/github/oeuftete/advent-of-code/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/oeuftete/advent-of-code?targetFile=requirements.txt)
 
