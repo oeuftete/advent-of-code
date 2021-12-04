@@ -1,0 +1,19 @@
+repos:
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        exclude: ^.direnv/
+        types: [python]
+  - repo: https://github.com/ambv/black
+    rev: 21.11b1
+    hooks:
+      - id: black
+        exclude: ^.direnv/
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        exclude: ^.direnv/
