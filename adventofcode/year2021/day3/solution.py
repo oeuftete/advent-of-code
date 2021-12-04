@@ -28,6 +28,14 @@ class Diagnostic:
         self.gamma_rate = int(gamma_string, base=2)
         self.epsilon_rate = int(epsilon_string, base=2)
 
+    @property
+    def oxygen_rating(self):
+        pass
+
+    @property
+    def co2_rating(self):
+        pass
+
 
 if __name__ == "__main__":
     puzzle = Puzzle(year=2021, day=3)
