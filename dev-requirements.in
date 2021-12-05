@@ -4,8 +4,6 @@ ipython
 isort
 pyls-isort
 python-lsp-black
-python-lsp-server
-python-lsp-server[pycodestyle]
-python-lsp-server[pydocstyle]
+python-lsp-server[all]
 python-lsp-server[pylint]
 urllib3>=1.26.5
