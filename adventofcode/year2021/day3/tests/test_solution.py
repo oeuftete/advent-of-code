@@ -22,7 +22,8 @@ def fixture_example_course():
 
 
 def test_diagnostics(example_diagnostics):
-    assert Diagnostic(example_diagnostics).gamma_rate == 22
-    assert Diagnostic(example_diagnostics).epsilon_rate == 9
-    #  assert Diagnostic(example_diagnostics).oxygen_rating == 23
-    #  assert Diagnostic(example_diagnostics).co2_rating == 10
+    diag = Diagnostic(example_diagnostics)
+    assert diag.power_consumption == 198
+    assert diag.oxygen_rating == 23
+    assert diag.scrubber_rating == 10
+    assert diag.life_support_rating == 230
