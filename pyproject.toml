@@ -9,6 +9,9 @@ line_length = 88
 [tool.black]
 line_length = 88
 
+[tool.mypy]
+strict_optional = false
+
 [tool.pylint.messages_control]
 disable = """
 bad-continuation,
