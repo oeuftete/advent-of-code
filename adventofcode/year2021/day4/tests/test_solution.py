@@ -28,7 +28,18 @@ def fixture_example_set():
 """.strip().splitlines()
 
 
-def test_bingo_board_set(example_set):
-    assert BingoBoardSet(example_set).last_drawn == 24
-    assert BingoBoardSet(example_set).winning_board.sum_unmarked == 188
-    assert BingoBoardSet(example_set).final_score == 4512
+def test_bingo_board_set_day1(example_set):
+    day1_set = BingoBoardSet(example_set)
+
+    assert len(day1_set.boards) == 3
+    assert day1_set.boards[1].board[2][2].value == 7
+    assert day1_set.last_drawn == 24
+    assert day1_set.winning_board.sum_unmarked == 188
+    assert day1_set.final_score == 4512
+
+
+def test_bingo_board_set_day2(example_set):
+    day2_set = BingoBoardSet(example_set, find_last=True)
+    assert day2_set.last_drawn == 13
+    assert day2_set.winning_board.sum_unmarked == 148
+    assert day2_set.final_score == 1924

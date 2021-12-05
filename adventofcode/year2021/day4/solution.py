@@ -47,13 +47,14 @@ class BingoBoard:
                 logging.debug("Found bingo: row [%s]: %s", i, self.board[i])
                 return True
 
-        for j in range(4):
+        for j in range(5):
             if all(
-                map(lambda v: v.marked, map(lambda i, j=j: self.board[i][j], range(4)))
+                map(lambda v: v.marked, map(lambda i, j=j: self.board[i][j], range(5)))
             ):
                 logging.debug("Found bingo: column [%s]", j)
                 return True
 
+        logging.debug("No bingo.")
         return False
 
     @property
@@ -69,6 +70,7 @@ class BingoBoard:
 @attr.s
 class BingoBoardSet:
     bingo_data: typing.List[str] = attr.ib()
+    find_last: bool = attr.ib(default=False)
     draws: typing.List[int] = attr.ib(init=False)
     boards: typing.List[BingoBoard] = attr.ib(init=False, factory=list)
     last_drawn: int = attr.ib(init=False)
@@ -81,6 +83,7 @@ class BingoBoardSet:
         for i in itertools.count(start=2, step=6):
             if i > len(self.bingo_data):
                 break
+
             logging.debug("Appending board from line %s in input", i)
             self.boards.append(BingoBoard(self.bingo_data[i : i + 5]))
 
@@ -88,13 +91,19 @@ class BingoBoardSet:
         for d in self.draws:
             logging.debug("Now drawing: %s", d)
             self.last_drawn = d
-            for b in self.boards:
+
+            for b in filter(lambda board: not board.is_complete, self.boards):
                 logging.debug("Now marking: %s on %s", d, b)
                 b.mark(d)
                 if b.is_complete:
                     logging.debug("WINNER! %s", b)
-                    self.winning_board = b
-                    return
+                    if self.find_last:
+                        if all(map(lambda board: board.is_complete, self.boards)):
+                            self.winning_board = b
+                            return
+                    else:
+                        self.winning_board = b
+                        return
 
         raise ValueError("No winner found!")
 
@@ -107,3 +116,4 @@ if __name__ == "__main__":
     puzzle = Puzzle(year=2021, day=4)
     bingo_data = puzzle.input_data.strip().splitlines()
     puzzle.answer_a = BingoBoardSet(bingo_data).final_score
+    puzzle.answer_b = BingoBoardSet(bingo_data, find_last=True).final_score
