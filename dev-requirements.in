@@ -3,6 +3,7 @@ black
 ipython
 isort
 pyls-isort
+pylsp-mypy
 python-lsp-black
 python-lsp-server[all]
 python-lsp-server[pylint]
