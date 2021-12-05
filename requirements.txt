@@ -22,7 +22,7 @@ cached-property==1.5.2
     # via -r requirements.in
 certifi==2021.10.8
     # via requests
-charset-normalizer==2.0.8
+charset-normalizer==2.0.9
     # via requests
 codecov==2.1.12
     # via -r requirements.in
@@ -52,7 +52,7 @@ pluggy==1.0.0
     # via pytest
 py==1.11.0
     # via pytest
-pylint==2.12.1
+pylint==2.12.2
     # via pytest-pylint
 pyparsing==3.0.6
     # via packaging
