@@ -25,6 +25,18 @@ def test_example_lines(example_lines):
 
     assert vm.grid[Coordinate(0, 0)] == 0
     assert vm.grid[Coordinate(2, 1)] == 1
+    assert vm.grid[Coordinate(4, 4)] == 1
     assert vm.grid[Coordinate(0, 9)] == 2
 
     assert len(vm.danger_spots) == 5
+
+
+def test_example_lines_with_diagonals(example_lines):
+    vm = VentMap(lines=example_lines, check_diagonals=True)
+
+    assert vm.grid[Coordinate(0, 0)] == 1
+    assert vm.grid[Coordinate(2, 1)] == 1
+    assert vm.grid[Coordinate(4, 4)] == 3
+    assert vm.grid[Coordinate(0, 9)] == 2
+
+    assert len(vm.danger_spots) == 12
