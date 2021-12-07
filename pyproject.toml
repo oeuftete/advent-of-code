@@ -8,6 +8,7 @@ line_length = 88
 
 [tool.black]
 line_length = 88
+target_version = ["py310"]
 
 [tool.mypy]
 strict_optional = false

@@ -1,5 +1,4 @@
 import logging
-import typing
 from collections import defaultdict
 
 import attr
@@ -12,13 +11,11 @@ logging.basicConfig(level=logging.INFO)
 
 @attr.s
 class VentMap:
-    lines: typing.List[str] = attr.ib()
-    grid: typing.Dict[Coordinate, int] = attr.ib(
-        init=False, factory=lambda: defaultdict(int)
-    )
+    lines: list[str] = attr.ib()
+    grid: dict[Coordinate, int] = attr.ib(init=False, factory=lambda: defaultdict(int))
     check_diagonals: bool = attr.ib(default=False)
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         for line in self.lines:
             line_start, line_end = sorted(
                 map(
@@ -58,7 +55,7 @@ class VentMap:
                     y += y_step
 
     @property
-    def danger_spots(self) -> typing.List[Coordinate]:
+    def danger_spots(self) -> list[Coordinate]:
         danger_spots = []
         for c, line_count in self.grid.items():
             if line_count > 1:

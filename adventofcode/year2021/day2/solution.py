@@ -1,12 +1,10 @@
-import typing
-
 import attr
 from aocd.models import Puzzle
 
 
 @attr.s
 class Positionator:
-    course: typing.List[str] = attr.ib()
+    course: list[str] = attr.ib()
     course_type: str = attr.ib(
         default="position", validator=attr.validators.in_(["aim", "position"])
     )
@@ -14,7 +12,7 @@ class Positionator:
     depth: int = attr.ib(default=0, init=False)
     aim: int = attr.ib(default=0, init=False)
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         for command in self.course:
             direction, units = command.split(" ")
             units = int(units)
@@ -35,7 +33,7 @@ class Positionator:
                     self.aim += units
 
     @property
-    def position_product(self):
+    def position_product(self) -> int:
         return self.forward * self.depth
 
 

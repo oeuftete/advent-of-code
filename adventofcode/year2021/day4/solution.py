@@ -1,10 +1,9 @@
 import itertools
 import logging
-import typing
 from collections import defaultdict
 
 import attr
-from aocd.models import Puzzle
+from aocd.models import Puzzle  # type: ignore
 
 logging.basicConfig(level=logging.INFO)
 
@@ -14,24 +13,26 @@ class BingoBoardValue:
     value: int = attr.ib()
     marked: bool = attr.ib(default=False)
 
-    def mark(self):
+    def mark(self) -> None:
         self.marked = True
 
 
 @attr.s
 class BingoBoard:
-    board_data: typing.List[str] = attr.ib()
-    board: typing.Dict = attr.ib(init=False, factory=lambda: defaultdict(dict))
-    board_index: typing.Dict = attr.ib(init=False, factory=dict)
+    board_data: list[str] = attr.ib()
+    board: dict[int, dict[int, BingoBoardValue]] = attr.ib(
+        init=False, factory=lambda: defaultdict(dict)
+    )
+    board_index: dict = attr.ib(init=False, factory=dict)
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         for i, row in enumerate(self.board_data):
             for j, board_value in enumerate(list(map(int, row.strip().split()))):
                 self.board[i][j] = BingoBoardValue(value=board_value)
                 self.board_index[board_value] = (i, j)
                 logging.debug("Set [%s][%s] to [%s]", i, j, board_value)
 
-    def mark(self, value):
+    def mark(self, value) -> None:
         """Look for the given value and mark it if found."""
         if value in self.board_index:
             i, j = self.board_index[value]
@@ -41,7 +42,7 @@ class BingoBoard:
             self.board[i][j].mark()
 
     @property
-    def is_complete(self):
+    def is_complete(self) -> bool:
         for i in self.board:
             if all(map(lambda v: v.marked, self.board[i].values())):
                 logging.debug("Found bingo: row [%s]: %s", i, self.board[i])
@@ -49,7 +50,12 @@ class BingoBoard:
 
         for j in range(5):
             if all(
-                map(lambda v: v.marked, map(lambda i, j=j: self.board[i][j], range(5)))
+                map(
+                    lambda v: v.marked,
+                    map(
+                        lambda i, j=j: self.board[i][j], range(5)  # type: ignore[misc]
+                    ),
+                )
             ):
                 logging.debug("Found bingo: column [%s]", j)
                 return True
@@ -58,7 +64,7 @@ class BingoBoard:
         return False
 
     @property
-    def sum_unmarked(self):
+    def sum_unmarked(self) -> int:
         sum_unmarked = 0
         for i in self.board:
             for v in self.board[i].values():
@@ -69,14 +75,14 @@ class BingoBoard:
 
 @attr.s
 class BingoBoardSet:
-    bingo_data: typing.List[str] = attr.ib()
+    bingo_data: list[str] = attr.ib()
     find_last: bool = attr.ib(default=False)
-    draws: typing.List[int] = attr.ib(init=False)
-    boards: typing.List[BingoBoard] = attr.ib(init=False, factory=list)
+    draws: list[int] = attr.ib(init=False)
+    boards: list[BingoBoard] = attr.ib(init=False, factory=list)
     last_drawn: int = attr.ib(init=False)
     winning_board: BingoBoard = attr.ib(init=False)
 
-    def __attrs_post_init__(self):
+    def __attrs_post_init__(self) -> None:
         self.draws = list(map(int, self.bingo_data[0].split(",")))
 
         #  Starting from line 2, grab the board's rows
@@ -108,7 +114,7 @@ class BingoBoardSet:
         raise ValueError("No winner found!")
 
     @property
-    def final_score(self):
+    def final_score(self) -> int:
         return self.winning_board.sum_unmarked * self.last_drawn
 
 
