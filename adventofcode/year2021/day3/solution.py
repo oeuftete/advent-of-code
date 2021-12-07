@@ -8,16 +8,13 @@ from cached_property import cached_property  # type: ignore
 
 @attr.s
 class Diagnostic:
-    measurements: typing.List[str] = attr.ib()
+    measurements: list[str] = attr.ib()
     counters: typing.DefaultDict[int, Counter] = attr.ib(
         init=False, factory=lambda: defaultdict(Counter)
     )
 
-    def __attrs_post_init__(self):
-        pass
-
     @cached_property
-    def power_consumption(self):
+    def power_consumption(self) -> int:
         for m in self.measurements:
             for i, c in enumerate(m):
                 self.counters[i][c] += 1
@@ -31,16 +28,18 @@ class Diagnostic:
         return int(gamma_string, base=2) * int(epsilon_string, base=2)
 
     @cached_property
-    def life_support_rating(self):
+    def life_support_rating(self) -> int:
         return self.oxygen_rating * self.scrubber_rating
 
     @cached_property
-    def scrubber_rating(self):
+    def scrubber_rating(self) -> int:
         co2_measurements = self.measurements.copy()
         position = 0
         while len(co2_measurements) > 1:
             #  Look at the current measurements, find the least common at position i
-            c = Counter(map(lambda m, p=position: m[p], co2_measurements))
+            c = Counter(
+                map(lambda m, p=position: m[p], co2_measurements)  # type: ignore[misc]
+            )
             most_common = c.most_common()[0]
             least_common = c.most_common()[-1]
 
@@ -57,12 +56,14 @@ class Diagnostic:
         return int(co2_measurements[0], base=2)
 
     @cached_property
-    def oxygen_rating(self):
+    def oxygen_rating(self) -> int:
         o2_measurements = self.measurements.copy()
         position = 0
         while len(o2_measurements) > 1:
             #  Look at the current measurements, find the most common at position i
-            c = Counter(map(lambda m, p=position: m[p], o2_measurements))
+            c = Counter(
+                map(lambda m, p=position: m[p], o2_measurements)  # type: ignore[misc]
+            )
             most_common = c.most_common()[0]
             least_common = c.most_common()[-1]
 

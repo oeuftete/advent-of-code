@@ -1,18 +1,18 @@
-import typing
-
 import attr
-from aocd.models import Puzzle
+from aocd.models import Puzzle  # type: ignore
+
+from adventofcode.common.utils import list_str_to_int
 
 
 @attr.s
 class Sonar:
-    measurements: typing.List[int] = attr.ib(converter=lambda l: list(map(int, l)))
+    measurements: list[int] = attr.ib(converter=list_str_to_int)
 
-    def n_increases(self, window_size=1):
+    def n_increases(self, window_size=1) -> int:
         n = 0
         for i, _ in enumerate(self.measurements[window_size:], start=window_size):
-            if sum(self.measurements[i - window_size + 1: i + 1]) > sum(
-                self.measurements[i - window_size: i]
+            if sum(self.measurements[i - window_size + 1 : i + 1]) > sum(
+                self.measurements[i - window_size : i]
             ):
                 n += 1
 

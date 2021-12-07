@@ -1,4 +1,3 @@
-import typing
 from collections import Counter
 
 import attr
@@ -9,24 +8,24 @@ from adventofcode.common.utils import list_str_to_int
 
 @attr.s
 class School:
-    fish: typing.List[int] = attr.ib(converter=list_str_to_int)
-    fish_counter: Counter = attr.ib(init=False, factory=Counter)
+    fish: list[int] = attr.ib(converter=list_str_to_int)
+    fish_counter: Counter[int] = attr.ib(init=False, factory=Counter)
 
     def __attrs_post_init__(self):
         self.fish_counter = Counter(self.fish)
 
-    def age(self, n=1):
+    def age(self, n: int = 1) -> None:
         for _ in range(n):
             for i, age in enumerate(self.fish.copy()):
-                if age > 0:
-                    self.fish[i] -= 1
-                elif age == 0:
+                if age == 0:
                     self.fish[i] = 6
                     self.fish.append(8)
+                else:
+                    self.fish[i] -= 1
 
-    def smart_age(self, n=1):
+    def smart_age(self, n: int = 1) -> None:
         for _ in range(n):
-            new_counter = Counter()
+            new_counter: Counter[int] = Counter()
             for i in range(9):
                 c_i = self.fish_counter[i]
                 if i == 0:
@@ -43,6 +42,8 @@ if __name__ == "__main__":
     #  school.age(80)
     #  puzzle.answer_a = len(school.fish)
     school.smart_age(80)
-    puzzle.answer_a = school.fish_counter.total()
+
+    # mypy doesn't know about Counter total() yet
+    puzzle.answer_a = school.fish_counter.total()  # type: ignore
     school.smart_age(256 - 80)
-    puzzle.answer_b = school.fish_counter.total()
+    puzzle.answer_b = school.fish_counter.total()  # type: ignore
