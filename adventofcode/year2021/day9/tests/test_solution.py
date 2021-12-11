@@ -19,3 +19,6 @@ def test_example_lines(example_lines):
 
     assert len(hm.low_points) == 4
     assert hm.risk_level_sum == 15
+
+    assert len(hm.basins) == 4
+    assert hm.basin_product == 1134
