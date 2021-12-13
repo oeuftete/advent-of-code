@@ -58,17 +58,24 @@ start-RW
 
 def test_example_small(example_small):
     cavern = Cavern(example_small)
-
     assert len(cavern.possible_paths) == 10
+
+    cavern = Cavern(example_small, revisit_small_caves=True)
+    assert len(cavern.possible_paths) == 36
 
 
 def test_example_medium(example_medium):
     cavern = Cavern(example_medium)
-
     assert len(cavern.possible_paths) == 19
 
+    cavern = Cavern(example_medium, revisit_small_caves=True)
+    assert len(cavern.possible_paths) == 103
 
+
+@pytest.mark.slow
 def test_example_large(example_large):
     cavern = Cavern(example_large)
-
     assert len(cavern.possible_paths) == 226
+
+    cavern = Cavern(example_large, revisit_small_caves=True)
+    assert len(cavern.possible_paths) == 3509
