@@ -82,7 +82,7 @@ class Image(object):
 
     @property
     def rendered_clearly(self):
-        return self.rendered.translate(str.maketrans("10", u"\u2588 "))
+        return self.rendered.translate(str.maketrans("10", "\u2588 "))
 
     @property
     def solution_a(self):

@@ -90,7 +90,7 @@ class PaintingRun(object):
         for x in list(range(-40, 40)):
             for y in list(range(-50, 50)):
                 color = self.get_paint_color_at(Coordinate(x, y))
-                hull += u"\u2588" if color == 1 else " "
+                hull += "\u2588" if color == 1 else " "
 
             hull += "\n"
 

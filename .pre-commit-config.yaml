@@ -5,10 +5,10 @@ repos:
         name: pylint
         entry: pylint
         language: system
-        exclude: ^.direnv/
+        exclude: "^(.direnv/|.*year201[89])"
         types: [python]
   - repo: https://github.com/ambv/black
-    rev: 21.11b1
+    rev: 22.1.0
     hooks:
       - id: black
         exclude: ^.direnv/

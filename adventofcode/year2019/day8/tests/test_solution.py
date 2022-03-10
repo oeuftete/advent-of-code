@@ -49,4 +49,4 @@ def test_example_a(image_data, image_size, layers, solution_a):
 def test_example_b():
     image = Image("0222112222120000", (2, 2))
     assert image.rendered == "01\n10"
-    assert image.rendered_clearly == u" \u2588\n\u2588 "
+    assert image.rendered_clearly == " \u2588\n\u2588 "

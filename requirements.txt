@@ -8,25 +8,25 @@ advent-of-code-data==1.1.1
     # via -r requirements.in
 anytree==2.8.0
     # via -r requirements.in
-astroid==2.9.0
+astroid==2.9.3
     # via pylint
-attrs==21.2.0
+attrs==21.4.0
     # via
     #   -r requirements.in
     #   pytest
 beautifulsoup4==4.10.0
     # via advent-of-code-data
-bitarray==2.3.4
+bitarray==2.4.0
     # via -r requirements.in
 cached-property==1.5.2
     # via -r requirements.in
 certifi==2021.10.8
     # via requests
-charset-normalizer==2.0.9
+charset-normalizer==2.0.12
     # via requests
 codecov==2.1.12
     # via -r requirements.in
-coverage[toml]==6.2
+coverage[toml]==6.3.2
     # via
     #   codecov
     #   pytest-cov
@@ -36,17 +36,17 @@ iniconfig==1.1.1
     # via pytest
 isort==5.10.1
     # via pylint
-lazy-object-proxy==1.6.0
+lazy-object-proxy==1.7.1
     # via astroid
 mccabe==0.6.1
     # via pylint
-networkx==2.6.3
+networkx==2.7.1
     # via -r requirements.in
 packaging==21.3
     # via pytest
 pebble==4.6.3
     # via advent-of-code-data
-platformdirs==2.4.0
+platformdirs==2.5.1
     # via pylint
 pluggy==1.0.0
     # via pytest
@@ -54,9 +54,9 @@ py==1.11.0
     # via pytest
 pylint==2.12.2
     # via pytest-pylint
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via packaging
-pytest==6.2.5
+pytest==7.0.1
     # via
     #   -r requirements.in
     #   pytest-cov
@@ -69,7 +69,7 @@ python-dateutil==2.8.2
     # via advent-of-code-data
 pytz-deprecation-shim==0.1.0.post0
     # via tzlocal
-requests==2.26.0
+requests==2.27.1
     # via
     #   advent-of-code-data
     #   codecov
@@ -84,15 +84,16 @@ termcolor==1.1.0
 toml==0.10.2
     # via
     #   pylint
-    #   pytest
     #   pytest-pylint
-tomli==1.2.2
-    # via coverage
+tomli==2.0.1
+    # via
+    #   coverage
+    #   pytest
 tzdata==2021.5
     # via pytz-deprecation-shim
 tzlocal==4.1
     # via advent-of-code-data
-urllib3==1.26.7
+urllib3==1.26.8
     # via
     #   -r requirements.in
     #   requests
