@@ -115,7 +115,7 @@ class AsteroidMap(object):
     def remove_asteroid_at(self, c):
         for i, a in enumerate(self.asteroids):
             if (a.x, a.y) == (c.x, c.y):
-                del self.asteroids[i: i + 1]
+                del self.asteroids[i : i + 1]
                 return True
 
         return False
@@ -123,7 +123,7 @@ class AsteroidMap(object):
     def _build_views(self):
         for i, a1 in enumerate(self.asteroids):
             logging.debug("Checking %s ...", a1)
-            for a2 in self.asteroids[i + 1:]:
+            for a2 in self.asteroids[i + 1 :]:
                 logging.debug("... against %s ...", a2)
                 line = Line(a1, a2)
                 for c in line.points_on_line + [a2]:

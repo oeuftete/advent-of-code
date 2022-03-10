@@ -23,7 +23,7 @@ class Cyphertext:
 
     @cached_property
     def first_invalid(self):
-        for n in self.stream[self.window_size:]:
+        for n in self.stream[self.window_size :]:
             if n not in map(sum, combinations(self.window, 2)):
                 return n
             self.window.append(n)

@@ -21,7 +21,7 @@ class Captcha:
         captcha_sum = 0
         clen = len(self.raw)
         for i, d in enumerate(self.raw):
-            if d == self.raw[int(i+clen/2) % clen]:
+            if d == self.raw[int(i + clen / 2) % clen]:
                 captcha_sum += int(d)
         return captcha_sum
 
