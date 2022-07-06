@@ -195,7 +195,7 @@ tzdata==2021.5
     # via pytz-deprecation-shim
 tzlocal==4.1
     # via advent-of-code-data
-ujson==5.2.0
+ujson==5.4.0
     # via
     #   python-lsp-jsonrpc
     #   python-lsp-server
