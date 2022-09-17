@@ -8,7 +8,7 @@ from adventofcode.common.utils import list_str_to_int
 class Sonar:
     measurements: list[int] = attr.ib(converter=list_str_to_int)
 
-    def n_increases(self, window_size=1) -> int:
+    def n_increases(self, window_size: int = 1) -> int:
         n = 0
         for i, _ in enumerate(self.measurements[window_size:], start=window_size):
             if sum(self.measurements[i - window_size + 1 : i + 1]) > sum(

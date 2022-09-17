@@ -59,7 +59,7 @@ class PotRow:
                 logging.debug(
                     "Matched rule {} => {} at {}".format(pot_rule, pot_value, i)
                 )
-                new_bits[i + 2] = True if pot_value == "#" else False
+                new_bits[i + 2] = pot_value == "#"
 
             self.bits = new_bits
 
