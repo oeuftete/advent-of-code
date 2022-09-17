@@ -13,6 +13,12 @@ target_version = ["py310"]
 [tool.mypy]
 strict_optional = false
 
+[[tool.mypy.overrides]]
+module = [
+    "aocd.models"
+]
+ignore_missing_imports = true
+
 [tool.pylint.messages_control]
 disable = """
 duplicate-code,
