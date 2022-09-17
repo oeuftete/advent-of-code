@@ -43,11 +43,11 @@ class CustomsCollection:
 
     @property
     def sum_of_any_yeses(self):
-        return sum([len(g.any_yeses) for g in self.groups])
+        return sum(len(g.any_yeses) for g in self.groups)
 
     @property
     def sum_of_all_yeses(self):
-        return sum([len(g.all_yeses) for g in self.groups])
+        return sum(len(g.all_yeses) for g in self.groups)
 
 
 if __name__ == "__main__":

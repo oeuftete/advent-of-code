@@ -136,7 +136,5 @@ class Calculator:
 if __name__ == "__main__":
     puzzle = Puzzle(year=2020, day=18)
     homework = puzzle.input_data.strip().splitlines()
-    puzzle.answer_a = sum([Calculator(equation).result for equation in homework])
-    puzzle.answer_b = sum(
-        [Calculator(equation).advanced_result for equation in homework]
-    )
+    puzzle.answer_a = sum(Calculator(equation).result for equation in homework)
+    puzzle.answer_b = sum(Calculator(equation).advanced_result for equation in homework)
