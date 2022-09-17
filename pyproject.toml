@@ -15,8 +15,6 @@ strict_optional = false
 
 [tool.pylint.messages_control]
 disable = """
-bad-continuation,
-bad-whitespace,
 duplicate-code,
 invalid-name,
 missing-class-docstring,

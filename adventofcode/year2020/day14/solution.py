@@ -62,7 +62,7 @@ class SeaportComputer:
             logging.debug("Memory contents: %s", self.memory)
 
     def sum_memory(self):
-        return sum([ba2int(v) for v in self.memory.values()])
+        return sum(ba2int(v) for v in self.memory.values())
 
 
 if __name__ == "__main__":
