@@ -73,11 +73,12 @@ def test_get_ordered_step_string(steps, ordered_step_string):
     [
         ("A", 0, 1),
         ("A", 60, 61),
-        ("Z", 0, 85),
+        ("Z", 0, 26),
+        ("Z", 60, 86),
     ],
 )
 def test_step_cost(c, offset, cost):
-    return step_cost(c, offset) == cost
+    assert step_cost(c, offset) == cost
 
 
 @pytest.mark.parametrize(
