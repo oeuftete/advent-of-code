@@ -108,3 +108,6 @@ input/
 
 # ipython log
 ipython_log.py
+
+# local LSP settings
+.vim-lsp-settings/
