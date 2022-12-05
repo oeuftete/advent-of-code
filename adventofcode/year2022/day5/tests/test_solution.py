@@ -36,3 +36,30 @@ def test_example_stack(example_stack_definition):
 
     stack_manager.move_all()
     assert stack_manager.message == "CMZ"
+
+
+def test_example_stack_9001(example_stack_definition):
+    stack_manager = StackManager(example_stack_definition, is_model_9001=True)
+
+    assert len(stack_manager.stack_moves) == 4
+    assert len(stack_manager.stacks) == 3
+    assert stack_manager.stacks[0] == ["Z", "N"]
+    assert stack_manager.stacks[1] == ["M", "C", "D"]
+    assert stack_manager.stacks[2] == ["P"]
+
+    stack_manager.move()
+    assert len(stack_manager.stack_moves) == 3
+    assert stack_manager.stacks[0] == ["Z", "N", "D"]
+    assert stack_manager.stacks[1] == ["M", "C"]
+    assert stack_manager.stacks[2] == ["P"]
+    assert stack_manager.message == "DCP"
+
+    stack_manager.move()
+    assert len(stack_manager.stack_moves) == 2
+    assert stack_manager.stacks[0] == []
+    assert stack_manager.stacks[1] == ["M", "C"]
+    assert stack_manager.stacks[2] == ["P", "Z", "N", "D"]
+    assert stack_manager.message == " CD"
+
+    stack_manager.move_all()
+    assert stack_manager.message == "MCD"

@@ -20,6 +20,7 @@ class StackMove:
 @attr.s
 class StackManager:
     stack_definition: list[str] = attr.ib()
+    is_model_9001: bool = attr.ib(default=False)
     stack_moves: list[StackMove] = attr.ib(factory=list, init=False)
     stacks: list[list[str]] = attr.ib(factory=list, init=False)
 
@@ -53,15 +54,29 @@ class StackManager:
         except IndexError as exc:
             raise StopIteration("No more moves!") from exc
 
-        for _ in range(stack_move.n):
-            crate = self.stacks[stack_move.from_stack - 1].pop()
+        if self.is_model_9001:
+            crates = [
+                self.stacks[stack_move.from_stack - 1].pop()
+                for _ in range(stack_move.n)
+            ]
             logging.debug(
                 "Moving %s from stack %d to stack %d",
-                crate,
+                crates,
                 stack_move.from_stack,
                 stack_move.to_stack,
             )
-            self.stacks[stack_move.to_stack - 1].append(crate)
+            self.stacks[stack_move.to_stack - 1].extend(reversed(crates))
+
+        else:
+            for _ in range(stack_move.n):
+                crate = self.stacks[stack_move.from_stack - 1].pop()
+                logging.debug(
+                    "Moving %s from stack %d to stack %d",
+                    crate,
+                    stack_move.from_stack,
+                    stack_move.to_stack,
+                )
+                self.stacks[stack_move.to_stack - 1].append(crate)
 
     def move_all(self) -> None:
         while True:
@@ -72,11 +87,24 @@ class StackManager:
 
     @property
     def message(self) -> str:
-        return "".join([s[-1] for s in self.stacks])
+        message = ""
+        for s in self.stacks:
+            try:
+                message += s[-1]
+            except IndexError:
+                message += " "
+        return message
 
 
 if __name__ == "__main__":
     puzzle = Puzzle(year=2022, day=5)
+
     stack_manager = StackManager(puzzle.input_data.splitlines())
     stack_manager.move_all()
     puzzle.answer_a = stack_manager.message
+
+    stack_manager_9001 = StackManager(
+        puzzle.input_data.splitlines(), is_model_9001=True
+    )
+    stack_manager_9001.move_all()
+    puzzle.answer_b = stack_manager_9001.message
