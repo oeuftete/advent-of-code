@@ -15,7 +15,10 @@ strict_optional = false
 
 [[tool.mypy.overrides]]
 module = [
-    "aocd.models"
+    "anytree",
+    "aocd",
+    "aocd.models",
+    "networkx",
 ]
 ignore_missing_imports = true
 

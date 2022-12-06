@@ -1,8 +1,8 @@
 from enum import IntEnum
+from functools import cached_property
 
 import attr
 from aocd.models import Puzzle
-from cached_property import cached_property
 
 
 class RPS(IntEnum):

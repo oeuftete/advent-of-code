@@ -9,7 +9,7 @@ from aocd.models import Puzzle
 @total_ordering
 class LogDay:
     def __init__(self, log_date):
-        LOG_DATE_FORMAT = re.compile(r"(\d{4})-(\d{2})-(\d{2}) " r"(\d{2}):(\d{2})")
+        LOG_DATE_FORMAT = re.compile(r"(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})")
         m = re.match(LOG_DATE_FORMAT, log_date)
         (year, month, day, hour, minute) = map(int, m.groups())
         self.year = year
@@ -48,7 +48,7 @@ class LogDay:
 class LogEntry:
     def __init__(self, entry):
         LOG_FORMAT = re.compile(
-            r"\[(.*?)\] " r"(wakes up|falls asleep|Guard #(\d+) begins shift)"
+            r"\[(.*?)\] (wakes up|falls asleep|Guard #(\d+) begins shift)"
         )
         m = re.match(LOG_FORMAT, entry)
         (datestamp, event, guard_no) = m.groups()
@@ -139,9 +139,10 @@ def sleepiest_guard_minute_in_log(log):
             sleepy_minute = minute
 
     logging.debug(
-        "Sleepiest guard-minute: %s: minute %s, %s times".format(
-            guard_no, sleepy_minute, occurrences
-        )
+        "Sleepiest guard-minute: %s: minute %s, %s times",
+        guard_no,
+        sleepy_minute,
+        occurrences,
     )
     return (guard_no, sleepy_minute, occurrences)
 

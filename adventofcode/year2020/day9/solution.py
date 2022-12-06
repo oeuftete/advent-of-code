@@ -1,11 +1,11 @@
 import logging
 import typing
 from collections import deque
+from functools import cached_property
 from itertools import combinations
 
 import attr
 from aocd.models import Puzzle
-from cached_property import cached_property
 
 logging.basicConfig(level=logging.INFO)
 

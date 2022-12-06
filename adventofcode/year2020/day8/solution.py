@@ -16,7 +16,7 @@ class ConsoleComputer:
     rules: list = field(default_factory=list)
     accumulator: int = field(default=0, init=False)
     address: int = field(default=0, init=False)
-    visited: set = field(default_factory=list, init=False)
+    visited: list = field(default_factory=list, init=False)
 
     def __post_init__(self):
         if not self.rules:

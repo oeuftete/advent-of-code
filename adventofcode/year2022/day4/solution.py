@@ -1,8 +1,8 @@
+from functools import cached_property
 from typing import Iterable
 
 import attr
 from aocd.models import Puzzle
-from cached_property import cached_property
 
 
 @attr.s

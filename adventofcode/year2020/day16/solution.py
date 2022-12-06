@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass, field
+from typing import Tuple
 
 from aocd.models import Puzzle
 
@@ -25,7 +26,7 @@ class TicketValidator:
 
         return is_valid
 
-    def is_valid(self, ticket) -> (bool, list):
+    def is_valid(self, ticket) -> Tuple[bool, list]:
         logging.debug("Checking %s for validity...", ticket)
 
         invalid_values = []

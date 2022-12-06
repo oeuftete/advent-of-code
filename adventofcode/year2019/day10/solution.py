@@ -1,14 +1,14 @@
 import logging
 import math
 from fractions import Fraction
+from functools import cached_property
 
 import attr
-from cached_property import cached_property
 
 from adventofcode.common.coordinate import Coordinate
 
 
-class Line(object):
+class Line:
     #  Has two coordinates.
     def __init__(self, c1, c2):
         self.c1 = c1
@@ -32,7 +32,7 @@ class Line(object):
     @property
     def points_on_line(self):
         #  Find all coordinates exactly on the line.
-        result = list()
+        result = []
         c1, c2 = self.c1, self.c2
 
         if c1 == c2:
@@ -81,15 +81,15 @@ class Asteroid(Coordinate):
         return len(self.viewable_asteroids)
 
 
-class AsteroidMap(object):
+class AsteroidMap:
     EMPTY = "."
     ASTEROID = "#"
 
     def __init__(self, input_data):
-        self.asteroids = list()
+        self.asteroids = []
         self._build_asteroids(input_data)  # make lazy?
         self._build_views()  # make lazy?
-        self.vaporized = list()
+        self.vaporized = []
 
     def _build_asteroids(self, input_data):
         # The asteroids can be described with X,Y coordinates where X is the
