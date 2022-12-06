@@ -14,8 +14,8 @@ class Positionator:
 
     def __attrs_post_init__(self) -> None:
         for command in self.course:
-            direction, units = command.split(" ")
-            units = int(units)
+            direction, s_units = command.split(" ")
+            units = int(s_units)
 
             match (self.course_type, direction):
                 case ("position", "forward"):

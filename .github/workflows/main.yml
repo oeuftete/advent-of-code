@@ -18,7 +18,7 @@ jobs:
       - name: run tests
         env:
           AOC_SESSION: ${{ secrets.AOC_SESSION }}
-        run: pytest --cov=./ --cov-report=xml --pylint --pylint-ignore-patterns '.*year201[89].*'
+        run: pytest --cov=./ --cov-report=xml --mypy --pylint --pylint-ignore-patterns '.*year201[89].*'
       - name: upload code coverage
         uses: codecov/codecov-action@v3
         with:

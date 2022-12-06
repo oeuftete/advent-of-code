@@ -4,7 +4,7 @@
 #
 #    pip-compile dev-requirements.in
 #
-advent-of-code-data==1.3.0
+advent-of-code-data==1.3.1
     # via -r requirements.in
 anytree==2.8.0
     # via -r requirements.in
@@ -12,12 +12,13 @@ appdirs==1.4.4
     # via pytoolconfig
 astroid==2.12.13
     # via pylint
-asttokens==2.2.0
+asttokens==2.2.1
     # via stack-data
 attrs==22.1.0
     # via
     #   -r requirements.in
     #   pytest
+    #   pytest-mypy
 autopep8==1.6.0
     # via python-lsp-server
 backcall==0.2.0
@@ -52,6 +53,8 @@ docstring-to-markdown==0.11
     # via python-lsp-server
 executing==1.2.0
     # via stack-data
+filelock==3.8.2
+    # via pytest-mypy
 flake8==5.0.4
     # via python-lsp-server
 idna==3.4
@@ -79,7 +82,9 @@ mccabe==0.7.0
     #   pylint
     #   python-lsp-server
 mypy==0.991
-    # via pylsp-mypy
+    # via
+    #   pylsp-mypy
+    #   pytest-mypy
 mypy-extensions==0.4.3
     # via
     #   black
@@ -127,7 +132,7 @@ pyflakes==2.5.0
     #   python-lsp-server
 pygments==2.13.0
     # via ipython
-pylint==2.15.7
+pylint==2.15.8
     # via
     #   pytest-pylint
     #   python-lsp-server
@@ -141,8 +146,11 @@ pytest==7.2.0
     # via
     #   -r requirements.in
     #   pytest-cov
+    #   pytest-mypy
     #   pytest-pylint
 pytest-cov==4.0.0
+    # via -r requirements.in
+pytest-mypy==0.10.2
     # via -r requirements.in
 pytest-pylint==0.19.0
     # via -r requirements.in
