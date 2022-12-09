@@ -31,8 +31,6 @@ black==22.10.0
     # via
     #   -r dev-requirements.in
     #   python-lsp-black
-cached-property==1.5.2
-    # via -r requirements.in
 certifi==2022.9.24
     # via requests
 charset-normalizer==2.1.1

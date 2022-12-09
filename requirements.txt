@@ -19,8 +19,6 @@ beautifulsoup4==4.11.1
     # via advent-of-code-data
 bitarray==2.6.0
     # via -r requirements.in
-cached-property==1.5.2
-    # via -r requirements.in
 certifi==2022.9.24
     # via requests
 charset-normalizer==2.1.1

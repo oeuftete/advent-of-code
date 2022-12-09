@@ -2,7 +2,6 @@ advent-of-code-data
 anytree
 attrs
 bitarray
-cached-property
 codecov
 networkx
 pytest

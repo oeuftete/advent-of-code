@@ -1,9 +1,9 @@
 import typing
 from collections import Counter, defaultdict
+from functools import cached_property
 
 import attr
-from aocd.models import Puzzle  # type: ignore
-from cached_property import cached_property  # type: ignore
+from aocd.models import Puzzle
 
 
 @attr.s
