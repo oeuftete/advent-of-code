@@ -19,7 +19,7 @@ beautifulsoup4==4.11.1
     # via advent-of-code-data
 bitarray==2.6.0
     # via -r requirements.in
-certifi==2022.9.24
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.1
     # via requests
