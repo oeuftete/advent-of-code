@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
-advent-of-code-data==1.3.1
+advent-of-code-data==1.3.2
     # via -r requirements.in
 anytree==2.8.0
     # via -r requirements.in
@@ -19,7 +19,7 @@ beautifulsoup4==4.11.1
     # via advent-of-code-data
 bitarray==2.6.0
     # via -r requirements.in
-certifi==2022.9.24
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.1
     # via requests
@@ -49,18 +49,16 @@ mypy-extensions==0.4.3
     # via mypy
 networkx==2.8.8
     # via -r requirements.in
-packaging==21.3
+packaging==22.0
     # via pytest
 pebble==5.0.3
     # via advent-of-code-data
-platformdirs==2.5.4
+platformdirs==2.6.0
     # via pylint
 pluggy==1.0.0
     # via pytest
 pylint==2.15.8
     # via pytest-pylint
-pyparsing==3.0.9
-    # via packaging
 pytest==7.2.0
     # via
     #   -r requirements.in
