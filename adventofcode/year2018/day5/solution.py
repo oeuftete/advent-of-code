@@ -10,7 +10,6 @@ def reacted_polymer(polymer):
     reacted = polymer[0]
 
     for unit in polymer[1:]:
-
         logging.debug("Before reaction: %s + %s" % (reacted[-10:], unit))
         # We have reactants.  Consume each other
         if len(reacted) and unit.swapcase() == reacted[-1]:

@@ -106,7 +106,6 @@ class TicketNotebook:
 
         logging.debug("All possible fields: %s", possible_fields)
         while any(len(pf) > 1 for pf in possible_fields):
-
             #  First, find any fields that are the only possibility
             identified_fields = []
             for pf in filter(lambda pf: len(pf) == 1, possible_fields):

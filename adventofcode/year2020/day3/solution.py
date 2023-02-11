@@ -8,7 +8,6 @@ logging.basicConfig(level=logging.INFO)
 
 
 class TreedSlope:
-
     TREE = "#"
 
     def __init__(self, slope_map):
@@ -19,10 +18,10 @@ class TreedSlope:
     def _build_slope(self):
         self.width = self.height = 0
         self.trees = []
-        for (y, l) in enumerate(self.slope_map.split("\n")):
+        for y, l in enumerate(self.slope_map.split("\n")):
             self.height += 1
             self.width = len(l)
-            for (x, c) in enumerate(l):
+            for x, c in enumerate(l):
                 if c == self.TREE:
                     self.trees.append(Coordinate(x, y))
 

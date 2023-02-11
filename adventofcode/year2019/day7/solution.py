@@ -18,7 +18,6 @@ class AmplificationMaximizer(object):
         self.max_phase_sequence = None
 
     def reset_amplifiers(self):
-
         self.amplifiers = [
             Intcode(
                 self.opcodes, computer_name="amp-{i}", pause_on_output=self.feedback

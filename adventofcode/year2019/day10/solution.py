@@ -97,10 +97,10 @@ class AsteroidMap:
         # (so the top-left corner is 0,0 and the position immediately to its
         # right is 1,0).
         self.width = self.height = 0
-        for (y, l) in enumerate(input_data.split("\n")):
+        for y, l in enumerate(input_data.split("\n")):
             self.height += 1
             self.width = len(l)
-            for (x, c) in enumerate(l):
+            for x, c in enumerate(l):
                 if c == self.ASTEROID:
                     self.asteroids.append(Asteroid(x, y))
 
@@ -196,7 +196,6 @@ class AsteroidMap:
 
         sx, sy = self.station.x, self.station.y
         while len(self.vaporized) < limit:
-
             last_count = len(self.asteroids)
 
             #  Look straight up

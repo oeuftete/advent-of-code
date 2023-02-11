@@ -93,7 +93,6 @@ def largest_area(coordinates):
     #  For each point within the boundary...
     for x in range(min_x - int(range_x / 2), max_x + int(range_x / 2)):
         for y in range(min_y - int(range_y / 2), max_y + int(range_y / 2)):
-
             logging.debug("Checking {}:{}...".format(x, y))
 
             target = Coordinate(x=x, y=y)
