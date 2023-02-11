@@ -14,7 +14,7 @@ def fixture_example_forest():
 """.strip()
 
 
-def test_example_forest(example_forest):
+def test_example_forest_part_a(example_forest):
     tree_spotter = TreeSpotter(example_forest)
 
     for x in range(5):
@@ -38,3 +38,15 @@ def test_example_forest(example_forest):
     assert not tree_spotter.tree_is_visible(3, 3)
 
     assert tree_spotter.part_a_solution == 21
+
+
+def test_example_forest_part_b(example_forest):
+    tree_spotter = TreeSpotter(example_forest)
+
+    assert tree_spotter.scenic_score(0, 0) == 0
+    assert tree_spotter.scenic_score(4, 1) == 0
+    assert tree_spotter.scenic_score(2, 1) == 4
+    assert tree_spotter.scenic_score(2, 3) == 8
+    assert tree_spotter.scenic_score(2, 4) == 0
+    assert tree_spotter.scenic_score(4, 4) == 0
+    assert tree_spotter.part_b_solution == 8
