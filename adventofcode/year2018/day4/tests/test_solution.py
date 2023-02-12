@@ -64,7 +64,6 @@ def test_sleepiest_guard(
     sleepiest_guard_sleepy_minute,
     sleepiest_guard_minute_tuple,
 ):
-
     sleepiest_guard = sleepiest_guard_in_log(log)
     assert sleepiest_guard.no == sleepiest_guard_no
     assert sleepiest_guard.total_minutes() == sleepiest_guard_total_minutes

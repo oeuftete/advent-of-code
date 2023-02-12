@@ -57,7 +57,6 @@ class AdventNode(AdventNodeBase, NodeMixin):
 
 
 def find_and_process_child(tokens, depth, n, parent_node=None):
-
     parent = parent_node if parent_node else None
     advent_node = AdventNode("%s:%s" % (depth, n), parent=parent)
 

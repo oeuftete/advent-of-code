@@ -10,7 +10,6 @@ logging.basicConfig(level=logging.INFO)
 
 @total_ordering
 class Cart:
-
     #  sorted() order
     LEFT = (-1, 0)
     UP = (0, -1)
