@@ -6,32 +6,31 @@
 #
 advent-of-code-data==1.3.2
     # via -r requirements.in
-anytree==2.8.0
+anytree==2.9.0
     # via -r requirements.in
-astroid==2.14.1
+astroid==2.15.5
     # via pylint
-attrs==22.2.0
+attrs==23.1.0
     # via
     #   -r requirements.in
-    #   pytest
     #   pytest-mypy
-beautifulsoup4==4.11.2
+beautifulsoup4==4.12.2
     # via advent-of-code-data
-bitarray==2.7.1
+bitarray==2.7.6
     # via -r requirements.in
-certifi==2022.12.7
+certifi==2023.5.7
     # via requests
-charset-normalizer==3.0.1
+charset-normalizer==3.1.0
     # via requests
-codecov==2.1.12
+codecov==2.1.13
     # via -r requirements.in
-coverage[toml]==7.1.0
+coverage[toml]==7.2.7
     # via
     #   codecov
     #   pytest-cov
 dill==0.3.6
     # via pylint
-filelock==3.9.0
+filelock==3.12.2
     # via pytest-mypy
 idna==3.4
     # via requests
@@ -43,29 +42,29 @@ lazy-object-proxy==1.9.0
     # via astroid
 mccabe==0.7.0
     # via pylint
-mypy==1.0.0
+mypy==1.4.1
     # via pytest-mypy
 mypy-extensions==1.0.0
     # via mypy
-networkx==3.0
+networkx==3.1
     # via -r requirements.in
-packaging==23.0
+packaging==23.1
     # via pytest
 pebble==5.0.3
     # via advent-of-code-data
-platformdirs==3.0.0
+platformdirs==3.8.0
     # via pylint
-pluggy==1.0.0
+pluggy==1.2.0
     # via pytest
-pylint==2.16.1
+pylint==2.17.4
     # via pytest-pylint
-pytest==7.2.1
+pytest==7.4.0
     # via
     #   -r requirements.in
     #   pytest-cov
     #   pytest-mypy
     #   pytest-pylint
-pytest-cov==4.0.0
+pytest-cov==4.1.0
     # via -r requirements.in
 pytest-mypy==0.10.3
     # via -r requirements.in
@@ -73,9 +72,7 @@ pytest-pylint==0.19.0
     # via -r requirements.in
 python-dateutil==2.8.2
     # via advent-of-code-data
-pytz-deprecation-shim==0.1.0.post0
-    # via tzlocal
-requests==2.28.2
+requests==2.31.0
     # via
     #   advent-of-code-data
     #   codecov
@@ -83,23 +80,21 @@ six==1.16.0
     # via
     #   anytree
     #   python-dateutil
-soupsieve==2.3.2.post1
+soupsieve==2.4.1
     # via beautifulsoup4
-termcolor==2.2.0
+termcolor==2.3.0
     # via advent-of-code-data
 toml==0.10.2
     # via pytest-pylint
-tomlkit==0.11.6
+tomlkit==0.11.8
     # via pylint
-typing-extensions==4.4.0
+typing-extensions==4.7.1
     # via mypy
-tzdata==2022.7
-    # via pytz-deprecation-shim
-tzlocal==4.2
+tzlocal==5.0.1
     # via advent-of-code-data
-urllib3==1.26.14
+urllib3==2.0.3
     # via
     #   -r requirements.in
     #   requests
-wrapt==1.14.1
+wrapt==1.15.0
     # via astroid
