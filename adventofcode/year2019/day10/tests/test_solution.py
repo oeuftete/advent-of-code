@@ -50,9 +50,7 @@ def test_asteroid_map():
     assert am.width == 5
     assert am.height == 5
 
-    assert am.has_asteroid_at(Coordinate(2, 2))
-    assert am.has_asteroid_at(Coordinate(3, 4))
-
+    assert am.get_asteroid_at(Coordinate(0, 0)) == None
     assert am.get_asteroid_at(Coordinate(3, 4)).n_viewable == 8
     assert am.get_asteroid_at(Coordinate(4, 4)).n_viewable == 7
 
