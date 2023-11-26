@@ -5,7 +5,6 @@ from uuid import UUID, uuid4
 import attr
 import networkx as nx
 from aocd.models import Puzzle
-from networkx import DiGraph
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -30,7 +29,7 @@ class Inode:
 @attr.s
 class DirReader:
     commands: list[str] = attr.ib()
-    tree: DiGraph = attr.ib(factory=DiGraph, init=False)
+    tree: nx.DiGraph = attr.ib(factory=nx.DiGraph, init=False)
     root: Inode = attr.ib(default=Inode("/", is_directory=True), init=False)
     pwd: Inode = attr.ib(init=False)
 
