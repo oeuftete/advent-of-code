@@ -1,5 +1,6 @@
 import logging
 import math
+import typing
 from fractions import Fraction
 from functools import cached_property
 
@@ -69,7 +70,9 @@ class Line:
 
 @attr.s
 class Asteroid(Coordinate):
-    viewable_asteroids = attr.ib(factory=set, cmp=False, init=False, repr=False)
+    viewable_asteroids: typing.Set[typing.Self] = attr.ib(
+        factory=set, cmp=False, init=False, repr=False
+    )
 
     def add_viewable(self, other):
         assert isinstance(other, Asteroid)
@@ -104,13 +107,11 @@ class AsteroidMap:
                 if c == self.ASTEROID:
                     self.asteroids.append(Asteroid(x, y))
 
-    def has_asteroid_at(self, c):
-        return c in map(lambda a: Coordinate(*(a.x, a.y)), self.asteroids)
-
     def get_asteroid_at(self, c):
         for a in self.asteroids:
             if (a.x, a.y) == (c.x, c.y):
                 return a
+        return None
 
     def remove_asteroid_at(self, c):
         for i, a in enumerate(self.asteroids):
@@ -128,8 +129,7 @@ class AsteroidMap:
                 line = Line(a1, a2)
                 for c in line.points_on_line + [a2]:
                     logging.debug("... checking point on line %s...", c)
-                    if self.has_asteroid_at(Coordinate(c.x, c.y)):
-                        a_seen = self.get_asteroid_at(Coordinate(c.x, c.y))
+                    if a_seen := self.get_asteroid_at(Coordinate(c.x, c.y)):
                         logging.debug("*** Can see: %s <--> %s", a1, a_seen)
                         a1.add_viewable(a_seen)
                         a_seen.add_viewable(a1)
@@ -176,7 +176,7 @@ class AsteroidMap:
         return zapped
 
     def run_vaporizer(self, limit=None):
-        self.vaporized = list()
+        self.vaporized = []
         limit = limit or math.inf
 
         positive = sorted(
