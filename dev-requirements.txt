@@ -136,7 +136,7 @@ pyls-isort==0.2.2
     # via -r dev-requirements.in
 pylsp-mypy==0.6.8
     # via -r dev-requirements.in
-pytest==7.4.3
+pytest==7.4.4
     # via
     #   -r requirements.in
     #   pytest-cov
