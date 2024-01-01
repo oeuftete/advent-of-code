@@ -24,7 +24,7 @@ beautifulsoup4==4.12.2
     # via advent-of-code-data
 bitarray==2.8.3
     # via -r requirements.in
-black==23.11.0
+black==23.12.1
     # via
     #   -r dev-requirements.in
     #   python-lsp-black
