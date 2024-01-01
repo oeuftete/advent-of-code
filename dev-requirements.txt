@@ -58,7 +58,7 @@ importlib-metadata==6.8.0
     # via yapf
 iniconfig==2.0.0
     # via pytest
-ipython==8.18.0
+ipython==8.19.0
     # via -r dev-requirements.in
 isort==5.12.0
     # via
