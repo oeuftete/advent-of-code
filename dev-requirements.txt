@@ -192,7 +192,7 @@ ujson==5.9.0
     # via
     #   python-lsp-jsonrpc
     #   python-lsp-server
-urllib3==2.1.0
+urllib3==2.2.0
     # via
     #   -r dev-requirements.in
     #   -r requirements.in
