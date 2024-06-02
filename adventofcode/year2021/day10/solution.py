@@ -55,13 +55,13 @@ class Parser:
         self.parsed_lines = list(map(ParserLine, self.lines))
         for l in self.parsed_lines:
             match (l.first_illegal):
-                case (")"):
+                case ")":
                     self.syntax_score += 3
-                case ("]"):
+                case "]":
                     self.syntax_score += 57
-                case ("}"):
+                case "}":
                     self.syntax_score += 1197
-                case (">"):
+                case ">":
                     self.syntax_score += 25137
 
     @property
@@ -77,13 +77,13 @@ class Parser:
         score = 0
         for c in s:
             match (c):
-                case (")"):
+                case ")":
                     score = 5 * score + 1
-                case ("]"):
+                case "]":
                     score = 5 * score + 2
-                case ("}"):
+                case "}":
                     score = 5 * score + 3
-                case (">"):
+                case ">":
                     score = 5 * score + 4
 
             LOGGER.debug("Interim score for -%s-: %d", s, score)
