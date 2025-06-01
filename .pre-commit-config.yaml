@@ -8,12 +8,12 @@ repos:
         exclude: "^(.direnv/|.*year201[89])"
         types: [python]
   - repo: https://github.com/ambv/black
-    rev: 24.4.2
+    rev: 25.1.0
     hooks:
       - id: black
         exclude: ^.direnv/
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
         exclude: ^.direnv/

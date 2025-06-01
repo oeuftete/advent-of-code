@@ -1,0 +1,17 @@
+[tools]
+pre-commit = "4.2.0"
+python = "3.12"
+
+[env]
+_.path = [
+  "."
+]
+_.python.venv = { path = ".venv", create = true }
+
+[hooks]
+enter = "pip3 install -U pip pip-tools"
+
+[tasks.install]
+description = "Install dependencies"
+run = "pip3 install -r dev-requirements.txt"
+sources = ['dev-requirements.txt']
