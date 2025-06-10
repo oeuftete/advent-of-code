@@ -70,7 +70,7 @@ pytest-mypy==1.0.1
     # via -r requirements.in
 pytest-pylint==0.21.0
     # via -r requirements.in
-requests==2.32.3
+requests==2.32.4
     # via codecov
 soupsieve==2.7
     # via beautifulsoup4
