@@ -5,9 +5,9 @@
 #    pip-compile dev-requirements.in
 #
 advent-of-code-data==2.1.0
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 anytree==2.13.0
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 aocd-example-parser==2024.12.25
     # via advent-of-code-data
 astroid==3.3.10
@@ -15,13 +15,13 @@ astroid==3.3.10
 asttokens==3.0.0
     # via stack-data
 attrs==25.3.0
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 autopep8==2.0.4
     # via python-lsp-server
 beautifulsoup4==4.13.4
     # via advent-of-code-data
 bitarray==3.4.2
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 black==25.1.0
     # via
     #   -r dev-requirements.in
@@ -33,7 +33,7 @@ charset-normalizer==3.4.2
 click==8.2.1
     # via black
 codecov==2.1.13
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 coverage[toml]==7.8.2
     # via
     #   codecov
@@ -85,7 +85,7 @@ mypy-extensions==1.1.0
     #   black
     #   mypy
 networkx==3.5
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 packaging==25.0
     # via
     #   black
@@ -142,16 +142,16 @@ pylsp-mypy==0.7.0
     # via -r dev-requirements.in
 pytest==8.3.5
     # via
-    #   -r /home/ken/working/git/github/advent-of-code/requirements.in
+    #   -r requirements.in
     #   pytest-cov
     #   pytest-mypy
     #   pytest-pylint
 pytest-cov==6.1.1
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 pytest-mypy==1.0.1
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 pytest-pylint==0.21.0
-    # via -r /home/ken/working/git/github/advent-of-code/requirements.in
+    # via -r requirements.in
 python-lsp-black==2.0.0
     # via -r dev-requirements.in
 python-lsp-jsonrpc==1.1.2
@@ -189,10 +189,10 @@ ujson==5.10.0
     # via
     #   python-lsp-jsonrpc
     #   python-lsp-server
-urllib3==2.4.0
+urllib3==2.5.0
     # via
-    #   -r /home/ken/working/git/github/advent-of-code/requirements.in
     #   -r dev-requirements.in
+    #   -r requirements.in
     #   advent-of-code-data
     #   requests
 wcwidth==0.2.13
