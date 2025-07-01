@@ -16,7 +16,7 @@ attrs==25.3.0
     # via -r requirements.in
 beautifulsoup4==4.13.4
     # via advent-of-code-data
-bitarray==3.4.2
+bitarray==3.4.3
     # via -r requirements.in
 certifi==2025.4.26
     # via requests
